@@ -1,0 +1,14 @@
+{
+    "name": "pandemonium/methuselah",
+    "description": "",
+    "authors": [
+        {
+            "name": "miclf",
+            "email": "michael@estsurinter.net"
+        }
+    ],
+    "require": {
+
+    },
+    "minimum-stability": "stable"
+}
