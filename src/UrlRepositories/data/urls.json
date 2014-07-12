@@ -1,0 +1,10 @@
+{
+    "parliaments": {
+        "k": {
+            "baseUrl": "http://www.lachambre.be/",
+            "mp_list": {
+                "current": "kvvcr/showpage.cfm?section=/depute&language=fr&cfm=/site/wwwcfm/depute/cvlist.cfm"
+            }
+        }
+    }
+}
