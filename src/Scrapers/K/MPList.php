@@ -1,7 +1,7 @@
 <?php namespace Pandemonium\Methuselah\Scrapers\K;
 
-use GuzzleHttp\Client;
 use Symfony\Component\DomCrawler\Crawler;
+use Pandemonium\Methuselah\DocumentProvider;
 
 /**
  * Extract data from the list of members of the Chamber.
@@ -11,11 +11,22 @@ use Symfony\Component\DomCrawler\Crawler;
 class MPList
 {
     /**
-     * Page listing the current MPs.
+     * A document provider.
      *
-     * @type string
+     * @var \Pandemonium\Methuselah\DocumentProvider
      */
-    const PAGE_URL = 'http://www.lachambre.be/kvvcr/showpage.cfm?section=/depute&language=fr&cfm=/site/wwwcfm/depute/cvlist.cfm';
+    protected $documentProvider;
+
+    /**
+     * Constructor.
+     *
+     * @param  \Pandemonium\Methuselah\DocumentProvider  $documentProvider
+     * @return self
+     */
+    public function __construct(DocumentProvider $documentProvider)
+    {
+        $this->documentProvider = $documentProvider;
+    }
 
     /**
      * Scrape the list of members of the Chamber and extract its information.
@@ -26,7 +37,7 @@ class MPList
     {
         $list = [];
 
-        $html = $this->getPage(self::PAGE_URL);
+        $html = $this->documentProvider->get('k.mp_list.current');
 
         $crawler = $this->newCrawler();
 
@@ -99,33 +110,6 @@ class MPList
     }
 
     /**
-     * Download the content at the given URL.
-     *
-     * @param  string  $url
-     * @return string
-     */
-    protected function getPage($url)
-    {
-        $client = $this->newHttpClient();
-
-        try {
-
-            $req = $client->createRequest('GET', $url);
-
-            // The site of the Chamber does not respect RFC 1738 nor RFC 3986.
-            // In order to work, query strings MUST NOT be encoded. So we need
-            // to disable the automatic encoding Guzzle provides by default.
-            $req->getQuery()->setEncodingType(false);
-
-            // Return the body of the response of the request as a string.
-            return (string) $client->send($req)->getBody();
-
-        } catch (\Exception $e) {
-            throw $e;
-        }
-    }
-
-    /**
      * Create a new DomCrawler.
      *
      * @return \Symfony\Component\DomCrawler\Crawler
@@ -133,16 +117,6 @@ class MPList
     public function newCrawler()
     {
         return new Crawler;
-    }
-
-    /**
-     * Create a new HTTP client.
-     *
-     * @return \GuzzleHttp\Client
-     */
-    public function newHttpClient()
-    {
-        return new Client;
     }
 
     /**
