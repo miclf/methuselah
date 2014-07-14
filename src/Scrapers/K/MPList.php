@@ -30,7 +30,8 @@ class MPList
 
         $crawler = $this->newCrawler();
 
-        // The page is encoded in ISO-8859-1, so we explicitly specify this.
+        // The page is encoded in ISO-8859-1, so we explicitly specify
+        // this in order to avoid any character encoding issue.
         $crawler->addHtmlContent($html, 'ISO-8859-1');
 
         // Get the <table> storing the list of MPs and loop on its rows.
