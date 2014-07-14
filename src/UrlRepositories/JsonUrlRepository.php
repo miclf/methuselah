@@ -57,7 +57,7 @@ class JsonUrlRepository implements UrlRepositoryInterface
      *
      * @return string
      */
-    public function getSourceFile()
+    public function getSource()
     {
         // Assign a default source file if none has been defined yet.
         if (!isset($this->sourceFile)) {
@@ -73,7 +73,7 @@ class JsonUrlRepository implements UrlRepositoryInterface
      * @param  string  $path
      * @return self
      */
-    public function setSourceFile($path)
+    public function setSource($path)
     {
         $this->sourceFile = $path;
 
@@ -87,7 +87,7 @@ class JsonUrlRepository implements UrlRepositoryInterface
      */
     protected function loadJson()
     {
-        $json = json_decode(file_get_contents($this->getSourceFile()), true);
+        $json = json_decode(file_get_contents($this->getSource()), true);
 
         $this->parliaments = [];
 
