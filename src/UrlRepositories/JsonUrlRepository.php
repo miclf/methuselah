@@ -89,7 +89,7 @@ class JsonUrlRepository implements UrlRepositoryInterface
     {
         $json = json_decode(file_get_contents($this->getSourceFile()), true);
 
-        $data = [];
+        $this->parliaments = [];
 
         // We will loop on all assemblies and check for each of them if
         // they have a base URL. If it is the case, we will recursively
@@ -97,13 +97,11 @@ class JsonUrlRepository implements UrlRepositoryInterface
         foreach ($json['parliaments'] as $key => $parliament) {
 
             if (array_key_exists('baseUrl', $parliament)) {
-                $data[$key] = $this->prependBaseUrl($parliament);
+                $this->parliaments[$key] = $this->prependBaseUrl($parliament);
             } else {
-                $data[$key] = $parliament;
+                $this->parliaments[$key] = $parliament;
             }
         }
-
-        $this->parliaments = $data;
 
         return $this;
     }
@@ -121,18 +119,16 @@ class JsonUrlRepository implements UrlRepositoryInterface
             $baseUrl = array_pull($patterns, 'baseUrl');
         }
 
-        $data = [];
-
         foreach ($patterns as $key => $pattern) {
 
             // If this patterns has subpatterns, recursively prepend them.
             if (is_array($pattern)) {
-                $data[$key] = $this->prependBaseUrl($pattern, $baseUrl);
+                $patterns[$key] = $this->prependBaseUrl($pattern, $baseUrl);
             } else {
-                $data[$key] = $baseUrl.$pattern;
+                $patterns[$key] = $baseUrl.$pattern;
             }
         }
 
-        return $data;
+        return $patterns;
     }
 }
