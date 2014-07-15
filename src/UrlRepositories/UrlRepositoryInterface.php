@@ -12,6 +12,8 @@ interface UrlRepositoryInterface
      *
      * @param  string  $key
      * @return string
+     *
+     * @throws \Exception if the key matches zero or more than one URL.
      */
     public function find($key);
 }
