@@ -50,6 +50,10 @@ class JsonUrlRepository implements UrlRepositoryInterface
             throw new Exception("No URL found for key [$key]");
         }
 
+        if ($placeholders = $this->getPlaceholders($url)) {
+            return $this->fillPlaceholders($url, $placeholders, $values);
+        }
+
         return $url;
     }
 
@@ -79,6 +83,45 @@ class JsonUrlRepository implements UrlRepositoryInterface
         $this->sourceFile = $path;
 
         return $this->loadJson();
+    }
+
+    /**
+     * Extract the placeholders of a URL pattern.
+     *
+     * @param  string  $url
+     * @return array|false
+     */
+    protected function getPlaceholders($url)
+    {
+        if (preg_match_all('#{([A-Za-z]+)}#', $url, $matches)) {
+            return $matches[1];
+        }
+
+        return false;
+    }
+
+    /**
+     * Replace placeholders by values in a given URL pattern.
+     *
+     * @param  string        $url
+     * @param  array         $placeholders
+     * @param  string|array  $values
+     * @return string
+     */
+    protected function fillPlaceholders($url, $placeholders, $values)
+    {
+        $values = (array) $values;
+
+        foreach ($placeholders as $key) {
+
+            if (!array_key_exists($key, $values)) {
+                throw new Exception("No value provided for placeholder $key");
+            }
+
+            $url = str_replace('{'.$key.'}', $values[$key], $url);
+        }
+
+        return $url;
     }
 
     /**
