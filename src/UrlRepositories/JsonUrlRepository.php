@@ -44,13 +44,13 @@ class JsonUrlRepository implements UrlRepositoryInterface
      */
     public function find($key, $values = null)
     {
-        $pattern = array_get($this->parliaments, $key);
+        $url = array_get($this->parliaments, $key);
 
-        if (!is_string($pattern) || !$pattern) {
+        if (!is_string($url) || !$url) {
             throw new Exception("No URL found for key [$key]");
         }
 
-        return $pattern;
+        return $url;
     }
 
     /**
