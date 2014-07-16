@@ -29,15 +29,24 @@ class MPList
     }
 
     /**
-     * Scrape the list of members of the Chamber and extract its information.
+     * Scrape a list of members of the Chamber and extract its information.
      *
+     * @param  int    $legislatureNumber
      * @return array
      */
-    public function scrape()
+    public function scrape($legislatureNumber = null)
     {
-        $list = [];
+        $list = $value = [];
 
-        $html = $this->documentProvider->get('k.mp_list.current');
+        $pattern = 'k.mp_list.current';
+
+        // Set the relevant parameters if a specific legislature is requested.
+        if (!is_null($legislatureNumber)) {
+            $pattern = 'k.mp_list.legislature';
+            $value   = compact('legislatureNumber');
+        }
+
+        $html = $this->documentProvider->get($pattern, $value);
 
         $crawler = $this->newCrawler();
 
@@ -48,7 +57,7 @@ class MPList
         // Get the <table> storing the list of MPs and loop on its rows.
         $rows = $crawler->filter('table[width="100%"] tr');
 
-        $rows->each(function ($row, $i) use (&$list) {
+        $rows->each(function ($row, $i) use (&$list, $legislatureNumber) {
 
             // Get the <td> elements of this table row.
             $cells = $row->children();
@@ -71,6 +80,17 @@ class MPList
             preg_match('#key=([\dO]+)#', $anchor->attr('href'), $matches);
             $mp['identifier'] = $matches[1];
 
+
+            // In the lists of previous legislatures, the following cells are
+            // empty and the information is not available anymore. We then
+            // stop the scraping of the row here and go to the next one.
+            if ($legislatureNumber) {
+
+                // Store the scraped data and stop the current iteration.
+                $list[] = $mp;
+
+                return;
+            }
 
             // Second <td>.
             // This one has an anchor containing the name and the Chamber ID of
