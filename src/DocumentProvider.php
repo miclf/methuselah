@@ -45,12 +45,13 @@ class DocumentProvider
     /**
      * Get a web page for a given key.
      *
-     * @param  string  $key  A URL pattern identifier
-     * @return string        Source code of the page
+     * @param  string        $key     A URL pattern identifier
+     * @param  string|array  $values  Pattern values
+     * @return string                 Source code of the page
      */
-    public function get($key)
+    public function get($key, $values = null)
     {
-        $url = $this->urlRepository->find($key);
+        $url = $this->urlRepository->find($key, $values);
 
         return $this->download($url);
     }
