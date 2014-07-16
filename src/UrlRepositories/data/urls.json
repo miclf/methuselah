@@ -3,7 +3,8 @@
         "k": {
             "baseUrl": "http://www.lachambre.be/",
             "mp_list": {
-                "current": "kvvcr/showpage.cfm?section=/depute&language=fr&cfm=/site/wwwcfm/depute/cvlist.cfm"
+                "current": "kvvcr/showpage.cfm?section=/depute&language=fr&cfm=/site/wwwcfm/depute/cvlist.cfm",
+                "legislature": "kvvcr/showpage.cfm?section=/depute&language=fr&rightmenu=right_depute&cfm=cvlist54.cfm?legis={legislatureNumber}&today=n"
             }
         }
     }
