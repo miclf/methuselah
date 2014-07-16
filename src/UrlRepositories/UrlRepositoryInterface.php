@@ -8,12 +8,13 @@
 interface UrlRepositoryInterface
 {
     /**
-     * Find a URL pattern by key.
+     * Find a URL by key.
      *
-     * @param  string  $key
+     * @param  string        $key
+     * @param  string|array  $values
      * @return string
      *
      * @throws \Exception if the key matches zero or more than one URL.
      */
-    public function find($key);
+    public function find($key, $values = null);
 }
