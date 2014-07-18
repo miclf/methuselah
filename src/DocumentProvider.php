@@ -109,11 +109,9 @@ class DocumentProvider
      */
     protected function configureUrlRepository($config)
     {
-        if (array_key_exists('url_repository', $config)) {
-            $repo = $config['url_repository'];
-        }
+        $repo = array_get($config, 'url_repository');
 
-        if (isset($repo) && $repo instanceof UrlRepositoryInterface) {
+        if ($repo instanceof UrlRepositoryInterface) {
             $this->urlRepository = $repo;
         } else {
             $this->setDefaultUrlRepository();
