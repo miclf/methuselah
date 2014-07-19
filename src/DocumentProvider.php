@@ -1,6 +1,7 @@
 <?php namespace Pandemonium\Methuselah;
 
 use Pandemonium\Methuselah\UrlRepositories\UrlRepositoryInterface;
+use Pandemonium\Methuselah\UrlRepositories\JsonUrlRepository;
 use GuzzleHttp\Client;
 use GuzzleHttp\Query;
 
@@ -125,6 +126,6 @@ class DocumentProvider
      */
     protected function setDefaultUrlRepository()
     {
-        $this->urlRepository = new UrlRepositories\JsonUrlRepository;
+        $this->urlRepository = new JsonUrlRepository;
     }
 }
