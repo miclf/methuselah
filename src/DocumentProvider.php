@@ -29,7 +29,7 @@ class DocumentProvider
     /**
      * Constructor.
      *
-     * @param array  $config
+     * @param  array  $config
      * @return void
      */
     public function __construct(array $config = [])
