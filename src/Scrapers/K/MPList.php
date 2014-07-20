@@ -150,7 +150,7 @@ class MPList
     {
         $regex = [
             // Replace non-breaking spaces by normal spaces
-            '# #' => ' ',
+            '# #'      => ' ',
             // Replace multiple adjacent spaces by a single one
             '#\s{2,}#' => ' ',
         ];
