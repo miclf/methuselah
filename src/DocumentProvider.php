@@ -38,9 +38,7 @@ class DocumentProvider
 
         // Allow to specify how query string values are URL encoded.
         // This is necessary for bogus sites that do not comply with RFCs.
-        if (array_key_exists('query_encoding', $config)) {
-            $this->queryEncoding = $config['query_encoding'];
-        }
+        $this->queryEncoding = array_get($config, 'query_encoding');
     }
 
     /**
