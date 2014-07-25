@@ -25,6 +25,11 @@ class MPList
      */
     public function __construct(DocumentProvider $documentProvider)
     {
+        // The website of the Chamber does not respect RFC 1738 nor RFC 3986. In
+        // order to work with it, query strings must not be encoded. We then
+        // disable the encoding operation that is executed by default.
+        $documentProvider->setQueryEncoding(false);
+
         $this->documentProvider = $documentProvider;
     }
 
