@@ -93,10 +93,10 @@ class DocumentProvider
 
         $request = $client->createRequest('GET', $url);
 
-        // Some sites, such as the one of the Chamber, do not respect RFC
-        // 1738 nor RFC 3986. In order to work with them, query strings
-        // must not be encoded. We then need to provide a way to disable
-        // the automatic encoding that Guzzle provides by default.
+        // Some sites, such as the one of the Chamber, do not respect RFC 1738
+        // nor RFC 3986. In order to work with them, query strings must not be
+        // encoded. We then need to provide a way to disable the automatic
+        // encoding that Guzzle provides by default.
         if (isset($this->queryEncoding)) {
 
             $request->getQuery()->setEncodingType($this->queryEncoding);
