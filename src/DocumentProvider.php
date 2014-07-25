@@ -35,10 +35,6 @@ class DocumentProvider
     public function __construct(array $config = [])
     {
         $this->configureUrlRepository($config);
-
-        // Allow to specify how query string values are URL encoded.
-        // This is necessary for bogus sites that do not comply with RFCs.
-        $this->queryEncoding = array_get($config, 'query_encoding');
     }
 
     /**
