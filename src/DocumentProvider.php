@@ -56,6 +56,16 @@ class DocumentProvider
     }
 
     /**
+     * Set how query string values have to be URL encoded.
+     *
+     * @param string|false  $encoding
+     */
+    public function setQueryEncoding($encoding = null)
+    {
+        $this->queryEncoding = $encoding;
+    }
+
+    /**
      * Get the URL repository of the document provider.
      *
      * @return \Pandemonium\Methuselah\UrlRepositories\UrlRepositoryInterface
