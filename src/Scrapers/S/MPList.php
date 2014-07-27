@@ -92,7 +92,7 @@ class MPList
     /**
      * Get the document provider of the scraper.
      *
-     * @return \Pandemonium\Methuselah\UrlRepositories\UrlRepositoryInterface
+     * @return \Pandemonium\Methuselah\DocumentProvider
      */
     public function getDocumentProvider()
     {
