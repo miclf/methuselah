@@ -29,6 +29,14 @@ abstract class AbstractScraper
     }
 
     /**
+     * Scrape data from a web page.
+     *
+     * @param  array  $options
+     * @return mixed
+     */
+    abstract public function scrape(array $options = null);
+
+    /**
      * Get the document provider of the scraper.
      *
      * @return \Pandemonium\Methuselah\DocumentProvider
