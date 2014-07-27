@@ -27,4 +27,14 @@ abstract class AbstractScraper
     {
         $this->documentProvider = $documentProvider;
     }
+
+    /**
+     * Get the document provider of the scraper.
+     *
+     * @return \Pandemonium\Methuselah\UrlRepositories\UrlRepositoryInterface
+     */
+    public function getDocumentProvider()
+    {
+        return $this->documentProvider;
+    }
 }

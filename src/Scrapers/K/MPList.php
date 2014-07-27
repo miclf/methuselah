@@ -135,16 +135,6 @@ class MPList
     }
 
     /**
-     * Get the document provider of the scraper.
-     *
-     * @return \Pandemonium\Methuselah\UrlRepositories\UrlRepositoryInterface
-     */
-    public function getDocumentProvider()
-    {
-        return $this->documentProvider;
-    }
-
-    /**
      * Create a new DomCrawler.
      *
      * @return \Symfony\Component\DomCrawler\Crawler
