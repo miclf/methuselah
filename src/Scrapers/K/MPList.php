@@ -2,21 +2,15 @@
 
 use Symfony\Component\DomCrawler\Crawler;
 use Pandemonium\Methuselah\DocumentProvider;
+use Pandemonium\Methuselah\Scrapers\AbstractScraper;
 
 /**
  * Extract data from the list of members of the Chamber.
  *
  * @author Michaël Lecerf <michael@estsurinter.net>
  */
-class MPList
+class MPList extends AbstractScraper
 {
-    /**
-     * A document provider.
-     *
-     * @var \Pandemonium\Methuselah\DocumentProvider
-     */
-    protected $documentProvider;
-
     /**
      * Constructor.
      *
@@ -25,12 +19,12 @@ class MPList
      */
     public function __construct(DocumentProvider $documentProvider)
     {
+        parent::__construct($documentProvider);
+
         // The website of the Chamber does not respect RFC 1738 nor RFC 3986. In
         // order to work with it, query strings must not be encoded. We then
         // disable the encoding operation that is executed by default.
-        $documentProvider->setQueryEncoding(false);
-
-        $this->documentProvider = $documentProvider;
+        $this->documentProvider->setQueryEncoding(false);
     }
 
     /**
