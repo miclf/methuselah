@@ -14,14 +14,16 @@ class MPList extends AbstractScraper
     /**
      * Scrape a list of senators and extract its information.
      *
-     * @param  int    $legislatureNumber
+     * @param  array  $options
      * @return array
      */
-    public function scrape($legislatureNumber = null)
+    public function scrape(array $options = null)
     {
         $list = $value = [];
 
         $pattern = 's.mp_list.current';
+
+        $legislatureNumber = array_get($options, 'legislature_number');
 
         // Set the relevant parameters if a specific legislature is requested.
         if (!is_null($legislatureNumber)) {
