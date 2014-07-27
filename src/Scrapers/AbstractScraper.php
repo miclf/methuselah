@@ -37,4 +37,14 @@ abstract class AbstractScraper
     {
         return $this->documentProvider;
     }
+
+    /**
+     * Create a new DomCrawler.
+     *
+     * @return \Symfony\Component\DomCrawler\Crawler
+     */
+    public function newCrawler()
+    {
+        return new Crawler;
+    }
 }

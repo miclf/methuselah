@@ -129,16 +129,6 @@ class MPList extends AbstractScraper
     }
 
     /**
-     * Create a new DomCrawler.
-     *
-     * @return \Symfony\Component\DomCrawler\Crawler
-     */
-    public function newCrawler()
-    {
-        return new Crawler;
-    }
-
-    /**
      * Extended trim utility method to deal with some of the endless suprises of
      * the website of the Chamber.
      *
