@@ -1,5 +1,8 @@
 <?php namespace Pandemonium\Methuselah\Scrapers;
 
+use Symfony\Component\DomCrawler\Crawler;
+use Pandemonium\Methuselah\DocumentProvider;
+
 /**
  * Base class for all scrapers.
  *
