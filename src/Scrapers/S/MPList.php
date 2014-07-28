@@ -64,13 +64,13 @@ class MPList extends AbstractScraper
             preg_match('#ID=([\d]+)#', $anchor->attr('href'), $matches);
             $mp['identifier'] = $matches[1];
 
-            $mp['given_name_surname'] = $this->trim($anchor->text());
+            $mp['given_name_surname'] = $anchor->text();
 
             // Add the data of the current MP to the list.
             $list[] = $mp;
 
         });
 
-        return $list;
+        return $this->trimArray($list);
     }
 }
