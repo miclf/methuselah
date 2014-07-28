@@ -64,35 +64,13 @@ class MPList extends AbstractScraper
             preg_match('#ID=([\d]+)#', $anchor->attr('href'), $matches);
             $mp['identifier'] = $matches[1];
 
-            $mp['given_name_surname'] = $this->trim($anchor->text());
+            $mp['given_name_surname'] = $anchor->text();
 
             // Add the data of the current MP to the list.
             $list[] = $mp;
 
         });
 
-        return $list;
-    }
-
-    /**
-     * Extended trim utility method to deal with some of the endless suprises of
-     * the website of the Chamber.
-     *
-     * @param  string  $str
-     * @return string
-     */
-    protected function trim($str)
-    {
-        $regex = [
-            // Replace non-breaking spaces by normal spaces
-            '# #'      => ' ',
-            // Replace multiple adjacent spaces by a single one
-            '#\s{2,}#' => ' ',
-        ];
-
-        $str = preg_replace(array_keys($regex), array_values($regex), $str);
-
-        // Quickly trim the string before returning it (faster than regex)
-        return trim($str);
+        return $this->trimArray($list);
     }
 }

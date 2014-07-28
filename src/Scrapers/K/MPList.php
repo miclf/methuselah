@@ -73,7 +73,7 @@ class MPList extends AbstractScraper
             // from this anchor.
             $anchor = $cells->eq(0)->filter('a');
 
-            $mp['surname_given_name'] = $this->trim($anchor->text());
+            $mp['surname_given_name'] = $anchor->text();
 
             // Chamber MP identifiers normally consist entirely of digits. But
             // they can also use the capital letter ‘O’, which really looks like
@@ -99,7 +99,7 @@ class MPList extends AbstractScraper
             // party name.
             $anchor = $cells->eq(1)->filter('a');
 
-            $mp['political_group'] = $this->trim($anchor->text());
+            $mp['political_group'] = $anchor->text();
 
             // Group identifiers are URL-encoded, so we need to decode them.
             preg_match('#namegroup=([^&]+)&#', $anchor->attr('href'), $matches);
@@ -108,7 +108,7 @@ class MPList extends AbstractScraper
 
             // Third <td> cell.
             // This one MAY contain the official e-mail address of the MP.
-            $mp['e-mail'] = $this->trim($cells->eq(2)->text()) ?: null;
+            $mp['e-mail'] = $cells->eq(2)->text() ?: null;
 
 
             // Process the last <td>.
@@ -127,28 +127,6 @@ class MPList extends AbstractScraper
 
         });
 
-        return $list;
-    }
-
-    /**
-     * Extended trim utility method to deal with some of the endless suprises of
-     * the website of the Chamber.
-     *
-     * @param  string  $str
-     * @return string
-     */
-    protected function trim($str)
-    {
-        $regex = [
-            // Replace non-breaking spaces by normal spaces
-            '# #'      => ' ',
-            // Replace multiple adjacent spaces by a single one
-            '#\s{2,}#' => ' ',
-        ];
-
-        $str = preg_replace(array_keys($regex), array_values($regex), $str);
-
-        // Quickly trim the string before returning it (faster than regex)
-        return trim($str);
+        return $this->trimArray($list);
     }
 }

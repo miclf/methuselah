@@ -55,4 +55,46 @@ abstract class AbstractScraper
     {
         return new Crawler;
     }
+
+    /**
+     * Recursive extended trim utility method to trim arrays of strings.
+     *
+     * @param  array  $array
+     * @return array
+     */
+    protected function trimArray(array $array)
+    {
+        foreach ($array as $key => $value) {
+
+            if (is_array($value)) {
+                $array[$key] = $this->trimArray($value);
+            } else {
+                $array[$key] = $this->trim($value);
+            }
+        }
+
+        return $array;
+    }
+
+    /**
+     * Extended trim utility method to deal with some crazy use cases that can
+     * be found on official websites.
+     *
+     * @param  string  $str
+     * @return string
+     */
+    protected function trim($str)
+    {
+        $regex = [
+            // Replace non-breaking spaces by normal spaces
+            '# #'      => ' ',
+            // Replace multiple adjacent spaces by a single one
+            '#\s{2,}#' => ' ',
+        ];
+
+        $str = preg_replace(array_keys($regex), array_values($regex), $str);
+
+        // Quickly trim the string (faster than regex)
+        return trim($str);
+    }
 }
