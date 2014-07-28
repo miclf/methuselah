@@ -57,26 +57,6 @@ abstract class AbstractScraper
     }
 
     /**
-     * Recursive extended trim utility method to trim arrays of strings.
-     *
-     * @param  array  $array
-     * @return array
-     */
-    protected function trimArray(array $array)
-    {
-        foreach ($array as $key => $value) {
-
-            if (is_array($value)) {
-                $array[$key] = $this->trimArray($value);
-            } else {
-                $array[$key] = $this->trim($value);
-            }
-        }
-
-        return $array;
-    }
-
-    /**
      * Extended trim utility method to deal with some crazy use cases that can
      * be found on official websites.
      *
@@ -96,5 +76,25 @@ abstract class AbstractScraper
 
         // Quickly trim the string (faster than regex)
         return trim($str);
+    }
+
+    /**
+     * Recursive extended trim utility method to trim arrays of strings.
+     *
+     * @param  array  $array
+     * @return array
+     */
+    protected function trimArray(array $array)
+    {
+        foreach ($array as $key => $value) {
+
+            if (is_array($value)) {
+                $array[$key] = $this->trimArray($value);
+            } else {
+                $array[$key] = $this->trim($value);
+            }
+        }
+
+        return $array;
     }
 }
