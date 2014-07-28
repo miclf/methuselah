@@ -73,26 +73,4 @@ class MPList extends AbstractScraper
 
         return $list;
     }
-
-    /**
-     * Extended trim utility method to deal with some of the endless suprises of
-     * the website of the Chamber.
-     *
-     * @param  string  $str
-     * @return string
-     */
-    protected function trim($str)
-    {
-        $regex = [
-            // Replace non-breaking spaces by normal spaces
-            '# #'      => ' ',
-            // Replace multiple adjacent spaces by a single one
-            '#\s{2,}#' => ' ',
-        ];
-
-        $str = preg_replace(array_keys($regex), array_values($regex), $str);
-
-        // Quickly trim the string before returning it (faster than regex)
-        return trim($str);
-    }
 }
