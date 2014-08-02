@@ -55,6 +55,7 @@ class DocumentProvider
      * Set how query string values have to be URL encoded.
      *
      * @param string|false  $encoding
+     * @return void
      */
     public function setQueryEncoding($encoding = null)
     {
