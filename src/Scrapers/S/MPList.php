@@ -12,6 +12,10 @@ class MPList extends AbstractScraper
     /**
      * Scrape a list of senators and extract its information.
      *
+     * The $options array accepts a 'legislature_number' option, allowing to
+     * get the information of a specific legislature. If this option is not
+     * provided, the scraper get the list of current MPs.
+     *
      * @param  array  $options
      * @return array
      */
