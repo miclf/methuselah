@@ -1,7 +1,5 @@
 <?php namespace Pandemonium\Methuselah\Scrapers\S;
 
-use Symfony\Component\DomCrawler\Crawler;
-use Pandemonium\Methuselah\DocumentProvider;
 use Pandemonium\Methuselah\Scrapers\AbstractScraper;
 
 /**
