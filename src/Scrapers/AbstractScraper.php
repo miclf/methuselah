@@ -18,6 +18,13 @@ abstract class AbstractScraper
     protected $documentProvider;
 
     /**
+     * The options of the scraper.
+     *
+     * @var array
+     */
+    protected $options = [];
+
+    /**
      * Constructor.
      *
      * @param  \Pandemonium\Methuselah\DocumentProvider  $documentProvider
@@ -35,6 +42,41 @@ abstract class AbstractScraper
      * @return mixed
      */
     abstract public function scrape(array $options = null);
+
+    /**
+     * Get the options of the scraper.
+     *
+     * @return array
+     */
+    public function getOptions()
+    {
+        return $this->options;
+    }
+
+    /**
+     * Set the options of the scraper.
+     *
+     * @param  array  $options
+     * @return self
+     */
+    public function setOptions(array $options)
+    {
+        $this->options = $options;
+
+        return $this;
+    }
+
+    /**
+     * Remove all the options of the scraper.
+     *
+     * @return self
+     */
+    public function unsetOptions()
+    {
+        $this->options = [];
+
+        return $this;
+    }
 
     /**
      * Get the document provider of the scraper.
