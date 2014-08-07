@@ -44,6 +44,17 @@ abstract class AbstractScraper
     abstract public function scrape(array $options = null);
 
     /**
+     * Get the value of a single option of the scraper.
+     *
+     * @param  string  $key
+     * @return mixed
+     */
+    public function getOption($key)
+    {
+        return array_get($this->options, $key);
+    }
+
+    /**
      * Get the options of the scraper.
      *
      * @return array
@@ -51,6 +62,20 @@ abstract class AbstractScraper
     public function getOptions()
     {
         return $this->options;
+    }
+
+    /**
+     * Set a single option of the scraper.
+     *
+     * @param  string  $key
+     * @param  mixed   $value
+     * @return self
+     */
+    public function setOption($key, $value)
+    {
+        array_set($this->options, $key, $value);
+
+        return $this;
     }
 
     /**
@@ -62,6 +87,19 @@ abstract class AbstractScraper
     public function setOptions(array $options)
     {
         $this->options = $options;
+
+        return $this;
+    }
+
+    /**
+     * Unset a single option of the scraper.
+     *
+     * @param  string  $key
+     * @return self
+     */
+    public function unsetOption($key)
+    {
+        array_forget($this->options, $key);
 
         return $this;
     }
