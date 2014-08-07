@@ -38,10 +38,9 @@ abstract class AbstractScraper
     /**
      * Scrape data from a web page.
      *
-     * @param  array  $options
      * @return mixed
      */
-    abstract public function scrape(array $options = null);
+    abstract public function scrape();
 
     /**
      * Get the value of a single option of the scraper.

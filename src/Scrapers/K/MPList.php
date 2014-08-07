@@ -29,14 +29,9 @@ class MPList extends AbstractScraper
     /**
      * Scrape a list of members of the Chamber and extract its information.
      *
-     * The $options array accepts a 'legislature_number' option, allowing to
-     * get the information of a specific legislature. If this option is not
-     * provided, the scraper get the list of current MPs.
-     *
-     * @param  array  $options
      * @return array
      */
-    public function scrape(array $options = null)
+    public function scrape()
     {
         $list = $value = [];
 
