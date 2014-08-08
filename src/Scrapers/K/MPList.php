@@ -11,6 +11,13 @@ use Pandemonium\Methuselah\Scrapers\AbstractScraper;
 class MPList extends AbstractScraper
 {
     /**
+     * Character set of the scraped documents.
+     *
+     * @var string
+     */
+    protected $charset = 'ISO-8859-1';
+
+    /**
      * Constructor.
      *
      * @param  \Pandemonium\Methuselah\DocumentProvider  $documentProvider

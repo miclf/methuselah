@@ -25,6 +25,13 @@ abstract class AbstractScraper
     protected $options = [];
 
     /**
+     * Character set of the scraped documents.
+     *
+     * @var string
+     */
+    protected $charset = 'UTF-8';
+
+    /**
      * Constructor.
      *
      * @param  \Pandemonium\Methuselah\DocumentProvider  $documentProvider
