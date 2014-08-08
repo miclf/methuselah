@@ -40,30 +40,16 @@ class MPList extends AbstractScraper
      */
     public function scrape()
     {
-        $list = $value = [];
+        $list = [];
 
-        $pattern = 'k.mp_list.current';
+        $hasLegislatureNumber = (bool) $this->getOption('legislature_number');
 
-        $legislatureNumber = array_get($options, 'legislature_number');
-
-        // Set the relevant parameters if a specific legislature is requested.
-        if (!is_null($legislatureNumber)) {
-            $pattern = 'k.mp_list.legislature';
-            $value   = compact('legislatureNumber');
-        }
-
-        $html = $this->documentProvider->get($pattern, $value);
-
-        $crawler = $this->newCrawler();
-
-        // The page is encoded in ISO-8859-1, so we explicitly specify
-        // this in order to avoid any character encoding issue.
-        $crawler->addHtmlContent($html, 'ISO-8859-1');
+        $crawler = $this->getCrawler();
 
         // Get the <table> storing the list of MPs and loop on its rows.
         $rows = $crawler->filter('table[width="100%"] tr');
 
-        $rows->each(function ($row, $i) use (&$list, $legislatureNumber) {
+        $rows->each(function ($row, $i) use (&$list, $hasLegislatureNumber) {
 
             // Get the <td> elements of this table row.
             $cells = $row->children();
@@ -90,7 +76,7 @@ class MPList extends AbstractScraper
             // In the lists of previous legislatures, the following cells are
             // empty and the information is not available anymore. We then
             // stop the scraping of the row here and go to the next one.
-            if ($legislatureNumber) {
+            if ($hasLegislatureNumber) {
 
                 // Store the scraped data and stop the current iteration.
                 $list[] = $mp;

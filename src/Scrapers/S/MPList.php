@@ -23,25 +23,9 @@ class MPList extends AbstractScraper
      */
     public function scrape()
     {
-        $list = $value = [];
+        $list = [];
 
-        $pattern = 's.mp_list.current';
-
-        $legislatureNumber = array_get($options, 'legislature_number');
-
-        // Set the relevant parameters if a specific legislature is requested.
-        if (!is_null($legislatureNumber)) {
-            $pattern = 's.mp_list.legislature';
-            $value   = compact('legislatureNumber');
-        }
-
-        $html = $this->documentProvider->get($pattern, $value);
-
-        $crawler = $this->newCrawler();
-
-        // The page is encoded in ISO-8859-1, so we explicitly specify
-        // this in order to avoid any character encoding issue.
-        $crawler->addHtmlContent($html, 'ISO-8859-1');
+        $crawler = $this->getCrawler();
 
         // Get the <table> storing the list of MPs and loop on its rows.
         // The correct table is the second one of the page

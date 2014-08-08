@@ -43,6 +43,22 @@ abstract class AbstractScraper
     }
 
     /**
+     * Get a DOM crawler prefilled with the whole document.
+     *
+     * @return \Symfony\Component\DomCrawler\Crawler
+     */
+    public function getCrawler()
+    {
+        $crawler = $this->newCrawler();
+
+        // We explicitly specify the character set to avoid issues
+        // with documents using old charsets such as ISO-8859-1.
+        $crawler->addHtmlContent($this->getDocument(), $this->charset);
+
+        return $crawler;
+    }
+
+    /**
      * Return the appropriate parameters for the document provider.
      *
      * This returns an indexed array of two elements. The first is the
@@ -51,6 +67,18 @@ abstract class AbstractScraper
      * @return array
      */
     abstract public function getProviderArguments();
+
+    /**
+     * Get the HTML of the document.
+     *
+     * @return string
+     */
+    public function getDocument()
+    {
+        list($pattern, $values) = $this->getProviderArguments();
+
+        return $this->documentProvider->get($pattern, $values);
+    }
 
     /**
      * Scrape data from a web page.
