@@ -66,16 +66,16 @@ class MPList extends AbstractScraper
 
 
             // Process the first <td> cell.
-            // It contains an achor linking to the page of the MP. We will
-            // extract the surname and given name of the MP and its Chamber ID
-            // from this anchor.
+            // It contains an achor linking to the page of the MP. We
+            // will extract the surname and given name of the MP and
+            // its Chamber ID from this anchor.
             $anchor = $cells->eq(0)->filter('a');
 
             $mp['surname_given_name'] = $anchor->text();
 
-            // Chamber MP identifiers normally consist entirely of digits. But
-            // they can also use the capital letter ‘O’, which really looks like
-            // a zero but isn’t.
+            // Chamber MP identifiers normally consist entirely of digits.
+            // But they can also use the capital letter ‘O’, which really
+            // looks like a zero but isn’t.
             preg_match('#key=([\dO]+)#', $anchor->attr('href'), $matches);
             $mp['identifier'] = $matches[1];
 
@@ -110,8 +110,8 @@ class MPList extends AbstractScraper
 
 
             // Process the last <td>.
-            // It MAY contain a link to a website chosen by the MP. It could be
-            // a personal site, the site of the party, etc.
+            // It MAY contain a link to a website chosen by the MP. It
+            // could be a personal site, the site of the party, etc.
             $mp['website'] = null;
 
             if (count($anchor = $cells->eq(3)->filter('a'))) {
