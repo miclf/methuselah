@@ -127,4 +127,26 @@ class MPList extends AbstractScraper
 
         return $this->trimArray($list);
     }
+
+    /**
+     * Return the appropriate parameters for the document provider.
+     *
+     * This returns an indexed array of two elements. The first is the
+     * pattern string and the second is an array of pattern values.
+     *
+     * @return array
+     */
+    public function getProviderArguments()
+    {
+        $pattern = 'k.mp_list.current';
+        $value = [];
+
+        // Set the relevant parameters if a specific legislature is requested.
+        if ($number = $this->getOption('legislature_number')) {
+            $pattern = 'k.mp_list.legislature';
+            $value   = ['legislatureNumber' => $number];
+        }
+
+        return [$pattern, $value];
+    }
 }

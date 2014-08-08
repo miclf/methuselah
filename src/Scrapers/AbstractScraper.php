@@ -36,6 +36,16 @@ abstract class AbstractScraper
     }
 
     /**
+     * Return the appropriate parameters for the document provider.
+     *
+     * This returns an indexed array of two elements. The first is the
+     * pattern string and the second is an array of pattern values.
+     *
+     * @return array
+     */
+    abstract public function getProviderArguments();
+
+    /**
      * Scrape data from a web page.
      *
      * @return mixed
