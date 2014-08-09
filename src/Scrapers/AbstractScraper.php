@@ -91,11 +91,12 @@ abstract class AbstractScraper
      * Get the value of a single option of the scraper.
      *
      * @param  string  $key
+     * @param  mixed   $default  Default value to return if the key does not exist
      * @return mixed
      */
-    public function getOption($key)
+    public function getOption($key, $default = null)
     {
-        return array_get($this->options, $key);
+        return array_get($this->options, $key, $default);
     }
 
     /**
