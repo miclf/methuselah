@@ -214,10 +214,12 @@ abstract class AbstractScraper
         foreach ($array as $key => $value) {
 
             if (is_array($value)) {
-                $array[$key] = $this->trimArray($value);
-            } else {
-                $array[$key] = $this->trim($value);
+                $value = $this->trimArray($value);
+            } elseif (is_string($value)) {
+                $value = $this->trim($value);
             }
+
+            $array[$key] = $value;
         }
 
         return $array;
