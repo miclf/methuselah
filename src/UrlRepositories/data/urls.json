@@ -5,7 +5,8 @@
             "mp_list": {
                 "current": "kvvcr/showpage.cfm?section=/depute&language=fr&cfm=/site/wwwcfm/depute/cvlist.cfm",
                 "legislature": "kvvcr/showpage.cfm?section=/depute&language=fr&rightmenu=right_depute&cfm=cvlist54.cfm?legis={legislatureNumber}&today=n"
-            }
+            },
+            "mp": "kvvcr/showpage.cfm?section=/depute&language={lang}&rightmenu=right_depute&cfm=cvview54.cfm?key={identifier}&lactivity={legislatureNumber}"
         },
         "s": {
             "baseUrl": "http://senat.be/www/?MIval=/",
