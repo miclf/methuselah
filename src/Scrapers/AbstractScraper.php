@@ -1,6 +1,6 @@
 <?php namespace Pandemonium\Methuselah\Scrapers;
 
-use Symfony\Component\DomCrawler\Crawler;
+use Pandemonium\Methuselah\Crawler\Crawler;
 use Pandemonium\Methuselah\DocumentProvider;
 
 /**
