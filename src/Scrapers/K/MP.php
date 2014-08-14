@@ -82,7 +82,7 @@ class MP extends AbstractScraper
      *
      * @return array
      */
-    public function getProviderArguments()
+    protected function getProviderArguments()
     {
         $values = [
             'identifier'        => $this->getOption('identifier'),

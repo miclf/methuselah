@@ -70,7 +70,7 @@ class MPList extends AbstractScraper
      *
      * @return array
      */
-    public function getProviderArguments()
+    protected function getProviderArguments()
     {
         $pattern = 's.mp_list.current';
         $value = [];

@@ -66,7 +66,7 @@ abstract class AbstractScraper
      *
      * @return array
      */
-    abstract public function getProviderArguments();
+    abstract protected function getProviderArguments();
 
     /**
      * Get the HTML of the document.
