@@ -264,6 +264,7 @@ class MP extends AbstractScraper
 
         foreach ($links as $i => $node) {
 
+            // If we encounter a heading, we are starting a new category.
             if ($node->nodeName === 'h5') {
                 $category = array_shift($categories);
                 continue;
@@ -271,6 +272,9 @@ class MP extends AbstractScraper
 
             $url = $node->getAttribute('href');
 
+            // Try to extract a group or committee identifier from the URL.
+            // If one is found, it is used as a key and added to the list
+            // with the corresponding full name of the group.
             if (preg_match('#\d+$#', $url, $matches)) {
 
                 $id = (string) $matches[0];
