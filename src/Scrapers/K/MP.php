@@ -256,10 +256,10 @@ class MP extends AbstractScraper
 
         // We get the anchors linking to committees as well as the headings
         // categorizing them. We will then loop on these nodes to guess,
-        // for each one, if the MP is an primary or a secondary member.
+        // for each one, if the MP is a normal or a substitute member.
         $links = $this->crawler->filter('h5, a[href*="com.cfm?com="]');
 
-        $categories = ['primary', 'secondary'];
+        $categories = ['normal', 'substitute'];
         $category;
 
         foreach ($links as $i => $node) {
