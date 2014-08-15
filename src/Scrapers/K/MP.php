@@ -64,6 +64,7 @@ class MP extends AbstractScraper
 
         // Extract relevant data from the different parts of the page.
         $mp['given_name_surname'] = $this->getFullName();
+        $mp['identifier']         = $this->getOption('identifier');
         $mp['legislatures']       = $this->getLegislatures();
         $mp['cv']                 = $this->getCV();
 
