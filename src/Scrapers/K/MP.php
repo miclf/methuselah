@@ -104,7 +104,7 @@ class MP extends AbstractScraper
         // The data is contained inside the first <center> element of the page.
         $fullName = $this->crawler->filter('center')->text();
 
-        return trim($fullName);
+        return $this->trim($fullName);
     }
 
     /**
