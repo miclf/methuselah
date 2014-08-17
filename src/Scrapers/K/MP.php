@@ -232,7 +232,7 @@ class MP extends AbstractScraper
     /**
      * Get the short ‘CV’ of the MP.
      *
-     * @return array  An array of strings containing the different parts of the CV
+     * @return array|null  An array of strings containing the different parts of the CV
      */
     protected function getCV()
     {
@@ -242,7 +242,13 @@ class MP extends AbstractScraper
             ->filter('p')
             ->text();
 
-        return array_map('trim', explode('   ', $content));
+        // Return early if the trimmed content is an empty string.
+        if (!$content = trim($content)) return null;
+
+        // The sentences of the text are usually (read: not always) separated
+        // by a series of two or three consecutive space characters. We will
+        // use this fact to convert the text to an array of sentences.
+        return preg_split('#\s{2,}#', $content);
     }
 
     /**
