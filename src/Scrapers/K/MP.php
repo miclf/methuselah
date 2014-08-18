@@ -119,10 +119,10 @@ class MP extends AbstractScraper
 
         foreach ($links as $link) {
 
-            // The value we want is the integer at the beginning
-            // of the string. Transtyping the value does the job
-            // quickly, without having to play with substrings.
-            $legislatures[] = (int) $link->nodeValue;
+            // The value we want is the number at the beginning of the string.
+            // Transtyping the value does the job quickly, without having to
+            // play with substrings. We then store the value as a string.
+            $legislatures[] = (string) intval($link->nodeValue);
         }
 
         // Order the values before returning them.
