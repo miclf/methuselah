@@ -1,5 +1,6 @@
 <?php namespace Pandemonium\Methuselah\Scrapers\K;
 
+use Exception;
 use Pandemonium\Methuselah\Crawler\Crawler;
 use Pandemonium\Methuselah\DocumentProvider;
 use Pandemonium\Methuselah\Scrapers\AbstractScraper;
@@ -56,6 +57,19 @@ class MP extends AbstractScraper
     ];
 
     /**
+     * The list of roles that MPs can have in groups and
+     * committees, mapped to their French names.
+     *
+     * @var array
+     */
+    protected $roles = [
+        'president'  => 'Président',
+        'member'     => 'Membre Effectif',
+        'substitute' => 'Membre Suppléant',
+        'nonvoter'   => 'Membre sans voix délibérative',
+    ];
+
+    /**
      * Constructor.
      *
      * @param  \Pandemonium\Methuselah\DocumentProvider  $documentProvider
@@ -75,6 +89,8 @@ class MP extends AbstractScraper
      * Scrape the page of a member of the Chamber and extract its information.
      *
      * @return array
+     *
+     * @throws \Exception if a committee role cannot be identified.
      */
     public function scrape()
     {
@@ -275,24 +291,26 @@ class MP extends AbstractScraper
      * Get the list of groups and committees of which the MP is a member.
      *
      * @return array
+     *
+     * @throws \Exception if a committee role cannot be identified.
      */
     protected function getCommittees()
     {
         $committees = [];
+        $role = null;
 
         // We get the anchors linking to committees as well as the headings
-        // categorizing them. We will then loop on these nodes to guess,
-        // for each one, if the MP is a normal or a substitute member.
-        $links = $this->crawler->filter('h5, a[href*="com.cfm?com="]');
+        // categorizing them by role. Then we loop on these nodes
+        // to guess the role(s) of the MP in each group.
+        $nodes = $this->crawler->filter('h5, a[href*="com.cfm?com="]');
 
-        $categories = ['normal', 'substitute'];
-        $category;
+        foreach ($nodes as $node) {
 
-        foreach ($links as $i => $node) {
-
-            // If we encounter a heading, we are starting a new category.
+            // If we encounter a heading, we are starting with a new role.
             if ($node->nodeName === 'h5') {
-                $category = array_shift($categories);
+
+                $role = $this->getCommitteeRole($node->nodeValue);
+
                 continue;
             }
 
@@ -305,11 +323,32 @@ class MP extends AbstractScraper
 
                 $id = (string) $matches[0];
 
-                $committees[$category][$id] = $node->nodeValue;
+                // A MP can have multiple roles inside a group, such as
+                // 'president' and 'normal member'. These are then
+                // always stored as arrays for each committee.
+                $committees[$id][] = $role;
             }
         }
 
-        return $committees;
+        return $committees ?: null;
+    }
+
+    /**
+     * Find a committee role from a string.
+     *
+     * @param  string  $str
+     * @return string
+     *
+     * @throws \Exception if the role cannot be found.
+     */
+    protected function getCommitteeRole($str)
+    {
+        foreach ($this->roles as $role => $needle) {
+
+            if (str_contains($str, $needle)) return $role;
+        }
+
+        throw new Exception('Cannot determine role inside committee');
     }
 
     /**
