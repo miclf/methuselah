@@ -41,6 +41,7 @@ class JsonUrlRepository implements UrlRepositoryInterface
      * @return string
      *
      * @throws \Exception if the key matches zero or more than one URL.
+     * @throws \Exception if the value is missing for any required placeholder.
      */
     public function find($key, $values = null)
     {
@@ -107,6 +108,8 @@ class JsonUrlRepository implements UrlRepositoryInterface
      * @param  array         $placeholders
      * @param  string|array  $values
      * @return string
+     *
+     * @throws \Exception if the value is missing for any given placeholder.
      */
     protected function fillPlaceholders($url, $placeholders, $values)
     {
