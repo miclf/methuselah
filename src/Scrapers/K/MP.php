@@ -315,19 +315,19 @@ class MP extends AbstractScraper
     /**
      * Extract data from a MP’s CV.
      *
-     * @return array|null
+     * @return array
      */
     protected function parseCV()
     {
-        // If there is no CV data, we will of course not parse anything.
-        if (is_null($cv = $this->getCV())) return null;
-
         // Initialize the array of data that will be returned.
         $data = [
             'gender'        => null,
             'party'         => null,
             'birthdate'     => null,
         ];
+
+        // If there is no CV data, we will of course not parse anything.
+        if (is_null($cv = $this->getCV())) return $data;
 
         foreach ($cv as $i => $line) {
 
