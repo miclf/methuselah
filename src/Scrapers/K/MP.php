@@ -90,6 +90,7 @@ class MP extends AbstractScraper
         $mp += $this->getContactDetails();
 
         $mp['committees']         = $this->getCommittees();
+        $mp += $this->parseCV();
 
         return $mp;
     }
@@ -310,6 +311,70 @@ class MP extends AbstractScraper
         }
 
         return $committees;
+    }
+
+    /**
+     * Extract data from a MP’s CV.
+     *
+     * @return array|null
+     */
+    protected function parseCV()
+    {
+        // If there is no CV data, we will of course not parse anything.
+        if (is_null($cv = $this->getCV())) return null;
+
+        // Initialize the array of data that will be returned.
+        $data = [
+            'gender'        => null,
+            'party'         => null,
+            'birthdate'     => null,
+        ];
+
+        foreach ($cv as $i => $line) {
+
+            // One of the lines tells us the short name of this MP’s party.
+            if (starts_with($line, 'Député')) {
+                $data['party'] = $this->extractParty($line);
+            }
+
+            if (starts_with($line, ['Né', 'né']) || str_contains($line, '. Né')) {
+
+                // Guess if the MP is a man or a woman.
+                $data['gender'] = starts_with($line, ['Née ', 'née ']) ? 'f' : 'm';
+
+                // Try to get her or his date of birth.
+                $data['birthdate'] = $this->extractDate($line);
+            }
+        }
+
+        return $data;
+    }
+
+    /**
+     * Extract the short name of a party from a string.
+     *
+     * @param  string       $str
+     * @return string|null
+     */
+    protected function extractParty($str)
+    {
+        $party = null;
+
+        // We first test special cases.
+        if (str_contains($str, ' FDF ')) {
+            $party = 'FDF';
+        } elseif (str_contains($str, ' du Vlaams Belang')) {
+            $party = 'Vlaams Belang';
+        } elseif (starts_with($str, 'Député FDF')) {
+            $party = 'FDF';
+        }
+
+        // If nothing was found yet, we try the normal case.
+        if (!isset($party) && preg_match('#\((.+)\)#U', $str, $matches)) {
+            $party = $matches[1];
+        }
+
+        return $party;
     }
 
     /**
