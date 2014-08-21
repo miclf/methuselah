@@ -332,7 +332,8 @@ class MP extends AbstractScraper
         foreach ($cv as $i => $line) {
 
             // One of the lines tells us the short name of this MP’s party.
-            if (starts_with($line, 'Député')) {
+            if (starts_with($line, 'Député') && !isset($data['party'])) {
+
                 $data['party'] = $this->extractParty($line);
             }
 
