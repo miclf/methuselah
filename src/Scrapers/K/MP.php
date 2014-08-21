@@ -86,10 +86,9 @@ class MP extends AbstractScraper
         $mp['given_name_surname'] = $this->getFullName();
         $mp['identifier']         = $this->getOption('identifier');
         $mp['legislatures']       = $this->getLegislatures();
+        $mp['committees']         = $this->getCommittees();
 
         $mp += $this->getContactDetails();
-
-        $mp['committees']         = $this->getCommittees();
         $mp += $this->parseCV();
 
         return $mp;
