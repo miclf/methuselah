@@ -49,7 +49,7 @@ class MPList extends AbstractScraper
             // at the end of the table. We skip the row.
             if (!count($anchor)) return;
 
-            preg_match('#ID=([\d]+)#', $anchor->attr('href'), $matches);
+            $matches = $this->match('#ID=([\d]+)#', $anchor->attr('href'));
             $mp['identifier'] = $matches[1];
 
             $mp['given_name_surname'] = $anchor->text();

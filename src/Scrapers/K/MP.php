@@ -319,7 +319,7 @@ class MP extends AbstractScraper
             // Try to extract a group or committee identifier from the URL.
             // If one is found, it is used as a key and added to the list
             // with the corresponding full name of the group.
-            if (preg_match('#\d+$#', $url, $matches)) {
+            if ($matches = $this->match('#\d+$#', $url)) {
 
                 $id = (string) $matches[0];
 
@@ -409,7 +409,7 @@ class MP extends AbstractScraper
         }
 
         // If nothing was found yet, we try the normal case.
-        if (!isset($party) && preg_match('#\((.+)\)#U', $str, $matches)) {
+        if (!isset($party) && $matches = $this->match('#\((.+)\)#U', $str)) {
             $party = $matches[1];
         }
 
@@ -424,7 +424,7 @@ class MP extends AbstractScraper
      */
     protected function extractDate($str)
     {
-        if (preg_match('#(\d+)(?:er)? (\S+) (\d+)#', $str, $date)) {
+        if ($date = $this->match('#(\d+)(?:er)? (\S+) (\d+)#', $str)) {
 
             $day   = str_pad($date[1], '2', '0', STR_PAD_LEFT);
             $month = $this->months[$date[2]];

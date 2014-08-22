@@ -69,7 +69,9 @@ class MPList extends AbstractScraper
             // Chamber MP identifiers normally consist entirely of digits.
             // But they can also use the capital letter ‘O’, which really
             // looks like a zero but isn’t.
-            preg_match('#key=([\dO]+)#', $anchor->attr('href'), $matches);
+            $pattern = '#key=([\dO]+)#';
+            $matches = $this->match($pattern, $anchor->attr('href'));
+
             $mp['identifier'] = $matches[1];
 
 
@@ -92,8 +94,10 @@ class MPList extends AbstractScraper
 
             $mp['political_group'] = $anchor->text();
 
+            $pattern = '#namegroup=([^&]+)&#';
+            $matches = $this->match($pattern, $anchor->attr('href'));
+
             // Group identifiers are URL-encoded, so we need to decode them.
-            preg_match('#namegroup=([^&]+)&#', $anchor->attr('href'), $matches);
             $mp['political_group_identifier'] = urldecode($matches[1]);
 
 
