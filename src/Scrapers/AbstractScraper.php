@@ -182,6 +182,23 @@ abstract class AbstractScraper
     }
 
     /**
+     * Object oriented wrapper around preg_match().
+     *
+     * @param  string  $pattern
+     * @param  string  $subject
+     * @param  int     $offset
+     * @return array
+     */
+    protected function match($pattern, $subject, $offset = 0)
+    {
+        $matches = [];
+
+        preg_match($pattern, $subject, $matches, 0, $offset);
+
+        return $matches;
+    }
+
+    /**
      * Extended trim utility method to deal with some crazy use cases that can
      * be found on official websites.
      *
