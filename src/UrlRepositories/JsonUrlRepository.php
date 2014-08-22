@@ -117,7 +117,7 @@ class JsonUrlRepository implements UrlRepositoryInterface
 
         foreach ($placeholders as $key) {
 
-            if (!array_key_exists($key, $values)) {
+            if (!isset($values[$key])) {
                 throw new Exception("No value provided for placeholder $key");
             }
 
