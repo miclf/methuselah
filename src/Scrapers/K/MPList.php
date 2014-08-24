@@ -101,22 +101,7 @@ class MPList extends AbstractScraper
             $mp['political_group_identifier'] = urldecode($matches[1]);
 
 
-            // Third <td> cell.
-            // This one MAY contain the official e-mail address of the MP.
-            $mp['e-mail'] = $cells->eq(2)->text() ?: null;
-
-
-            // Process the last <td>.
-            // It MAY contain a link to a website chosen by the MP. It
-            // could be a personal site, the site of the party, etc.
-            $mp['website'] = null;
-
-            if (count($anchor = $cells->eq(3)->filter('a'))) {
-                $mp['website'] = $anchor->attr('href');
-            }
-
-
-            // All the cells of the row have been processed. We can
+            // All the needed cells of the row have been processed. We can
             // now add the data of the current MP to the list.
             $list[] = $mp;
 
