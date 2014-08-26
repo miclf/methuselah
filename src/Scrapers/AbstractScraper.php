@@ -73,9 +73,11 @@ abstract class AbstractScraper
      *
      * @return string
      */
-    public function getDocument()
+    public function getDocument($pattern = null, $values = null)
     {
-        list($pattern, $values) = $this->getProviderArguments();
+        if (is_null($pattern)) {
+            list($pattern, $values) = $this->getProviderArguments();
+        }
 
         return $this->documentProvider->get($pattern, $values);
     }
