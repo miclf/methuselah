@@ -80,7 +80,7 @@ class Committee extends AbstractScraper
      *
      * @return \Symfony\Component\DomCrawler\Crawler
      */
-    public function getCrawler()
+    public function getCrawler($document = null, $charset = null)
     {
         $crawler = parent::getCrawler();
 
