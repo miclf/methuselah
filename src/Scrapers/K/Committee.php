@@ -94,13 +94,14 @@ class Committee extends AbstractScraper
      * This returns an indexed array of two elements. The first is the
      * pattern string and the second is an array of pattern values.
      *
+     * @param  string  $lang
      * @return array
      */
-    protected function getProviderArguments()
+    protected function getProviderArguments($lang = 'fr')
     {
         $values = [
             'identifier' => $this->getOption('identifier'),
-            'lang'       => 'fr',
+            'lang'       => $lang,
         ];
 
         return ['k.committee', $values];
