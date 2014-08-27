@@ -2,8 +2,6 @@
 
 use Exception;
 use Pandemonium\Methuselah\Crawler\Crawler;
-use Pandemonium\Methuselah\DocumentProvider;
-use Pandemonium\Methuselah\Scrapers\AbstractScraper;
 
 /**
  * Extract data from the pages of members of the Chamber.
@@ -12,13 +10,6 @@ use Pandemonium\Methuselah\Scrapers\AbstractScraper;
  */
 class MP extends AbstractScraper
 {
-    /**
-     * Character set of the scraped documents.
-     *
-     * @var string
-     */
-    protected $charset = 'ISO-8859-1';
-
     /**
      * An instance of a DOM crawler.
      *
@@ -68,22 +59,6 @@ class MP extends AbstractScraper
         'substitute' => 'Membre Suppléant',
         'nonvoter'   => 'Membre sans voix délibérative',
     ];
-
-    /**
-     * Constructor.
-     *
-     * @param  \Pandemonium\Methuselah\DocumentProvider  $documentProvider
-     * @return self
-     */
-    public function __construct(DocumentProvider $documentProvider)
-    {
-        parent::__construct($documentProvider);
-
-        // The website of the Chamber does not respect RFC 1738 nor RFC 3986. In
-        // order to work with it, query strings must not be encoded. We then
-        // disable the encoding operation that is executed by default.
-        $this->documentProvider->setQueryEncoding(false);
-    }
 
     /**
      * Scrape the page of a member of the Chamber and extract its information.
