@@ -60,7 +60,9 @@ class Committee extends AbstractScraper
      */
     public function getCrawler($document = null, $charset = null)
     {
-        $crawler = parent::getCrawler();
+        $document = $this->prepareDocument($this->getDocument());
+
+        $crawler = parent::getCrawler($document, $charset);
 
         // We get the second element with a ‘unique’ ID of ‘story’. Yep.
         return $crawler->filter('#story')->eq(1);
@@ -83,6 +85,17 @@ class Committee extends AbstractScraper
         ];
 
         return ['k.committee', $values];
+    }
+
+    /**
+     * Insert empty HTML anchors for each empty committee seat.
+     *
+     * @param  string  $document
+     * @return string
+     */
+    protected function prepareDocument($document)
+    {
+        return preg_replace('#Si\xE8ge non attribu\xE9#', '<a></a>', $document);
     }
 
     /**
@@ -203,13 +216,18 @@ class Committee extends AbstractScraper
     {
         if ($node->getNode(0)->tagName === 'a') {
 
-            $pattern = '#key=([\dO]+)#';
-            $matches = $this->match($pattern, $node->attr('href'));
+            $identifier = $given_name_surname = null;
 
-            return [
-                'identifier'         => $matches[1],
-                'given_name_surname' => $this->trim($node->text()),
-            ];
+            $pattern = '#key=([\dO]+)#';
+            $href    = $node->attr('href');
+
+            if ($matches = $this->match($pattern, $href)) {
+
+                $identifier         = $matches[1];
+                $given_name_surname = $this->trim($node->text());
+            }
+
+            return compact('identifier', 'given_name_surname');
         }
     }
 }
