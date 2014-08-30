@@ -135,7 +135,7 @@ class Committee extends AbstractScraper
 
             $name = $this->getRoleName($node);
 
-            $roles[$name] = $this->getMPs($node);
+            $roles[$name] = $this->getSeats($node);
         });
 
         return $roles;
@@ -160,12 +160,12 @@ class Committee extends AbstractScraper
     }
 
     /**
-     * Get a list of MPs from a node set.
+     * Get a list of committee seats from a node set.
      *
      * @param  \Symfony\Component\DomCrawler\Crawler  $node
      * @return array
      */
-    protected function getMPs(Crawler $node)
+    protected function getSeats(Crawler $node)
     {
         $mps = [];
         $group = null;
@@ -179,12 +179,12 @@ class Committee extends AbstractScraper
 
                 // If the current node contains the name of a political group, we
                 // store it and, starting from here till we encounter a new group
-                // name, all the next MPs will belong to this group.
+                // name, all the next seats will belong to this group.
                 $group = $name;
 
-            } elseif ($mp = $this->getMP($node)) {
+            } elseif ($mp = $this->getSeat($node)) {
 
-                // Each time we encounter a MP node, we store its data
+                // Each time we encounter a seat node, we store its data
                 // and associate it to the relevant political group.
                 $mps[] = $mp + ['political_group' => $group];
             }
@@ -207,12 +207,12 @@ class Committee extends AbstractScraper
     }
 
     /**
-     * Get the full name and identifier of a MP.
+     * Get the info of a committee seat.
      *
      * @param  \Symfony\Component\DomCrawler\Crawler  $node
      * @return array|null
      */
-    protected function getMP(Crawler $node)
+    protected function getSeat(Crawler $node)
     {
         if ($node->getNode(0)->tagName === 'a') {
 
