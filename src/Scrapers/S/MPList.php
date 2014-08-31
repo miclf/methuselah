@@ -52,7 +52,7 @@ class MPList extends AbstractScraper
             $matches = $this->match('#ID=([\d]+)#', $anchor->attr('href'));
             $mp['identifier'] = $matches[1];
 
-            $mp['given_name_surname'] = $anchor->text();
+            $mp['surname_given_name'] = $anchor->text();
 
             // Add the data of the current MP to the list.
             $list[] = $mp;
