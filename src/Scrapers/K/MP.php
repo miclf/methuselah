@@ -97,7 +97,7 @@ class MP extends AbstractScraper
     {
         $values = [
             'identifier'        => $this->getOption('identifier'),
-            'lang'              => $this->getOption('lang', 'fr'),
+            'lang'              => 'fr',
             'legislatureNumber' => $this->getOption('legislature_number', 54),
         ];
 
