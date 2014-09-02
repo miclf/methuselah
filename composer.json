@@ -1,6 +1,6 @@
 {
     "name": "pandemonium/methuselah",
-    "description": "",
+    "description": "Scrapers to get info from the Belgian federal parliament’s websites.",
     "authors": [
         {
             "name": "miclf",
