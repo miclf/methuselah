@@ -46,9 +46,24 @@ class DocumentProvider
      */
     public function get($key, $values = null)
     {
-        $url = $this->urlRepository->find($key, $values);
+        $source = $this->urlRepository->find($key, $values);
 
-        return $this->download($url);
+        if ($this->isRemote($source)) {
+            return $this->download($source);
+        }
+
+        return $this->load($source);
+    }
+
+    /**
+     * Check if a source is a local path or a remote URL.
+     *
+     * @param  string  $source
+     * @return bool
+     */
+    protected function isRemote($source)
+    {
+        return starts_with($source, ['http://', 'https://']);
     }
 
     /**
@@ -105,6 +120,17 @@ class DocumentProvider
 
         // Return the body of the response.
         return (string) $client->send($request)->getBody();
+    }
+
+    /**
+     * Load the file at the given local path.
+     *
+     * @param  string  $path
+     * @return string
+     */
+    protected function load($path)
+    {
+        return file_get_contents($path);
     }
 
     /**
