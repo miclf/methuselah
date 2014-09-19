@@ -32,6 +32,14 @@ The current list of info that can be retrieved is described below. The **K** let
 These features and their options are described in more details further below.
 
 
+## Table of contents
+
+- [Technical details](#technical-details)
+- [Dependencies](#dependencies)
+- [Instantiating scrapers](#instantiating-scrapers)
+- [Available scrapers](#available-scrapers)
+
+
 ## Technical details
 
 This project requires **PHP 5.4** or a newer version. It can be installed with the [Composer package manager](http://getcomposer.org/).
