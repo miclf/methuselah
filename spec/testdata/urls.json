@@ -1,0 +1,9 @@
+{
+    "parliaments": {
+        "foo": {
+            "baseUrl": "spec/testdata/foo/",
+            "bar": "baz.txt",
+            "baz": "{qux}/quux"
+        }
+    }
+}
