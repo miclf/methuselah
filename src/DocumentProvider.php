@@ -114,7 +114,6 @@ class DocumentProvider
         // encoded. We then need to provide a way to disable the automatic
         // encoding that Guzzle provides by default.
         if (isset($this->queryEncoding)) {
-
             $request->getQuery()->setEncodingType($this->queryEncoding);
         }
 
