@@ -200,9 +200,7 @@ class MP extends AbstractScraper
     {
         $lang = trim($this->removeTags($html));
 
-        if (array_key_exists($lang, $this->langs)) {
-            return $this->langs[$lang];
-        }
+        return isset($this->langs[$lang]) ? $this->langs[$lang] : null;
     }
 
     /**
@@ -343,7 +341,7 @@ class MP extends AbstractScraper
         // If there is no CV data, we will of course not parse anything.
         if (is_null($cv = $this->getCV())) return $data;
 
-        foreach ($cv as $i => $line) {
+        foreach ($cv as $line) {
 
             // One of the lines tells us the short name of this MP’s party.
             if (starts_with($line, 'Député') && !isset($data['party'])) {
@@ -375,16 +373,14 @@ class MP extends AbstractScraper
         $party = null;
 
         // We first test special cases.
-        if (str_contains($str, ' FDF ')) {
-            $party = 'FDF';
+        if (starts_with($str, 'Député FDF') || str_contains($str, ' FDF ')) {
+            return 'FDF';
         } elseif (str_contains($str, ' du Vlaams Belang')) {
-            $party = 'Vlaams Belang';
-        } elseif (starts_with($str, 'Député FDF')) {
-            $party = 'FDF';
+            return 'Vlaams Belang';
         }
 
         // If nothing was found yet, we try the normal case.
-        if (!isset($party) && $matches = $this->match('#\((.+)\)#U', $str)) {
+        if ($matches = $this->match('#\((.+)\)#U', $str)) {
             $party = $matches[1];
         }
 
