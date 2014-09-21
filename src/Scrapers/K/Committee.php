@@ -214,20 +214,21 @@ class Committee extends AbstractScraper
      */
     protected function getSeat(Crawler $node)
     {
-        if ($node->getNode(0)->tagName === 'a') {
-
-            $identifier = $given_name_surname = null;
-
-            $pattern = '#key=([\dO]+)#';
-            $href    = $node->attr('href');
-
-            if ($matches = $this->match($pattern, $href)) {
-
-                $identifier         = $matches[1];
-                $given_name_surname = $this->trim($node->text());
-            }
-
-            return compact('identifier', 'given_name_surname');
+        if ($node->getNode(0)->tagName !== 'a') {
+            return;
         }
+
+        $identifier = $given_name_surname = null;
+
+        $pattern = '#key=([\dO]+)#';
+        $href    = $node->attr('href');
+
+        if ($matches = $this->match($pattern, $href)) {
+
+            $identifier         = $matches[1];
+            $given_name_surname = $this->trim($node->text());
+        }
+
+        return compact('identifier', 'given_name_surname');
     }
 }
