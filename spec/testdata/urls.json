@@ -4,6 +4,23 @@
             "baseUrl": "spec/testdata/foo/",
             "bar": "baz.txt",
             "baz": "{qux}/quux"
+        },
+        "k": {
+            "baseUrl": "spec/testdata/K/",
+            "mp_list": {
+                "current": "mp/mp_list.fr.html",
+                "legislature": "mp/{legislatureNumber}/mp_list.fr.html"
+            },
+            "mp": "mp/{legislatureNumber}/{identifier}.{lang}.html",
+            "committee": "comm/{identifier}.{lang}.html"
+        },
+        "s": {
+            "baseUrl": "spec/testdata/S/",
+            "mp_list": {
+                "current": "mp/mp_list.fr.html",
+                "legislature": "mp/{legislatureNumber}/mp_list.fr.html"
+            },
+            "mp": "mp/{legislatureNumber}/{identifier}.{lang}.html"
         }
     }
 }
