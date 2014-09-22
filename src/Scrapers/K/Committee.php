@@ -60,6 +60,8 @@ class Committee extends AbstractScraper
      */
     public function getCrawler($document = null, $charset = null)
     {
+        // Prepare the document so that we will be able
+        // to detect empty seats with the DOM crawler.
         $document = $this->prepareDocument($this->getDocument());
 
         $crawler = parent::getCrawler($document, $charset);
@@ -218,12 +220,12 @@ class Committee extends AbstractScraper
             return;
         }
 
+        // By default, both the MP identifier and full name are null.
+        // They will stay null if the seat is empty but replaced by
+        // other values if the seat has been assigned to someone.
         $identifier = $given_name_surname = null;
 
-        $pattern = '#key=([\dO]+)#';
-        $href    = $node->attr('href');
-
-        if ($matches = $this->match($pattern, $href)) {
+        if ($matches = $this->match('#key=([\dO]+)#', $node->attr('href'))) {
 
             $identifier         = $matches[1];
             $given_name_surname = $this->trim($node->text());
