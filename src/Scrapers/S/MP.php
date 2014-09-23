@@ -17,12 +17,27 @@ class MP extends AbstractScraper
     protected $charset = 'ISO-8859-1';
 
     /**
+     * An instance of a DOM crawler.
+     *
+     * @var \Pandemonium\Methuselah\Crawler\Crawler
+     */
+    protected $crawler;
+
+    /**
      * Scrape the page of a senator and extract its information.
      *
      * @return array
      */
     public function scrape()
     {
+        $mp = [];
+
+        $this->crawler = $this->getCrawler();
+
+        // Extract relevant data from the different parts of the page.
+        $mp['given_name_surname'] = $this->getFullName();
+
+        return $mp;
     }
 
     /**
@@ -36,5 +51,15 @@ class MP extends AbstractScraper
     protected function getProviderArguments()
     {
         return ['s.mp', ['identifier' => $this->getOption('identifier')]];
+    }
+
+    /**
+     * Get the given name and surname of the MP.
+     *
+     * @return string
+     */
+    protected function getFullName()
+    {
+        return $this->crawler->filter('title')->text();
     }
 }
