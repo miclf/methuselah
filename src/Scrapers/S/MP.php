@@ -37,6 +37,7 @@ class MP extends AbstractScraper
         // Extract relevant data from the different parts of the page.
         $mp['given_name_surname'] = $this->getFullName();
         $mp['identifier']         = $this->getOption('identifier');
+        $mp['party']              = $this->getParty();
 
         return $mp;
     }
@@ -62,5 +63,22 @@ class MP extends AbstractScraper
     protected function getFullName()
     {
         return $this->crawler->filter('title')->text();
+    }
+
+    /**
+     * Get the party of the MP.
+     *
+     * @return string
+     */
+    protected function getParty()
+    {
+        // The first <th> of the table contains the full name
+        // and the party, separated by an hyphen. We split
+        // this string and only return the party name.
+        $str = $this->crawler->filter('th')->text();
+
+        $party = explode('-', $str)[1];
+
+        return trim($party);
     }
 }
