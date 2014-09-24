@@ -67,7 +67,7 @@ class MP extends AbstractScraper
         // this string and only return the two parts.
         $str = $this->crawler->filter('th')->text();
 
-        $parts = explode('-', $str);
+        $parts = explode(' - ', $str);
 
         return [
             'given_name_surname' => trim($parts[0]),
