@@ -24,6 +24,30 @@ class MP extends AbstractScraper
     protected $crawler;
 
     /**
+     * The list of federated entities (French => English).
+     *
+     * @var array
+     */
+    protected $origins = [
+
+        'Groupe linguistique français du Parlement de la Région de Bruxelles-Capitale' =>
+        'French-speaking group of the Parliament of the Brussels-Capital Region',
+
+        'Parlement de la Communauté française' =>
+        'Parliament of the French Community',
+
+        'Parlement de la Communauté germanophone' =>
+        'Parliament of the German-speaking Community',
+
+        'Parlement flamand' =>
+        'Flemish Parliament',
+
+        'Parlement wallon' =>
+        'Walloon Parliament',
+
+    ];
+
+    /**
      * Scrape the page of a senator and extract its information.
      *
      * @return array
@@ -38,6 +62,7 @@ class MP extends AbstractScraper
         $mp['identifier'] = $this->getOption('identifier');
 
         $mp += $this->getFullNameAndGroup();
+        $mp += $this->getTypeAndOrigin();
 
         return $mp;
     }
@@ -73,5 +98,32 @@ class MP extends AbstractScraper
             'given_name_surname' => trim($parts[0]),
             'political_group'    => trim($parts[1])
         ];
+    }
+
+    /**
+     * Get the type of senator and, where applicable, his or
+     * her parliament or parliamentary group of origin.
+     *
+     * @return array
+     */
+    protected function getTypeAndOrigin()
+    {
+        $type = $origin = null;
+
+        $str = $this->crawler->filter('td[colspan="3"]')->text();
+
+        // If the senator comes from a federated entity, the parliament of
+        // origin will be specified between parentheses. So, if we find
+        // anything in parentheses, the senator comes from an entity.
+        if ($matches = $this->match('#\((.+)\)#', $str)) {
+
+            $type   = 'federated entities';
+            $origin = $this->origins[$matches[1]];
+
+        } elseif (str_contains($str, 'coopté')) {
+            $type = 'co-opted';
+        }
+
+        return compact('type', 'origin');
     }
 }
