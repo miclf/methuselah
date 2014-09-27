@@ -59,7 +59,8 @@ class MP extends AbstractScraper
         $this->crawler = $this->getCrawler();
 
         // Extract relevant data from the different parts of the page.
-        $mp['identifier'] = $this->getOption('identifier');
+        $mp['identifier']   = $this->getOption('identifier');
+        $mp['legislatures'] = $this->getLegislatures();
 
         $mp += $this->getFullNameAndGroup();
         $mp += $this->getTypeAndOrigin();
@@ -78,6 +79,49 @@ class MP extends AbstractScraper
     protected function getProviderArguments()
     {
         return ['s.mp', ['identifier' => $this->getOption('identifier')]];
+    }
+
+    /**
+     * Get the list of legislatures where the person has been a MP.
+     *
+     * @return array
+     */
+    protected function getLegislatures()
+    {
+        $legislatures = [];
+
+        $links = $this->getLegislatureLinks();
+
+        // We will loop on the anchors and extract the
+        // legislature number from each href attribute.
+        foreach ($links as $link) {
+
+            $matches = $this->match('#LEG=(\d+)#', $link->getAttribute('href'));
+
+            $legislatures[] = $matches[1];
+        }
+
+        // Order the values before returning them.
+        sort($legislatures);
+
+        return $legislatures;
+    }
+
+    /**
+     * Get the HTML anchors of legislatures the MP has participated to.
+     *
+     * @return \Symfony\Component\DomCrawler\Crawler
+     */
+    protected function getLegislatureLinks()
+    {
+        // We start at the ‘Travail parlementaire’ heading and take
+        // the anchors contained in the following table row.
+        return $this->crawler
+            ->filter("th:contains('Travail parlementaire')")
+            ->closestElement('tr')
+            ->nextAll()
+            ->first()
+            ->filter('a');
     }
 
     /**
