@@ -315,9 +315,9 @@ class MP extends AbstractScraper
     {
         // Initialize the array of data that will be returned.
         $data = [
-            'gender'        => null,
-            'party'         => null,
-            'birthdate'     => null,
+            'gender'    => null,
+            'party'     => null,
+            'birthdate' => null,
         ];
 
         // If there is no CV data, we will of course not parse anything.
