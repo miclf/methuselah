@@ -263,7 +263,7 @@ class MP extends AbstractScraper
     /**
      * Get the list of groups and committees of which the MP is a member.
      *
-     * @return array
+     * @return array|null
      *
      * @throws \Exception if a committee role cannot be identified.
      */
