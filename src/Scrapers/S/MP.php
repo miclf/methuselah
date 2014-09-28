@@ -1,5 +1,6 @@
 <?php namespace Pandemonium\Methuselah\Scrapers\S;
 
+use Exception;
 use Pandemonium\Methuselah\Scrapers\AbstractScraper;
 
 /**
@@ -48,6 +49,18 @@ class MP extends AbstractScraper
     ];
 
     /**
+     * The list of roles that MPs can have in groups and
+     * committees, mapped to their French names.
+     *
+     * @var array
+     */
+    protected $roles = [
+        'president'  => 'Président',
+        'member'     => 'Membre',
+        'substitute' => 'Suppléant',
+    ];
+
+    /**
      * Scrape the page of a senator and extract its information.
      *
      * @return array
@@ -61,6 +74,7 @@ class MP extends AbstractScraper
         // Extract relevant data from the different parts of the page.
         $mp['identifier']   = $this->getOption('identifier');
         $mp['legislatures'] = $this->getLegislatures();
+        $mp['committees']   = $this->getCommittees();
 
         $mp += $this->getFullNameAndGroup();
         $mp += $this->getTypeAndOrigin();
@@ -122,6 +136,105 @@ class MP extends AbstractScraper
             ->nextAll()
             ->first()
             ->filter('a');
+    }
+
+    /**
+     * Get the list of groups and committees of which the MP is a member.
+     *
+     * @return array|null
+     *
+     * @throws \Exception if a committee role cannot be identified.
+     */
+    protected function getCommittees()
+    {
+        $committees = [];
+        $role = null;
+
+        // We get the anchors linking to committees as well as the headings
+        // categorizing them by role. Then we loop on these nodes
+        // to guess the role(s) of the MP in each group.
+        foreach ($this->getCommitteeNodes() as $node) {
+
+            // If we encounter a ‘heading’ (actually implemented via
+            // a <u> element), we are starting with a new role.
+            if ($node->nodeName === 'u') {
+
+                $role = $this->getCommitteeRole($node->nodeValue);
+
+                continue;
+            }
+
+            $url = $node->getAttribute('href');
+
+            // Try to extract a group or committee identifier from the URL.
+            // If one is found, it is used as a key and added to the list
+            // with the corresponding full name of the group.
+            if ($matches = $this->match('#\d+#', $url)) {
+
+                $id = (string) $matches[0];
+
+                // A MP can have multiple roles inside a group, such as
+                // 'president' and 'normal member'. These are then
+                // always stored as arrays for each committee.
+                $committees[$id][] = $role;
+            }
+        }
+
+        return $committees ?: null;
+    }
+
+    /**
+     * Get the DOM nodes storing committee roles and
+     * identifiers related to the MP.
+     *
+     * @return \Symfony\Component\DomCrawler\Crawler
+     */
+    protected function getCommitteeNodes()
+    {
+        $hasFoundAllNodes = false;
+
+        // Start by getting all the table rows following
+        // the one introducing the committee roles.
+        $nodes = $this->crawler
+            ->filter("th:contains('Appartenance aux commissions')")
+            ->closestElement('tr')
+            ->nextAll();
+
+        // Determine which table rows are relevant. We will keep all of
+        // them till we find one without an inline background color.
+        // That’s a weird criterion but it is the best we have.
+        $closure = function ($node) use (&$hasFoundAllNodes) {
+
+            if (!$hasFoundAllNodes && is_null($node->attr('bgcolor'))) {
+                $hasFoundAllNodes = true;
+            }
+
+            return !$hasFoundAllNodes;
+        };
+
+        $nodes = $nodes->reduce($closure);
+
+        // Finally, we only keep the <u> and <a> elements, since these
+        // are the only ones containing relevant information.
+        return $nodes->filter('u, a');
+    }
+
+    /**
+     * Find a committee role from a string.
+     *
+     * @param  string  $str
+     * @return string
+     *
+     * @throws \Exception if the role cannot be found.
+     */
+    protected function getCommitteeRole($str)
+    {
+        foreach ($this->roles as $role => $needle) {
+
+            if (str_contains($str, $needle)) return $role;
+        }
+
+        throw new Exception('Cannot determine role inside committee');
     }
 
     /**
