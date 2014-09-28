@@ -62,6 +62,8 @@ class MP extends AbstractScraper
         $mp += $this->getContactDetails();
         $mp += $this->parseCV();
 
+        ksort($mp);
+
         return $mp;
     }
 

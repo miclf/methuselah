@@ -81,6 +81,8 @@ class MP extends AbstractScraper
         $mp += $this->getFullNameAndGroup();
         $mp += $this->getTypeAndOrigin();
 
+        ksort($mp);
+
         return $mp;
     }
 

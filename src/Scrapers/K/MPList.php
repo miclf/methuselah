@@ -55,6 +55,7 @@ class MPList extends AbstractScraper
             if ($hasLegislatureNumber) {
 
                 // Store the scraped data and stop the current iteration.
+                ksort($mp);
                 $list[] = $mp;
 
                 return;
@@ -77,6 +78,7 @@ class MPList extends AbstractScraper
 
             // All the needed cells of the row have been processed. We can
             // now add the data of the current MP to the list.
+            ksort($mp);
             $list[] = $mp;
 
         });
