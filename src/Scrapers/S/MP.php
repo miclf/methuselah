@@ -76,6 +76,7 @@ class MP extends AbstractScraper
         $mp['legislatures'] = $this->getLegislatures();
         $mp['committees']   = $this->getCommittees();
         $mp['birthdate']    = $this->getBirthdate();
+        $mp['gender']       = $this->getGender();
 
         $mp += $this->getFullNameAndGroup();
         $mp += $this->getTypeAndOrigin();
@@ -302,5 +303,21 @@ class MP extends AbstractScraper
         }
 
         return compact('type', 'origin');
+    }
+
+    /**
+     * Determine if the MP is a woman or a man.
+     *
+     * @return string|null
+     */
+    protected function getGender()
+    {
+        $str = $this->crawler->filter('td[colspan="3"]')->text();
+
+        if (!$this->trim($str)) return null;
+
+        if (starts_with($str, 'Sénatrice')) return 'f';
+
+        return 'm';
     }
 }
