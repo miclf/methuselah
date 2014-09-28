@@ -8,6 +8,43 @@
 trait ScrapingHelpersTrait
 {
     /**
+     * The list of French month names and their associated number.
+     *
+     * @var array
+     */
+    protected $months = [
+        'janvier'   => '01',
+        'février'   => '02',
+        'mars'      => '03',
+        'avril'     => '04',
+        'mai'       => '05',
+        'juin'      => '06',
+        'juillet'   => '07',
+        'août'      => '08',
+        'septembre' => '09',
+        'octobre'   => '10',
+        'novembre'  => '11',
+        'décembre'  => '12',
+    ];
+
+    /**
+     * Extract a date from a string.
+     *
+     * @param  string       $str
+     * @return string|null
+     */
+    protected function extractDate($str)
+    {
+        if ($date = $this->match('#(\d+)(?:er)? (\S+) (\d+)#', $str)) {
+
+            $day   = str_pad($date[1], '2', '0', STR_PAD_LEFT);
+            $month = $this->months[$date[2]];
+
+            return $date[3].'-'.$month.'-'.$day;
+        }
+    }
+
+    /**
      * Object oriented wrapper around preg_match().
      *
      * @param  string  $pattern

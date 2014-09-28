@@ -28,26 +28,6 @@ class MP extends AbstractScraper
     ];
 
     /**
-     * The list of French month names and their associated number.
-     *
-     * @var array
-     */
-    protected $months = [
-        'janvier'   => '01',
-        'février'   => '02',
-        'mars'      => '03',
-        'avril'     => '04',
-        'mai'       => '05',
-        'juin'      => '06',
-        'juillet'   => '07',
-        'août'      => '08',
-        'septembre' => '09',
-        'octobre'   => '10',
-        'novembre'  => '11',
-        'décembre'  => '12',
-    ];
-
-    /**
      * The list of roles that MPs can have in groups and
      * committees, mapped to their French names.
      *
@@ -385,23 +365,6 @@ class MP extends AbstractScraper
         }
 
         return $party;
-    }
-
-    /**
-     * Extract a date from a string.
-     *
-     * @param  string       $str
-     * @return string|null
-     */
-    protected function extractDate($str)
-    {
-        if ($date = $this->match('#(\d+)(?:er)? (\S+) (\d+)#', $str)) {
-
-            $day   = str_pad($date[1], '2', '0', STR_PAD_LEFT);
-            $month = $this->months[$date[2]];
-
-            return $date[3].'-'.$month.'-'.$day;
-        }
     }
 
     /**
