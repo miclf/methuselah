@@ -245,8 +245,8 @@ class MP extends AbstractScraper
     protected function getFullNameAndGroup()
     {
         // The first <th> of the table contains the full name
-        // and the group, separated by an hyphen. We split
-        // this string and only return the two parts.
+        // and the political group, separated by an hyphen.
+        // We split this string and return the two parts.
         $str = $this->crawler->filter('th')->text();
 
         $parts = explode(' - ', $str);
