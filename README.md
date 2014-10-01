@@ -100,12 +100,12 @@ Example of returned array (shortened to two MPs for clarity):
 ```json
 [
     {
-        "surname_given_name": "Doe John",
-        "identifier": "12345"
+        "identifier": "12345",
+        "surname_given_name": "Doe John"
     },
     {
-        "surname_given_name": "Doe Jane",
-        "identifier": "54321"
+        "identifier": "54321",
+        "surname_given_name": "Doe Jane"
     }
 ]
 ```
@@ -125,13 +125,8 @@ Example of returned array:
 
 ```json
 {
-    "given_name_surname": "John Doe",
-    "identifier": "12345",
-    "legislatures": [
-        "52",
-        "53",
-        "54"
-    ],
+    "address": null,
+    "birthdate": "1969-01-01",
     "committees": {
         "1234": [
             "president",
@@ -144,13 +139,18 @@ Example of returned array:
             "member"
         ]
     },
-    "lang": "fr",
-    "address": null,
     "email": "john.doe@lachambre.be",
-    "website": "www.johndoe.be",
     "gender": "m",
+    "given_name_surname": "John Doe",
+    "identifier": "12345",
+    "lang": "fr",
+    "legislatures": [
+        "52",
+        "53",
+        "54"
+    ],
     "party": "Cat Party",
-    "birthdate": "1969-01-01"
+    "website": "www.johndoe.be"
 }
 ```
 
