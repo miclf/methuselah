@@ -222,3 +222,44 @@ Example of returned array:
     }
 ]
 ```
+
+
+#### `\Pandemonium\Methuselah\Scrapers\S\MP`
+
+This scraper gets info associated to a single senator.
+
+Required parameters:
+- `identifier`: the Senate identifier of the senator.
+
+Optional parameters: none.
+
+Example of returned array:
+
+```json
+{
+    "birthdate": "1969-01-01",
+    "committees": {
+        "1234": [
+            "president",
+            "member"
+        ],
+        "2345": [
+            "member"
+        ],
+        "3456": [
+            "member"
+        ]
+    },
+    "gender": "m",
+    "given_name_surname": "John Doe",
+    "identifier": "12345",
+    "legislatures": [
+        "4",
+        "5",
+        "6"
+    ],
+    "origin": "Parliament of the Unicorn Community",
+    "political_group": "Unicorns",
+    "type": "federated entities"
+}
+```
