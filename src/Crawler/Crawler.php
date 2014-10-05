@@ -79,4 +79,16 @@ class Crawler extends SymfonyCrawler
             if ($node->nodeType === 1) return $node;
         }
     }
+
+    /**
+     * Returns the first node of the list as HTML.
+     *
+     * @return  string  The node html
+     *
+     * @throws \InvalidArgumentException when current node is empty
+     */
+    public function __toString()
+    {
+        return $this->html();
+    }
 }
