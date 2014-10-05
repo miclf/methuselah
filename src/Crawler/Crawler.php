@@ -7,8 +7,8 @@ class Crawler extends SymfonyCrawler
     /**
      * Returns the node that is the nearest ancestor with a given tag name.
      *
-     * @param  string                           $tagName  The tag name
-     * @return \Pandemonium\Methuselah\Crawler  A new instance of the Crawler with the nodethat was found, or an empty Crawler if nothing was found.
+     * @param  string                                   $tagName  The tag name
+     * @return \Pandemonium\Methuselah\Crawler\Crawler  A new instance of the Crawler with the node that was found, or an empty Crawler if nothing was found.
      *
      * @throws \InvalidArgumentException when current node is empty
      */
@@ -32,7 +32,7 @@ class Crawler extends SymfonyCrawler
     /**
      * Returns the next sibling node of the current selection.
      *
-     * @return \Pandemonium\Methuselah\Crawler  A Crawler instance with the next sibling node
+     * @return \Pandemonium\Methuselah\Crawler\Crawler  A Crawler instance with the next sibling node
      *
      * @throws \InvalidArgumentException when current node is empty
      *
@@ -50,7 +50,7 @@ class Crawler extends SymfonyCrawler
     /**
      * Returns the previous sibling node of the current selection.
      *
-     * @return \Pandemonium\Methuselah\Crawler  A Crawler instance with the previous sibling node
+     * @return \Pandemonium\Methuselah\Crawler\Crawler  A Crawler instance with the previous sibling node
      *
      * @throws \InvalidArgumentException when current node is empty
      *
