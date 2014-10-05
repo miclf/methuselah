@@ -28,4 +28,55 @@ class Crawler extends SymfonyCrawler
 
         return new static(null, $this->uri);
     }
+
+    /**
+     * Returns the next sibling node of the current selection.
+     *
+     * @return \Pandemonium\Methuselah\Crawler  A Crawler instance with the next sibling node
+     *
+     * @throws \InvalidArgumentException when current node is empty
+     *
+     * @api
+     */
+    public function nextOne()
+    {
+        if (!count($this)) {
+            throw new \InvalidArgumentException('The current node list is empty.');
+        }
+
+        return new static($this->siblingOne($this->getNode(0)), $this->uri);
+    }
+
+    /**
+     * Returns the previous sibling node of the current selection.
+     *
+     * @return \Pandemonium\Methuselah\Crawler  A Crawler instance with the previous sibling node
+     *
+     * @throws \InvalidArgumentException when current node is empty
+     *
+     * @api
+     */
+    public function previousOne()
+    {
+        if (!count($this)) {
+            throw new \InvalidArgumentException('The current node list is empty.');
+        }
+
+        return new static($this->siblingOne($this->getNode(0), 'previousSibling'), $this->uri);
+    }
+
+    /**
+     * Return the first next or previous element node.
+     *
+     * @param \DOMElement  $node
+     * @param string       $siblingDir
+     *
+     * @return \DOMElement|null
+     */
+    protected function siblingOne($node, $siblingDir = 'nextSibling')
+    {
+        while ($node = $node->$siblingDir) {
+            if ($node->nodeType === 1) return $node;
+        }
+    }
 }
