@@ -14,9 +14,7 @@ class Crawler extends SymfonyCrawler
      */
     public function closestElement($tagName)
     {
-        if (!count($this)) {
-            throw new \InvalidArgumentException('The current node list is empty.');
-        }
+        $this->throwIfEmpty();
 
         $node = $this->getNode(0);
 
@@ -40,9 +38,7 @@ class Crawler extends SymfonyCrawler
      */
     public function nextOne()
     {
-        if (!count($this)) {
-            throw new \InvalidArgumentException('The current node list is empty.');
-        }
+        $this->throwIfEmpty();
 
         return new static($this->siblingOne($this->getNode(0)), $this->uri);
     }
@@ -58,9 +54,7 @@ class Crawler extends SymfonyCrawler
      */
     public function previousOne()
     {
-        if (!count($this)) {
-            throw new \InvalidArgumentException('The current node list is empty.');
-        }
+        $this->throwIfEmpty();
 
         return new static($this->siblingOne($this->getNode(0), 'previousSibling'), $this->uri);
     }
@@ -77,6 +71,20 @@ class Crawler extends SymfonyCrawler
     {
         while ($node = $node->$siblingDir) {
             if ($node->nodeType === 1) return $node;
+        }
+    }
+
+    /**
+     * Test if the current node is empty.
+     *
+     * @return void
+     *
+     * @throws \InvalidArgumentException when current node is empty
+     */
+    protected function throwIfEmpty()
+    {
+        if (!count($this)) {
+            throw new \InvalidArgumentException('The current node list is empty.');
         }
     }
 
