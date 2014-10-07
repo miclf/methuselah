@@ -33,8 +33,6 @@ class Crawler extends SymfonyCrawler
      * @return \Pandemonium\Methuselah\Crawler\Crawler  A Crawler instance with the next sibling node
      *
      * @throws \InvalidArgumentException when current node is empty
-     *
-     * @api
      */
     public function nextOne()
     {
@@ -49,8 +47,6 @@ class Crawler extends SymfonyCrawler
      * @return \Pandemonium\Methuselah\Crawler\Crawler  A Crawler instance with the previous sibling node
      *
      * @throws \InvalidArgumentException when current node is empty
-     *
-     * @api
      */
     public function previousOne()
     {
