@@ -29,6 +29,7 @@ The current list of info that can be retrieved is described below. The **K** let
 - List of the current members of the parliament (K, S)
 - List of members who seated during previous legislatures or who seated earlier in the current legislature (K, S)
 - Personal info of a member (K)
+- List of existing committees (K)
 - Details and seats of a committee (K)
 
 These features and their options are described in more details further below.
@@ -154,6 +155,33 @@ Example of returned array:
     "party": "Cat Party",
     "website": "www.johndoe.be"
 }
+```
+
+#### `\Pandemonium\Methuselah\Scrapers\K\CommitteeList`
+
+This retrieves the list of *current* working groups and committees of the Chamber. The website provides no way to get the list from a particular point in time.
+
+Required parameters: none.
+
+Optional parameters: none.
+
+Example of returned array:
+
+```json
+[
+    {
+        "identifier": "12345",
+        "type": "permanent",
+        "name_fr": "…",
+        "name_nl": "…"
+    },
+    {
+        "identifier": "54321",
+        "surname_given_name": "special",
+        "name_fr": "…",
+        "name_nl": "…"
+    }
+]
 ```
 
 
