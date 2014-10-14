@@ -30,6 +30,13 @@ class CommitteeList extends AbstractScraper
     ];
 
     /**
+     * The list of committees.
+     *
+     * @var array
+     */
+    protected $committees = [];
+
+    /**
      * Scrape the pages of lists of committees
      * and extract their information.
      *
@@ -39,58 +46,11 @@ class CommitteeList extends AbstractScraper
      */
     public function scrape()
     {
-        $list = [];
-        $type = null;
-
         foreach (['fr', 'nl'] as $lang) {
-
-            list($pattern, $values) = $this->getProviderArguments($lang);
-
-            $document = $this->getDocument($pattern, $values);
-
-            // Get all the nodes except the first <b> tag, which stores the role.
-            $nodes = $this->getCrawler($document)->filter('#content h4, #content a');
-
-            $nodes->each(function ($node) use (&$list, &$type, $lang) {
-
-                if ($str = $this->getCommitteeType($node)) {
-
-                    // If the current node introduces a committee type, we
-                    // store it and, until we encounter a new one, all
-                    // the next committees will be of that type.
-                    $type = $str;
-
-                } else {
-
-                    $matches = $this->match('#com=(\d+)#', $node->attr('href'));
-                    $identifier = $matches[1];
-
-                    // Determine the committee name in the current language.
-                    $nameVar = 'name_'.$lang;
-                    ${$nameVar} = Utf8::strtolower(trim($node->text()));
-
-                    // If this committee has already been added to the list in
-                    // a previous iteration, then we only need to add the name
-                    // in the current lang, because the rest of the data is
-                    // already there. Otherwise, we set everything.
-                    if (isset($list[$identifier])) {
-                        $list[$identifier][$nameVar] = ${$nameVar};
-                    } else {
-                        $list[$identifier] = compact('identifier', 'type', "$nameVar");
-                    }
-                }
-            });
+            $this->scrapeCommitteeList($lang);
         }
 
-        // Transform the associative array to an
-        // indexed one before returning it.
-        $committees = [];
-
-        foreach ($list as $committee) {
-            $committees[] = $committee;
-        }
-
-        return $committees;
+        return $this->getCommittees();
     }
 
     /**
@@ -108,6 +68,72 @@ class CommitteeList extends AbstractScraper
     }
 
     /**
+     * Scrape a page of list of committees
+     * and extract its information.
+     *
+     * @param  string  $lang
+     * @return array
+     *
+     * @throws \Exception if a committee type cannot be determined.
+     */
+    protected function scrapeCommitteeList($lang)
+    {
+        $type = null;
+
+        $this->getNodes($lang)->each(function ($node) use (&$type, $lang) {
+
+            // If the current node introduces a committee type, we
+            // store it and, until we encounter a new one, all the
+            // next committees will be of that type.
+            if ($str = $this->getCommitteeType($node)) {
+
+                $type = $str;
+
+                return;
+            }
+
+            // Get the identifier of the current committee.
+            $matches = $this->match('#com=(\d+)#', $node->attr('href'));
+            $identifier = $matches[1];
+
+            // Determine the committee name in the current language.
+            $name = Utf8::strtolower(trim($node->text()));
+
+            // If this committee has already been added to the list in
+            // a previous iteration, then we only need to add the name
+            // in the current lang, because the rest of the data is
+            // already there. Otherwise, we set everything.
+            if (isset($this->committees[$identifier])) {
+
+                $this->committees[$identifier]['name_'.$lang] = $name;
+
+            } else {
+
+                $this->committees[$identifier] = [
+                    'identifier'  => $identifier,
+                    'type'        => $type,
+                    'name_'.$lang => $name,
+                ];
+            }
+        });
+    }
+
+    /**
+     * Get a DOM crawler prefilled with only the
+     * node set relevant for the scraper.
+     *
+     * @return \Pandemonium\Methuselah\Crawler\Crawler
+     */
+    public function getNodes($lang)
+    {
+        list($pattern, $values) = $this->getProviderArguments($lang);
+
+        $document = $this->getDocument($pattern, $values);
+
+        return $this->getCrawler($document)->filter('#content h4, #content a');
+    }
+
+    /**
      * Get the name of a political group from a node.
      *
      * @param  \Symfony\Component\DomCrawler\Crawler  $node
@@ -119,8 +145,8 @@ class CommitteeList extends AbstractScraper
     {
         if ($node->getNode(0)->tagName === 'h4') {
 
-            // The tag contains the French name of the type. We loop
-            // on a map to find the associated ‘normalized’ name.
+            // The tag contains the French or Dutch name of the type. We
+            // loop on a map to find the associated ‘normalized’ name.
             $str = trim($node->text());
 
             foreach ($this->types as $needle => $type) {
@@ -129,5 +155,22 @@ class CommitteeList extends AbstractScraper
 
             throw new Exception('Cannot determine type of committee');
         }
+    }
+
+    /**
+     * Return the list of committees as an indexed
+     * array of associative arrays.
+     *
+     * @return array
+     */
+    protected function getCommittees()
+    {
+        $list = [];
+
+        foreach ($this->committees as $committee) {
+            $list[] = $committee;
+        }
+
+        return $list;
     }
 }
