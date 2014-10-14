@@ -1,5 +1,6 @@
 <?php namespace Pandemonium\Methuselah\Scrapers\K;
 
+use Exception;
 use Patchwork\Utf8;
 use Pandemonium\Methuselah\Crawler\Crawler;
 
