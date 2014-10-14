@@ -14,8 +14,10 @@ $container = new Illuminate\Container\Container;
 // Instantiate a scraper to get all the current members of the parliament.
 $scraper = $container->make('Pandemonium\Methuselah\Scrapers\K\MPList');
 
-// Get an array of data. All the scrapers have a public
-// 'scrape()' method that can accept an array of parameters.
+// Options can be set on scrapers.
+$scraper->setOptions(['legislature_number' => 54]);
+
+// Get an array of data. All the scrapers have a public 'scrape()' method.
 $list = $scraper->scrape();
 
 // Display the data as JSON.
