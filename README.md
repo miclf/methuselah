@@ -2,7 +2,15 @@
 
 Methuselah is a set of web scrapers to read data from the official websites of the Belgian federal parliament.
 
-For example:
+It can be used like this:
+
+```php
+$scraper = $container->make('ChamberMPList');
+
+$data = $scraper->setOptions($options)->scrape();
+```
+
+Here is a fully working and more verbose example:
 
 ```php
 // Require the Composer autoloader.
