@@ -185,7 +185,7 @@ Example of returned array:
     },
     {
         "identifier": "54321",
-        "surname_given_name": "special",
+        "type": "special",
         "name_fr": "…",
         "name_nl": "…"
     }
