@@ -37,7 +37,7 @@ The current list of info that can be retrieved is described below. The **K** let
 - List of the current members of the parliament (K, S)
 - List of members who seated during previous legislatures or who seated earlier in the current legislature (K, S)
 - Personal info of a member (K)
-- List of existing committees (K)
+- List of existing committees (K, S)
 - Details and seats of a committee (K)
 
 These features and their options are described in more details further below.
@@ -300,4 +300,32 @@ Example of returned array:
     "political_group": "Unicorns",
     "type": "federated entities"
 }
+```
+
+
+#### `\Pandemonium\Methuselah\Scrapers\S\CommitteeList`
+
+This scraper gets the list of *current* working groups and committees of the Senate. The website provides no way to get the list from a particular point in time.
+
+Required parameters: none.
+
+Optional parameters: none.
+
+Example of returned array:
+
+```json
+[
+    {
+        "identifier": "12345",
+        "type": "permanent",
+        "name_fr": "…",
+        "name_nl": "…"
+    },
+    {
+        "identifier": "54321",
+        "type": "special",
+        "name_fr": "…",
+        "name_nl": "…"
+    }
+]
 ```
