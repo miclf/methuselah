@@ -10,7 +10,7 @@ $scraper = $container->make('ChamberMPList');
 $data = $scraper->setOptions($options)->scrape();
 ```
 
-Here is a fully working and more verbose example:
+Here is a fully working and more verbose example, using an optional IoC container:
 
 ```php
 // Require the Composer autoloader.
@@ -71,7 +71,9 @@ This list is simply informative. These packages are automatically installed alon
 
 ## Instantiating scrapers
 
-Methuselah uses the [Illuminate Container component](https://github.com/illuminate/container) to make it easy to instantiate scrapers. To use it, simply create an instance of the container and call its `make` method to instantiate any scraper.
+Methuselah’s scrapers use *dependency injection* to manage relationships between different classes of the project. It is recommended to use an IoC container to avoid manually instantiating these dependencies. Different modern frameworks include a container, please see your framework’s documentation to learn how to use it.
+
+In case you do not use a framework, Methuselah ships with the [Illuminate Container component](https://github.com/illuminate/container "View the project page on GitHub") to make it easy to instantiate scrapers. To use it, simply create an instance of the container and call its `make` method to instantiate any scraper.
 
 ```php
 $container = new Illuminate\Container\Container;
@@ -87,6 +89,8 @@ $container = new Illuminate\Container\Container;
 
 // Bind the class to the container with a custom name.
 $container->bind(['Pandemonium\Methuselah\Scrapers\K\MPList' => 'ChamberMPList']);
+
+// Do stuff…
 
 // Instantiate a scraper to get all the current members of the parliament.
 $scraper = $container->make('ChamberMPList');
