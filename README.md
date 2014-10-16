@@ -93,7 +93,7 @@ $scraper = $container->make('ChamberMPList');
 
 ## Available scrapers
 
-What follows is a detailed list of the different scrapers and their parameters.
+What follows is a detailed list of the different scrapers and their parameters. All of them return *PHP arrays* but the examples of returned data are expressed in JSON for convenience and readability.
 
 ### Chamber of Representatives
 
@@ -106,7 +106,7 @@ Required parameters: none.
 Optional parameters:
 - `legislature_number`: number of the legislature of which the list of MPs is needed.
 
-Example of returned array (shortened to two MPs for clarity):
+Example of returned data (shortened to two MPs for clarity):
 
 ```json
 [
@@ -132,7 +132,7 @@ Required parameters:
 Optional parameters:
 - `legislature_number`: number of the legislature from which data should be extracted of. Defaults to `54`. There should be no need to set this parameter, since the most recent data is generally what is wanted.
 
-Example of returned array:
+Example of returned data:
 
 ```json
 {
@@ -173,7 +173,7 @@ Required parameters: none.
 
 Optional parameters: none.
 
-Example of returned array:
+Example of returned data:
 
 ```json
 [
@@ -202,7 +202,7 @@ Required parameters:
 
 Optional parameters: none.
 
-Example of returned array (shortened for clarity):
+Example of returned data (shortened for clarity):
 
 ```json
 {
@@ -246,7 +246,7 @@ Required parameters: none.
 Optional parameters:
 - `legislature_number`: number of the legislature of which the list of senators is needed.
 
-Example of returned array:
+Example of returned data:
 
 ```json
 [
@@ -271,7 +271,7 @@ Required parameters:
 
 Optional parameters: none.
 
-Example of returned array:
+Example of returned data:
 
 ```json
 {
@@ -311,7 +311,7 @@ Required parameters: none.
 
 Optional parameters: none.
 
-Example of returned array:
+Example of returned data:
 
 ```json
 [
