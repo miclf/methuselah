@@ -66,6 +66,8 @@ Methuselah depends on the following Composer packages:
 - `symfony/css-selector` to query DOM nodes using CSS selectors
 - `symfony/dom-crawler` to select and work with DOM nodes
 
+This list is simply informative. These packages are automatically installed along Methuselah, you do not have to do anything special to get them.
+
 
 ## Instantiating scrapers
 
