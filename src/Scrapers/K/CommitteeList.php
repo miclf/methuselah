@@ -134,7 +134,7 @@ class CommitteeList extends AbstractScraper
     }
 
     /**
-     * Get the name of a political group from a node.
+     * Get a committee type from a node.
      *
      * @param  \Symfony\Component\DomCrawler\Crawler  $node
      * @return string|null
