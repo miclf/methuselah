@@ -36,7 +36,7 @@ The current list of info that can be retrieved is described below. The **K** let
 
 - List of the current members of the parliament (K, S)
 - List of members who seated during previous legislatures or who seated earlier in the current legislature (K, S)
-- Personal info of a member (K)
+- Personal info of a member (K, S)
 - List of existing committees (K, S)
 - Details and seats of a committee (K)
 
