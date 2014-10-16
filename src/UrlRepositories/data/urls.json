@@ -16,7 +16,8 @@
                 "current": "WieIsWie/LijstDerSenatoren&LANG=fr",
                 "legislature": "WieIsWie/LijstDerSenatoren&LEG={legislatureNumber}&LANG=fr"
             },
-            "mp": "showSenator&ID={identifier}&LANG=fr"
+            "mp": "showSenator&ID={identifier}&LANG=fr",
+            "committee_list": "WieIsWie/LijstVanCommissies&LANG={lang}"
         }
     }
 }
