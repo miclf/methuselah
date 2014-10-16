@@ -93,7 +93,9 @@ $scraper = $container->make('ChamberMPList');
 
 ## Available scrapers
 
-What follows is a detailed list of the different scrapers and their parameters. All of them return *PHP arrays* but the examples of returned data are expressed in JSON for convenience and readability.
+What follows is a detailed list of the different scrapers and their parameters. All of them return *PHP arrays*.
+
+That being said, examples of returned data are expressed in JSON for convenience and readability. These examples are also often shortened for brevity, because no one wants to read JSON dumps of hundreds of similar objects when displaying only two is enough to show how they look like.
 
 ### Chamber of Representatives
 
@@ -106,7 +108,7 @@ Required parameters: none.
 Optional parameters:
 - `legislature_number`: number of the legislature of which the list of MPs is needed.
 
-Example of returned data (shortened to two MPs for clarity):
+Example of returned data:
 
 ```json
 [
@@ -202,7 +204,7 @@ Required parameters:
 
 Optional parameters: none.
 
-Example of returned data (shortened for clarity):
+Example of returned data:
 
 ```json
 {
