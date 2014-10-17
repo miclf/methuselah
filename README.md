@@ -63,6 +63,7 @@ Methuselah depends on the following Composer packages:
 - `guzzlehttp/guzzle` to get web pages from the websites
 - `illuminate/container` to manage IoC concerns
 - `illuminate/support` for various helpers
+- `patchwork/utf8` to deal with encoding and character sets
 - `symfony/css-selector` to query DOM nodes using CSS selectors
 - `symfony/dom-crawler` to select and work with DOM nodes
 
