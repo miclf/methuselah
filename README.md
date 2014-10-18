@@ -37,6 +37,7 @@ The current list of info that can be retrieved is described below. The **K** let
 - List of the current members of the parliament (K, S)
 - List of members who seated during previous legislatures or who seated earlier in the current legislature (K, S)
 - Personal info of a member (K, S)
+- Details of a dossier (K)
 - List of existing committees (K, S)
 - Details and seats of a committee (K)
 
@@ -242,6 +243,20 @@ Example of returned data:
     ]
 }
 ```
+
+
+#### `\Pandemonium\Methuselah\Scrapers\K\Dossier`
+
+This scraper gets information about a full dossier.
+
+Required parameters:
+- `identifier`: the Chamber identifier of the dossier. It matches the pattern `DDKDDDD`, where ‘D’ are digits and ‘K’ is a litteral uppercase ‘k’.
+
+Optional parameters: none.
+
+Example of returned array (shortened for clarity):
+
+(to be defined)
 
 
 ### Senate
