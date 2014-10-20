@@ -1,5 +1,7 @@
 <?php namespace Pandemonium\Methuselah\Scrapers\S;
 
+use Exception;
+use Pandemonium\Methuselah\Crawler\Crawler;
 use Pandemonium\Methuselah\Scrapers\AbstractScraper;
 
 /**
@@ -17,13 +19,43 @@ class Committee extends AbstractScraper
     protected $charset = 'ISO-8859-1';
 
     /**
+     * An instance of a DOM crawler.
+     *
+     * @var \Pandemonium\Methuselah\Crawler\Crawler
+     */
+    protected $crawler;
+
+    /**
+     * The list of roles that MPs can have in groups and
+     * committees, mapped to their French names.
+     *
+     * @var array
+     */
+    protected $roles = [
+        'members'         => 'Membres',
+        'substitutes'     => 'Membres Suppléants',
+    ];
+
+    /**
      * Scrape the page of a committee and extract its information.
      *
      * @return array
+     *
+     * @throws \Exception if a role cannot be determined.
      */
     public function scrape()
     {
-        return [];
+        // Get and store the node set we will work on.
+        $this->crawler = $this->getCrawler()->filter('hr')->nextAll();
+
+        $committee = [
+            'identifier' => (string) $this->getOption('identifier')
+        ];
+
+        // Add the list of MPs, categorized by role.
+        $committee += $this->getRoles();
+
+        return $committee;
     }
 
     /**
@@ -43,5 +75,103 @@ class Committee extends AbstractScraper
         ];
 
         return ['s.committee', $values];
+    }
+
+    /**
+     * Get a list of MPs categorized by committee role.
+     *
+     * @return array
+     *
+     * @throws \Exception if a role cannot be determined.
+     */
+    protected function getRoles()
+    {
+        $roles = [];
+        $name  = null;
+
+        // Each role’s data is contained inside an unordered list. We will
+        // loop on all of them and, for each one, extract both the name and
+        // the list of MPs.
+        $this->crawler->filter('h3, ul')->each(function ($node) use (&$roles, &$name) {
+
+            // If the current node introduces a new role, we
+            // store it and, until we encounter a new one,
+            // all the next seats will have that role.
+            if ($str = $this->getRoleName($node)) {
+
+                $name = $str;
+
+                return;
+            }
+
+            // Otherwise, the node contains an <ul> element
+            // that we will extract the seats data from.
+            $roles[$name] = $this->getSeats($node);
+        });
+
+        return $roles;
+    }
+
+    /**
+     * Get a normalized role name.
+     *
+     * @param  \Symfony\Component\DomCrawler\Crawler  $node
+     * @return string|null
+     *
+     * @throws \Exception if the role cannot be determined.
+     */
+    protected function getRoleName(Crawler $node)
+    {
+        if ($node->getNode(0)->tagName === 'h3') {
+
+            // The tag contains the French name of the role. We loop
+            // on a map to find the associated ‘normalized’ name.
+            $str = $node->text();
+
+            foreach ($this->roles as $role => $needle) {
+                if ($str === $needle) return $role;
+            }
+
+            throw new Exception('Cannot determine role inside committee');
+        }
+    }
+
+    /**
+     * Get a list of committee seats from a node set.
+     *
+     * @param  \Symfony\Component\DomCrawler\Crawler  $node
+     * @return array
+     */
+    protected function getSeats(Crawler $node)
+    {
+        $mps = [];
+
+        // Get all the list items.
+        $nodes = $node->filter('li');
+
+        $nodes->each(function ($node) use (&$mps) {
+            $mps[] = $this->getSeat($node);
+        });
+
+        return $mps;
+    }
+
+    /**
+     * Get the info of a committee seat.
+     *
+     * @param  \Symfony\Component\DomCrawler\Crawler  $node
+     * @return array|null
+     */
+    protected function getSeat(Crawler $node)
+    {
+        $identifier = $surname_given_name = null;
+
+        if ($matches = $this->match('#ID=(\d+)&amp;LANG=fr">(.+)</a>#', $node->html())) {
+
+            $identifier         = $matches[1];
+            $surname_given_name = $matches[2];
+        }
+
+        return compact('identifier', 'surname_given_name');
     }
 }
