@@ -45,12 +45,14 @@ class Committee extends AbstractScraper
      */
     public function scrape()
     {
-        // Get and store the node set we will work on.
-        $this->crawler = $this->getCrawler()->filter('hr')->nextAll();
+        $this->crawler = $this->getCrawler();
 
         $committee = [
             'identifier' => (string) $this->getOption('identifier')
         ];
+
+        // Get the French and Dutch name of the committee.
+        $committee += $this->getNames();
 
         // Add the list of MPs, categorized by role.
         $committee += $this->getRoles();
@@ -75,6 +77,27 @@ class Committee extends AbstractScraper
         ];
 
         return ['s.committee', $values];
+    }
+
+    /**
+     * Get the French and Dutch name of the committee.
+     *
+     * @return array
+     */
+    protected function getNames()
+    {
+        // We will download the NL version of the page in order
+        // to scrape the name of the committee from it.
+        list($pattern, $values) = $this->getProviderArguments('nl');
+
+        $nlPage = $this->getDocument($pattern, $values);
+
+        $nlCrawler = $this->getCrawler($nlPage);
+
+        return [
+            'name_fr' => $this->crawler->filter('h1')->text(),
+            'name_nl' => $nlCrawler->filter('h1')->text(),
+        ];
     }
 
     /**
