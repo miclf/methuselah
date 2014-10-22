@@ -2,7 +2,6 @@
 
 use Exception;
 use Pandemonium\Methuselah\Crawler\Crawler;
-use Pandemonium\Methuselah\Scrapers\AbstractScraper;
 
 /**
  * Extract data from the list of committees of the Senate.
@@ -11,13 +10,6 @@ use Pandemonium\Methuselah\Scrapers\AbstractScraper;
  */
 class CommitteeList extends AbstractScraper
 {
-    /**
-     * Character set of the scraped documents.
-     *
-     * @var string
-     */
-    protected $charset = 'ISO-8859-1';
-
     /**
      * The list of committee types, mapped
      * to their French and Dutch names.

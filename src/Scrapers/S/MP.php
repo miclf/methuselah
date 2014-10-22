@@ -1,7 +1,6 @@
 <?php namespace Pandemonium\Methuselah\Scrapers\S;
 
 use Exception;
-use Pandemonium\Methuselah\Scrapers\AbstractScraper;
 
 /**
  * Extract data from the pages of senators.
@@ -10,13 +9,6 @@ use Pandemonium\Methuselah\Scrapers\AbstractScraper;
  */
 class MP extends AbstractScraper
 {
-    /**
-     * Character set of the scraped documents.
-     *
-     * @var string
-     */
-    protected $charset = 'ISO-8859-1';
-
     /**
      * An instance of a DOM crawler.
      *
