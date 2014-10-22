@@ -39,7 +39,7 @@ The current list of info that can be retrieved is described below. The **K** let
 - Personal info of a member (K, S)
 - Details of a dossier (K)
 - List of existing committees (K, S)
-- Details and seats of a committee (K)
+- Details and seats of a committee (K, S)
 
 These features and their options are described in more details further below.
 
