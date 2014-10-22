@@ -192,11 +192,14 @@ class Committee extends AbstractScraper
      */
     protected function getSeat(Crawler $node)
     {
-        if ($matches = $this->match('#ID=(\d+)&amp;LANG=fr">(.+)</a>#', $node->html())) {
+        $regex = '#ID=(\d+)&amp;LANG=fr">(.+)</a> \((.+)\)#';
+
+        if ($matches = $this->match($regex, $node->html())) {
 
             return [
                 'identifier'         => $matches[1],
-                'surname_given_name' => $matches[2]
+                'surname_given_name' => $matches[2],
+                'political_group'    => $matches[3]
             ];
         }
     }
