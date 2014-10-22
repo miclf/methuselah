@@ -150,18 +150,17 @@ class Committee extends AbstractScraper
      */
     protected function getRoleName(Crawler $node)
     {
-        if ($node->getNode(0)->tagName === 'h3') {
+        if ($node->getNode(0)->tagName !== 'h3') return;
 
-            // The tag contains the French name of the role. We loop
-            // on a map to find the associated ‘normalized’ name.
-            $str = $node->text();
+        // The tag contains the French name of the role. We loop
+        // on a map to find the associated ‘normalized’ name.
+        $str = $node->text();
 
-            foreach ($this->roles as $role => $needle) {
-                if ($str === $needle) return $role;
-            }
-
-            throw new Exception('Cannot determine role inside committee');
+        foreach ($this->roles as $role => $needle) {
+            if ($str === $needle) return $role;
         }
+
+        throw new Exception('Cannot determine role inside committee');
     }
 
     /**
