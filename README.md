@@ -107,7 +107,9 @@ That being said, examples of returned data are expressed in JSON for convenience
 
 ### Chamber of Representatives
 
-#### `\Pandemonium\Methuselah\Scrapers\K\MPList`
+All of these scrapers live in the `\Pandemonium\Methuselah\Scrapers\K` namespace. In other words, to instanciate them, you need to preprend their name with this namespace.
+
+#### MPList
 
 Without any parameter, it gets the list of *current* members of the Chamber. When provided a legislature number, it gets the list of *all the MPs who seated* during that legislature.
 
@@ -132,7 +134,7 @@ Example of returned data:
 ```
 
 
-#### `\Pandemonium\Methuselah\Scrapers\K\MP`
+#### MP
 
 This scraper gets info associated to a single member of the Chamber.
 
@@ -175,7 +177,7 @@ Example of returned data:
 }
 ```
 
-#### `\Pandemonium\Methuselah\Scrapers\K\CommitteeList`
+#### CommitteeList
 
 This retrieves the list of *current* working groups and committees of the Chamber. The website provides no way to get the list from a particular point in time.
 
@@ -203,7 +205,7 @@ Example of returned data:
 ```
 
 
-#### `\Pandemonium\Methuselah\Scrapers\K\Committee`
+#### Committee
 
 This gets the names of a committee and the existing seats, categorized by types and political groups. The array data of each seat attributed to a member of the Chamber also stores the full name and the identifier of this member.
 
@@ -245,7 +247,7 @@ Example of returned data:
 ```
 
 
-#### `\Pandemonium\Methuselah\Scrapers\K\Dossier`
+#### Dossier
 
 This scraper gets information about a full dossier.
 
@@ -261,7 +263,9 @@ Example of returned array (shortened for clarity):
 
 ### Senate
 
-#### `\Pandemonium\Methuselah\Scrapers\S\MPList`
+All of these scrapers live in the `\Pandemonium\Methuselah\Scrapers\S` namespace. In other words, to instanciate them, you need to preprend their name with this namespace.
+
+#### MPList
 
 Without any parameter, it gets the list of *current* members of the Senate. When provided a legislature number, it gets the list of *all the senators who seated* during that legislature.
 
@@ -286,7 +290,7 @@ Example of returned data:
 ```
 
 
-#### `\Pandemonium\Methuselah\Scrapers\S\MP`
+#### MP
 
 This scraper gets info associated to a single senator.
 
@@ -327,7 +331,7 @@ Example of returned data:
 ```
 
 
-#### `\Pandemonium\Methuselah\Scrapers\S\CommitteeList`
+#### CommitteeList
 
 This scraper gets the list of *current* working groups and committees of the Senate. The website provides no way to get the list from a particular point in time.
 
@@ -355,7 +359,7 @@ Example of returned data:
 ```
 
 
-#### `\Pandemonium\Methuselah\Scrapers\S\Committee`
+#### Committee
 
 This gets the names of a committee and the existing seats, categorized by roles. Each seat’s array stores the full name, the identifier and the political group of the related senator.
 
