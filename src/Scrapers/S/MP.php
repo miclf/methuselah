@@ -1,7 +1,6 @@
 <?php namespace Pandemonium\Methuselah\Scrapers\S;
 
 use Exception;
-use Pandemonium\Methuselah\Scrapers\AbstractScraper;
 
 /**
  * Extract data from the pages of senators.

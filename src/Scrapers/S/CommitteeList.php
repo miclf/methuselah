@@ -2,7 +2,6 @@
 
 use Exception;
 use Pandemonium\Methuselah\Crawler\Crawler;
-use Pandemonium\Methuselah\Scrapers\AbstractScraper;
 
 /**
  * Extract data from the list of committees of the Senate.

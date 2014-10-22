@@ -1,7 +1,5 @@
 <?php namespace Pandemonium\Methuselah\Scrapers\S;
 
-use Pandemonium\Methuselah\Scrapers\AbstractScraper;
-
 /**
  * Extract data from the list of senators.
  *
