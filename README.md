@@ -353,3 +353,44 @@ Example of returned data:
     }
 ]
 ```
+
+
+#### `\Pandemonium\Methuselah\Scrapers\S\Committee`
+
+This gets the names of a committee and the existing seats, categorized by roles. Each seat’s array stores the full name, the identifier and the political group of the related senator.
+
+Required parameters:
+- `identifier`: the Senate identifier of the group or committee.
+
+Optional parameters: none.
+
+Example of returned data:
+
+```json
+{
+    "identifier": "1234",
+    "name_fr": "…",
+    "name_nl": "…",
+    "presidents": [
+        {
+            "identifier": "12345",
+            "surname_given_name": "John Doe",
+            "political_group": "Cats"
+        }
+    ],
+    "members": [
+        {
+            "identifier": "54321",
+            "surname_given_name": "Jane Doe",
+            "political_group": "Unicorns"
+        }
+    ],
+    "substitutes": [
+        {
+            "identifier": "23456",
+            "surname_given_name": "Bob Doe",
+            "political_group": "Unicorns"
+        }
+    ]
+}
+```
