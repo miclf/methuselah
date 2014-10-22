@@ -56,6 +56,8 @@ class MP extends AbstractScraper
      * Scrape the page of a senator and extract its information.
      *
      * @return array
+     *
+     * @throws \Exception if a committee role cannot be identified.
      */
     public function scrape()
     {
