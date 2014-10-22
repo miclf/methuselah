@@ -166,21 +166,21 @@ class Committee extends AbstractScraper
     /**
      * Get a list of committee seats from a node set.
      *
-     * @param  \Symfony\Component\DomCrawler\Crawler  $node
+     * @param  \Symfony\Component\DomCrawler\Crawler  $list
      * @return array
      */
-    protected function getSeats(Crawler $node)
+    protected function getSeats(Crawler $list)
     {
-        $mps = [];
+        $seats = [];
 
-        // Get all the list items.
-        $nodes = $node->filter('li');
+        $list->filter('li')->each(function ($node) use (&$seats) {
 
-        $nodes->each(function ($node) use (&$mps) {
-            $mps[] = $this->getSeat($node);
+            if ($seat = $this->getSeat($node)) {
+                $seats[] = $seat;
+            }
         });
 
-        return $mps;
+        return $seats;
     }
 
     /**
