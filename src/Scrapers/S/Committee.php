@@ -32,8 +32,9 @@ class Committee extends AbstractScraper
      * @var array
      */
     protected $roles = [
-        'members'         => 'Membres',
-        'substitutes'     => 'Membres Suppléants',
+        'president'   => 'Président',
+        'members'     => 'Membres',
+        'substitutes' => 'Membres Suppléants',
     ];
 
     /**
