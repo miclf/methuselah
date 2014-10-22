@@ -8,13 +8,6 @@
 class MPList extends AbstractScraper
 {
     /**
-     * Character set of the scraped documents.
-     *
-     * @var string
-     */
-    protected $charset = 'ISO-8859-1';
-
-    /**
      * Scrape a list of senators and extract its information.
      *
      * @return array

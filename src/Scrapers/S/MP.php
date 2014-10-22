@@ -10,13 +10,6 @@ use Exception;
 class MP extends AbstractScraper
 {
     /**
-     * Character set of the scraped documents.
-     *
-     * @var string
-     */
-    protected $charset = 'ISO-8859-1';
-
-    /**
      * An instance of a DOM crawler.
      *
      * @var \Pandemonium\Methuselah\Crawler\Crawler
