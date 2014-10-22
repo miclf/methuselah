@@ -127,9 +127,13 @@ class Committee extends AbstractScraper
                 return;
             }
 
-            // Otherwise, the node contains an <ul> element
-            // that we will extract the seats data from.
-            $roles[$name] = $this->getSeats($node);
+            // Otherwise, the node contains an <ul> element that we will
+            // extract the seats data from. The conditional statement
+            // is here to work around a bug where the same list is
+            // displayed multiple times on a page.
+            if (!isset($roles[$name])) {
+                $roles[$name] = $this->getSeats($node);
+            }
         });
 
         return $roles;
