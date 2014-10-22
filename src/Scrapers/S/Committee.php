@@ -113,10 +113,12 @@ class Committee extends AbstractScraper
         $roles = [];
         $name  = null;
 
+        $nodes = $this->crawler->filter('h3, ul');
+
         // Each role’s data is contained inside an unordered list. We will
         // loop on all of them and, for each one, extract both the name and
         // the list of MPs.
-        $this->crawler->filter('h3, ul')->each(function ($node) use (&$roles, &$name) {
+        $nodes->each(function ($node) use (&$roles, &$name) {
 
             // If the current node introduces a new role, we
             // store it and, until we encounter a new one,
