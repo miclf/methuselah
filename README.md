@@ -34,12 +34,11 @@ echo json_encode($list);
 
 The current list of info that can be retrieved is described below. The **K** letter means that the feature is available for the Chamber of Representatives (*Kamer*), while the **S** stands for the Senate.
 
-- List of the current members of the parliament (K, S)
-- List of members who seated during previous legislatures or who seated earlier in the current legislature (K, S)
-- Personal info of a member (K, S)
-- Details of a dossier (K)
-- List of existing committees (K, S)
-- Details and seats of a committee (K, S)
+- List of current or past members of the parliament ([K](#mplist), [S](#mplist-1))
+- Personal info of a member ([K](#mp), [S](#mp-1))
+- Details of a dossier ([K](#dossier))
+- List of existing committees ([K](#committeelist), [S](#committeelist-1))
+- Details and seats of a committee ([K](#committee), [S](#committee-1))
 
 These features and their options are described in more details further below.
 
