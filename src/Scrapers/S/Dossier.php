@@ -27,6 +27,8 @@ class Dossier extends AbstractScraper
 
         $dossier = [];
 
+        $dossier['meta'] = $this->getMetadata();
+
         return $dossier;
     }
 
@@ -52,5 +54,71 @@ class Dossier extends AbstractScraper
         ];
 
         return ['s.dossier', $values];
+    }
+
+    /**
+     * Get the metadata of the dossier.
+     *
+     * @return array
+     */
+    protected function getMetadata()
+    {
+        // Get a crawler for the <tr> elements of the first table.
+        $rows = $this->crawler->filter('table tr');
+
+        // The first row stores the full number of the dossier.
+        $data = $this->extractLegislatureAndDossierNumber($rows->first());
+
+        // The title of the dossier is located in the second row of the table.
+        $data['title'] = [
+            'fr' => trim($rows->eq(1)->text())
+        ];
+
+        // The third table row may contain a list of authors.
+        $data['authors'] = $this->extractAuthors($rows->last());
+
+        return $data;
+    }
+
+    /**
+     * Get the legislature number and the number of the dossier.
+     *
+     * @param  \Symfony\Component\DomCrawler\Crawler  $row
+     * @return array
+     */
+    protected function extractLegislatureAndDossierNumber(Crawler $row)
+    {
+        $identifier = (string) $row->children()->first();
+
+        $matches = $this->match('#(\d+)-(\d+)#', $identifier);
+
+        return [
+            'legislature' => $matches[1],
+            'number'      => $matches[2]
+        ];
+    }
+
+    /**
+     * Get the list of authors.
+     *
+     * @param  \Symfony\Component\DomCrawler\Crawler  $row
+     * @return array|null
+     */
+    protected function extractAuthors(Crawler $row)
+    {
+        $anchors = $row->filter('a');
+
+        if (!count($anchors)) return null;
+
+        // We will loop on all the links and extract their info.
+        return $anchors->each(function ($anchor) {
+
+            $matches = $this->match('#ID=(\d+)#', $anchor->attr('href'));
+
+            return [
+                'identifier'         => $matches[1],
+                'given_name_surname' => trim($anchor->text())
+            ];
+        });
     }
 }
