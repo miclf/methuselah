@@ -29,6 +29,10 @@ class Dossier extends AbstractScraper
 
         $dossier['meta'] = $this->getMetadata();
 
+        $dossier['keywords'] = [
+            'fr' => $this->extractKeywords()
+        ];
+
         return $dossier;
     }
 
@@ -120,5 +124,23 @@ class Dossier extends AbstractScraper
                 'given_name_surname' => trim($anchor->text())
             ];
         });
+    }
+
+    /**
+     * Get the list of keywords.
+     *
+     * @return array
+     */
+    protected function extractKeywords()
+    {
+        // All the keywords of the dossier are contained in a single
+        // table cell and separated by <br> elements. We explode
+        // this string and then clean the array that we got.
+        $cell = $this->crawler->filter('table:nth-of-type(2) td');
+
+        $keywords = explode('<br>', $cell->html());
+
+        // Trim values and remove empty ones.
+        return array_filter(array_map('trim', $keywords));
     }
 }
