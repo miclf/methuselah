@@ -68,7 +68,7 @@ class Dossier extends AbstractScraper
     protected function getMetadata()
     {
         // Get a crawler for the <tr> elements of the first table.
-        $rows = $this->crawler->filter('table tr');
+        $rows = $this->crawler->filter('table:first-child tr');
 
         // The first row stores the full number of the dossier.
         $data = $this->extractLegislatureAndDossierNumber($rows->first());
