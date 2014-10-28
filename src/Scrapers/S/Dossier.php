@@ -33,6 +33,8 @@ class Dossier extends AbstractScraper
             'fr' => $this->extractKeywords()
         ];
 
+        $dossier['documents'] = $this->extractDocuments();
+
         return $dossier;
     }
 
@@ -144,5 +146,82 @@ class Dossier extends AbstractScraper
 
         // Trim values and remove empty ones.
         return array_filter(array_map('trim', $keywords));
+    }
+
+    /**
+     * Get the list of documents.
+     *
+     * @return array|null
+     */
+    protected function extractDocuments()
+    {
+        // The third table of the page contains the list of documents.
+        // We grab all its rows except the first one, which stores
+        // the names of the columns. We then simply make a loop.
+        $rows = $this->crawler->filter('table:nth-of-type(3) tr:nth-child(n+2)');
+
+        return $rows->each(function ($row) {
+
+            $cells = $row->children();
+
+            return [
+                'number' => trim($cells->eq(0)->text()),
+                'type'   => trim($cells->eq(1)->text()),
+                'date'   => $this->parseDate($cells->eq(2)->text()),
+                'links'  => $this->parseDocumentLinks($cells->eq(0)),
+            ];
+        });
+    }
+
+    /**
+     * Find document links and extract info from them.
+     *
+     * @param  \Symfony\Component\DomCrawler\Crawler  $node
+     * @return array
+     */
+    protected function parseDocumentLinks(Crawler $node)
+    {
+        $data = $found = [];
+
+        // We will loop on all the links and extract their info.
+        $node->filter('a')->each(function ($anchor) use (&$data, &$found) {
+
+            // We look for a document format, normally specified inside
+            // parentheses in the title attribute of each anchor.
+            if ($matches = $this->match('#\((.+)\)#', $anchor->attr('title'))) {
+
+                $format = strtolower($matches[1]);
+                $url    = 'http://senate.be'.$anchor->attr('href');
+
+                // The website of the Senate sometimes shows multiple links to
+                // the exact same document. We then need to keep track of the
+                // ones we already added so that we don’t store duplicates.
+                if (in_array($url, $found)) {
+                    return;
+                }
+
+                $found[] = $url;
+
+                $data[] = compact('format', 'url');
+            }
+        });
+
+        return $data;
+    }
+
+    /**
+     * Convert a date to ISO 8601.
+     *
+     * @param  string  $date
+     * @return string
+     */
+    protected function parseDate($date)
+    {
+        $parts = explode('/', trim($date));
+
+        return
+            $parts[2].'-'.
+            str_pad($parts[1], 2, '0', STR_PAD_LEFT).'-'.
+            str_pad($parts[0], 2, '0', STR_PAD_LEFT);
     }
 }
