@@ -138,6 +138,8 @@ class Dossier extends AbstractScraper
         // this string and then clean the array that we got.
         $cell = $this->crawler->filter('table:nth-of-type(2) td');
 
+        if (!count($cell)) return null;
+
         $keywords = explode('<br>', $cell->html());
 
         // Trim values and remove empty ones.
