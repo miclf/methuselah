@@ -199,24 +199,26 @@ class Dossier extends AbstractScraper
         // We will loop on all the links and extract their info.
         $node->filter('a')->each(function ($anchor) use (&$data, &$found) {
 
+            $url = 'http://senate.be'.$anchor->attr('href');
+
             // We look for a document format, normally specified inside
             // parentheses in the title attribute of each anchor.
-            if ($matches = $this->match('#\((.+)\)#', $anchor->attr('title'))) {
+            $matches = $this->match('#\((.+)\)#', $anchor->attr('title'));
 
-                $format = strtolower($matches[1]);
-                $url    = 'http://senate.be'.$anchor->attr('href');
-
-                // The website of the Senate sometimes shows multiple links to
-                // the exact same document. We then need to keep track of the
-                // ones we already added so that we don’t store duplicates.
-                if (in_array($url, $found)) {
-                    return;
-                }
-
-                $found[] = $url;
-
-                $data[] = compact('format', 'url');
+            // The website of the Senate sometimes shows multiple links to
+            // the exact same document. We then need to keep track of the
+            // ones we already added so that we don’t store duplicates.
+            // We will also skip the link if we can’t find its format.
+            if (in_array($url, $found) || !$matches) {
+                return;
             }
+
+            $found[] = $url;
+
+            $data[] = [
+                'format' => strtolower($matches[1]),
+                'url'    => $url
+            ];
         });
 
         return $data;
