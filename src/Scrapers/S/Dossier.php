@@ -165,12 +165,25 @@ class Dossier extends AbstractScraper
             $cells = $row->children();
 
             return [
-                'number' => trim($cells->eq(0)->text()),
+                'number' => $this->extractDocumentNumber($cells->eq(0)->text()),
                 'type'   => trim($cells->eq(1)->text()),
                 'date'   => $this->parseDate($cells->eq(2)->text()),
                 'links'  => $this->parseDocumentLinks($cells->eq(0)),
             ];
         });
+    }
+
+    /**
+     * Extract a document number from a string.
+     *
+     * @param  string  $str
+     * @return string
+     */
+    protected function extractDocumentNumber($str)
+    {
+        $matches = $this->match('#\d+-\d+(?:/\d+)#', trim($str));
+
+        return $matches[0];
     }
 
     /**
