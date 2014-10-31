@@ -34,6 +34,7 @@ class Dossier extends AbstractScraper
         ];
 
         $dossier['documents'] = $this->extractDocuments();
+        $dossier['history']   = $this->getHistory();
 
         return $dossier;
     }
@@ -222,6 +223,115 @@ class Dossier extends AbstractScraper
         });
 
         return $data;
+    }
+
+    /**
+     * Get the history items of the dossier.
+     *
+     * @return array
+     */
+    protected function getHistory()
+    {
+        // The fourth table of the page stores the history of the
+        // dossier so far. We will loop on all its rows except
+        // the first three, which contain no history info.
+        $rows = $this->crawler->filter('table:nth-of-type(4) tr:nth-child(n+4)');
+
+        $history = $groups = [];
+        $currentGroupName = null;
+        $currentDepth = 0;
+
+        $rows->each(function ($row) use (
+            &$history,
+            &$groups,
+            &$currentGroupName,
+            &$currentDepth
+        ) {
+            // If the current table row introduces a new group of history
+            // items, we get its name and save it for later reuse. We
+            // then return since the row contains no history data.
+            if ($rowGroup = $this->parseGroup($row)) {
+
+                $groups[$rowGroup['depth']] = $rowGroup['name'];
+                $currentGroupName = $rowGroup['name'];
+
+                return;
+
+            } elseif (($rowDepth = $this->getRowDepth($row)) != $currentDepth) {
+
+                // If the depth of the current history row is different than the
+                // one of the previous row, it means that the group has changed.
+                // We then try to update that name according to the new depth.
+                $currentDepth     = $rowDepth;
+                $currentGroupName = null;
+
+                // By default, the group name is reset. We then check
+                // if we previsouly had a named group at that depth.
+                if (isset($groups[$rowDepth])) {
+                    $currentGroupName = $groups[$rowDepth];
+                }
+            }
+
+            $cells = $row->children();
+
+            // Here we gather the basic information of the history item.
+            $rowData = [
+                'group_name' => $currentGroupName,
+                'date'       => $this->parseDate($cells->eq(0)->text()),
+                'content'    => trim($cells->eq(2)->text()),
+            ];
+
+            if ($this->isReferencingDocument($row)) {
+                $str = $cells->last()->text();
+                $rowData['document'] = $this->extractDocumentNumber($str);
+            }
+
+            // Finally, we store the data we got
+            // from the current table row.
+            $history[] = $rowData;
+        });
+
+        return $history;
+    }
+
+    /**
+     * Extract data of a history group.
+     *
+     * @param  \Symfony\Component\DomCrawler\Crawler  $row
+     * @return array|null
+     */
+    protected function parseGroup(Crawler $row)
+    {
+        if ($row->attr('bgcolor')) {
+            return [
+                'name'  => $this->trim($row->text()),
+                'depth' => $row->filter('td:first-child')->attr('colspan')
+            ];
+        }
+    }
+
+    /**
+     * Calculate the depth of a history row.
+     *
+     * @param  \Symfony\Component\DomCrawler\Crawler  $row
+     * @return int
+     */
+    protected function getRowDepth(Crawler $row)
+    {
+        $colspan = $row->filter('td:nth-child(3)')->attr('colspan');
+
+        return 5 - $colspan;
+    }
+
+    /**
+     * Checks if the given row contains a link to a document.
+     *
+     * @param  \Symfony\Component\DomCrawler\Crawler  $row
+     * @return bool
+     */
+    protected function isReferencingDocument(Crawler $row)
+    {
+        return (bool) count($this->parseDocumentLinks($row));
     }
 
     /**
