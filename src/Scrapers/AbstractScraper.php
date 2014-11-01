@@ -8,7 +8,7 @@ use Pandemonium\Methuselah\DocumentProvider;
  *
  * @author Michaël Lecerf <michael@estsurinter.net>
  */
-abstract class AbstractScraper
+abstract class AbstractScraper implements ScraperInterface
 {
     use ScrapingHelpersTrait;
 
