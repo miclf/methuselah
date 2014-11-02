@@ -17,6 +17,20 @@ class Dossier extends AbstractScraper
     protected $crawler;
 
     /**
+     * Keep track of the different groups of history items.
+     *
+     * @var array
+     */
+    protected $historyGroups = [];
+
+    /**
+     * Stores the names of history groups when parsing history.
+     *
+     * @var string
+     */
+    protected $currentGroupName;
+
+    /**
      * Scrape the page of a dossier and extract its information.
      *
      * @return array
@@ -237,38 +251,28 @@ class Dossier extends AbstractScraper
         // the first three, which contain no history info.
         $rows = $this->crawler->filter('table:nth-of-type(4) tr:nth-child(n+4)');
 
-        $history = $groups = [];
-        $currentGroupName = null;
+        $history = [];
         $currentDepth = 0;
 
-        $rows->each(function ($row) use (
-            &$history,
-            &$groups,
-            &$currentGroupName,
-            &$currentDepth
-        ) {
-            // If the current table row introduces a new group of history
-            // items, we get its name and save it for later reuse. We
-            // then return since the row contains no history data.
-            if ($rowGroup = $this->parseGroup($row)) {
+        $rows->each(function ($row) use (&$history, &$currentDepth) {
 
-                $groups[$rowGroup['depth']] = $rowGroup['name'];
-                $currentGroupName = $rowGroup['name'];
-
+            // Skip the row because it contains no history data.
+            if ($this->isStartingNewGroup($row)) {
                 return;
+            }
 
-            } elseif (($rowDepth = $this->getRowDepth($row)) != $currentDepth) {
+            // If the depth of the current history row is different than the
+            // one of the previous row, it means that the group has changed.
+            // We then try to update that name according to the new depth.
+            if (($rowDepth = $this->getRowDepth($row)) != $currentDepth) {
 
-                // If the depth of the current history row is different than the
-                // one of the previous row, it means that the group has changed.
-                // We then try to update that name according to the new depth.
-                $currentDepth     = $rowDepth;
-                $currentGroupName = null;
+                $currentDepth = $rowDepth;
+                $this->currentGroupName = null;
 
                 // By default, the group name is reset. We then check
                 // if we previsouly had a named group at that depth.
-                if (isset($groups[$rowDepth])) {
-                    $currentGroupName = $groups[$rowDepth];
+                if (isset($this->historyGroups[$rowDepth])) {
+                    $this->currentGroupName = $this->historyGroups[$rowDepth];
                 }
             }
 
@@ -276,7 +280,7 @@ class Dossier extends AbstractScraper
 
             // Here we gather the basic information of the history item.
             $rowData = [
-                'group_name' => $currentGroupName,
+                'group_name' => $this->currentGroupName,
                 'date'       => $this->parseDate($cells->eq(0)->text()),
                 'content'    => trim($cells->eq(2)->text()),
             ];
@@ -295,19 +299,25 @@ class Dossier extends AbstractScraper
     }
 
     /**
-     * Extract data of a history group.
+     * Determine if the current history row starts a new group.
      *
      * @param  \Symfony\Component\DomCrawler\Crawler  $row
-     * @return array|null
+     * @return bool
      */
-    protected function parseGroup(Crawler $row)
+    protected function isStartingNewGroup(Crawler $row)
     {
-        if ($row->attr('bgcolor')) {
-            return [
-                'name'  => $this->trim($row->text()),
-                'depth' => $row->filter('td:first-child')->attr('colspan')
-            ];
+        if (is_null($row->attr('bgcolor'))) {
+            return false;
         }
+
+        $name  = $this->trim($row->text());
+        $depth = $row->filter('td:first-child')->attr('colspan');
+
+        // We save the name of the new group for later reuse.
+        $this->currentGroupName = $name;
+        $this->historyGroups[$depth] = $name;
+
+        return true;
     }
 
     /**
