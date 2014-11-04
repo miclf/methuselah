@@ -31,6 +31,13 @@ class Dossier extends AbstractScraper
     protected $currentGroupName;
 
     /**
+     * Stores the depths of history groups when parsing history.
+     *
+     * @var int
+     */
+    protected $currentDepth;
+
+    /**
      * Scrape the page of a dossier and extract its information.
      *
      * @return array
@@ -252,28 +259,12 @@ class Dossier extends AbstractScraper
         $rows = $this->crawler->filter('table:nth-of-type(4) tr:nth-child(n+4)');
 
         $history = [];
-        $currentDepth = 0;
 
-        $rows->each(function ($row) use (&$history, &$currentDepth) {
+        $rows->each(function ($row) use (&$history) {
 
-            // Skip the row because it contains no history data.
-            if ($this->isStartingNewGroup($row)) {
+            // Skip the row if it contains no history data.
+            if (!$this->hasHistoryData($row)) {
                 return;
-            }
-
-            // If the depth of the current history row is different than the
-            // one of the previous row, it means that the group has changed.
-            // We then try to update that name according to the new depth.
-            if (($rowDepth = $this->getRowDepth($row)) != $currentDepth) {
-
-                $currentDepth = $rowDepth;
-                $this->currentGroupName = null;
-
-                // By default, the group name is reset. We then check
-                // if we previsouly had a named group at that depth.
-                if (isset($this->historyGroups[$rowDepth])) {
-                    $this->currentGroupName = $this->historyGroups[$rowDepth];
-                }
             }
 
             $cells = $row->children();
@@ -299,6 +290,24 @@ class Dossier extends AbstractScraper
     }
 
     /**
+     * Determine if a row contains history data.
+     *
+     * @param  \Symfony\Component\DomCrawler\Crawler  $row
+     * @return bool
+     */
+    protected function hasHistoryData(Crawler $row)
+    {
+        // A row starting a new group contains no history data.
+        if ($this->isStartingNewGroup($row)) {
+            return false;
+        }
+
+        $this->checkGroupChange($row);
+
+        return true;
+    }
+
+    /**
      * Determine if the current history row starts a new group.
      *
      * @param  \Symfony\Component\DomCrawler\Crawler  $row
@@ -318,6 +327,32 @@ class Dossier extends AbstractScraper
         $this->historyGroups[$depth] = $name;
 
         return true;
+    }
+
+    /**
+     * Determine if the current history row causes a group
+     * change and update the relevant properties.
+     *
+     * @param  \Symfony\Component\DomCrawler\Crawler  $row
+     * @return void
+     */
+    protected function checkGroupChange(Crawler $row)
+    {
+        $rowDepth = $this->getRowDepth($row);
+
+        if ($rowDepth == $this->currentDepth) return;
+
+        // If the depth of the current history row is different than the
+        // one of the previous row, it means that the group has changed.
+        // We then try to update that name according to the new depth.
+        // By default, the group name is reset. We then check if we
+        // previsouly had a named group at that depth.
+        $this->currentGroupName = null;
+        $this->currentDepth     = $rowDepth;
+
+        if (isset($this->historyGroups[$rowDepth])) {
+            $this->currentGroupName = $this->historyGroups[$rowDepth];
+        }
     }
 
     /**
