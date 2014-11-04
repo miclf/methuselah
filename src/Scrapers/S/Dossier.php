@@ -270,20 +270,14 @@ class Dossier extends AbstractScraper
             $cells = $row->children();
 
             // Here we gather the basic information of the history item.
-            $rowData = [
+            $data = [
                 'group_name' => $this->currentGroupName,
                 'date'       => $this->parseDate($cells->eq(0)->text()),
                 'content'    => trim($cells->eq(2)->text()),
             ];
 
-            if ($this->isReferencingDocument($row)) {
-                $str = $cells->last()->text();
-                $rowData['document'] = $this->extractDocumentNumber($str);
-            }
-
-            // Finally, we store the data we got
-            // from the current table row.
-            $history[] = $rowData;
+            // Store the data we got, plus any extra data we could obtain.
+            $history[] = $data + $this->getExtraRowData($row);
         });
 
         return $history;
@@ -366,6 +360,26 @@ class Dossier extends AbstractScraper
         $colspan = $row->filter('td:nth-child(3)')->attr('colspan');
 
         return 5 - $colspan;
+    }
+
+    /**
+     * Extract any special data an history row may contain.
+     *
+     * @param  \Symfony\Component\DomCrawler\Crawler  $row
+     * @return array
+     */
+    protected function getExtraRowData(Crawler $row)
+    {
+        $extra = [];
+
+        if ($this->isReferencingDocument($row)) {
+
+            $str = $row->children()->last()->text();
+
+            $extra['document'] = $this->extractDocumentNumber($str);
+        }
+
+        return $extra;
     }
 
     /**
