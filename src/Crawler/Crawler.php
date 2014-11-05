@@ -85,6 +85,20 @@ class Crawler extends SymfonyCrawler
     }
 
     /**
+     * Returns the value of a node given its position in the node list.
+     *
+     * @param int      $position  The position
+     *
+     * @return string  The node value
+     *
+     * @throws \InvalidArgumentException if there is no node at given position
+     */
+    public function textOfNode($position)
+    {
+        return $this->eq($position)->text();
+    }
+
+    /**
      * Returns the first node of the list as HTML.
      *
      * @return  string  The node html
