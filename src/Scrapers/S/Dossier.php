@@ -99,7 +99,7 @@ class Dossier extends AbstractScraper
 
         // The title of the dossier is located in the second row of the table.
         $data['title'] = [
-            'fr' => trim($rows->eq(1)->text())
+            'fr' => trim($rows->textOfNode(1))
         ];
 
         // The third table row may contain a list of authors.
@@ -187,9 +187,9 @@ class Dossier extends AbstractScraper
             $cells = $row->children();
 
             return [
-                'number' => $this->extractDocumentNumber($cells->eq(0)->text()),
-                'type'   => trim($cells->eq(1)->text()),
-                'date'   => $this->parseDate($cells->eq(2)->text()),
+                'number' => $this->extractDocumentNumber($cells->textOfNode(0)),
+                'type'   => trim($cells->textOfNode(1)),
+                'date'   => $this->parseDate($cells->textOfNode(2)),
                 'links'  => $this->parseDocumentLinks($cells->eq(0)),
             ];
         });
@@ -272,8 +272,8 @@ class Dossier extends AbstractScraper
             // Here we gather the basic information of the history item.
             $data = [
                 'group_name' => $this->currentGroupName,
-                'date'       => $this->parseDate($cells->eq(0)->text()),
-                'content'    => trim($cells->eq(2)->text()),
+                'date'       => $this->parseDate($cells->textOfNode(0)),
+                'content'    => trim($cells->textOfNode(2)),
             ];
 
             // Store the data we got, plus any extra data we could obtain.
