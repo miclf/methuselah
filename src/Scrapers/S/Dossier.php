@@ -10,11 +10,11 @@ use Pandemonium\Methuselah\Crawler\Crawler;
 class Dossier extends AbstractScraper
 {
     /**
-     * An instance of a DOM crawler.
+     * An array of DOM crawler instances.
      *
-     * @var \Pandemonium\Methuselah\Crawler\Crawler
+     * @var array
      */
-    protected $crawler;
+    protected $crawlers = [];
 
     /**
      * Keep track of the different groups of history items.
@@ -44,7 +44,7 @@ class Dossier extends AbstractScraper
      */
     public function scrape()
     {
-        $this->crawler = $this->getCrawler();
+        $this->crawlers = $this->getCrawlers();
 
         $dossier = [];
 
@@ -79,10 +79,31 @@ class Dossier extends AbstractScraper
         $values = [
             'legislatureNumber' => $matches[1],
             'dossierNumber'     => $matches[2],
-            'lang'              => $this->getOption('lang', 'fr'),
+            'lang'              => $this->getOption('lang', $lang),
         ];
 
         return ['s.dossier', $values];
+    }
+
+    /**
+     * Get a DOM crawler for each language.
+     *
+     * @return array
+     */
+    protected function getCrawlers()
+    {
+        $crawlers = [];
+
+        foreach (['fr', 'nl'] as $lang) {
+
+            list($pattern, $values) = $this->getProviderArguments($lang);
+
+            $page = $this->getDocument($pattern, $values);
+
+            $crawlers[$lang] = $this->getCrawler($page);
+        }
+
+        return $crawlers;
     }
 
     /**
@@ -93,7 +114,7 @@ class Dossier extends AbstractScraper
     protected function getMetadata()
     {
         // Get a crawler for the <tr> elements of the first table.
-        $rows = $this->crawler->filter('table:first-child tr');
+        $rows = $this->crawlers['fr']->filter('table:first-child tr');
 
         // The first row stores the full number of the dossier.
         $data = $this->extractLegislatureAndDossierNumber($rows->first());
@@ -161,7 +182,8 @@ class Dossier extends AbstractScraper
      */
     protected function extractProcedureType()
     {
-        $cells = $this->crawler->filter('table:nth-of-type(4) tr:nth-child(3) th');
+        $selector = 'table:nth-of-type(4) tr:nth-child(3) th';
+        $cells    = $this->crawlers['fr']->filter($selector);
 
         return trim($cells->textOfNode(1));
     }
@@ -176,7 +198,7 @@ class Dossier extends AbstractScraper
         // All the keywords of the dossier are contained in a single
         // table cell and separated by <br> elements. We explode
         // this string and then clean the array that we got.
-        $cell = $this->crawler->filter('table:nth-of-type(2) td');
+        $cell = $this->crawlers['fr']->filter('table:nth-of-type(2) td');
 
         if (!count($cell)) return null;
 
@@ -196,7 +218,8 @@ class Dossier extends AbstractScraper
         // The third table of the page contains the list of documents.
         // We grab all its rows except the first one, which stores
         // the names of the columns. We then simply make a loop.
-        $rows = $this->crawler->filter('table:nth-of-type(3) tr:nth-child(n+2)');
+        $selector = 'table:nth-of-type(3) tr:nth-child(n+2)';
+        $rows     = $this->crawlers['fr']->filter($selector);
 
         return $rows->each(function ($row) {
 
@@ -272,7 +295,8 @@ class Dossier extends AbstractScraper
         // The fourth table of the page stores the history of the
         // dossier so far. We will loop on all its rows except
         // the first three, which contain no history info.
-        $rows = $this->crawler->filter('table:nth-of-type(4) tr:nth-child(n+4)');
+        $selector = 'table:nth-of-type(4) tr:nth-child(n+4)';
+        $rows     = $this->crawlers['fr']->filter($selector);
 
         $history = [];
 
@@ -419,7 +443,8 @@ class Dossier extends AbstractScraper
         // The fifth table of the page stores the status of the
         // dossier so far. We will loop on all its rows except
         // the first two, which contain no useful info.
-        $rows = $this->crawler->filter('table:nth-of-type(5) tr:nth-child(n+3)');
+        $selector = 'table:nth-of-type(5) tr:nth-child(n+3)';
+        $rows     = $this->crawlers['fr']->filter($selector);
 
         $status = [];
 
