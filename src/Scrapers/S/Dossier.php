@@ -10,6 +10,13 @@ use Pandemonium\Methuselah\Crawler\Crawler;
 class Dossier extends AbstractScraper
 {
     /**
+     * The list of languages this scraper can extract data in.
+     *
+     * @var array
+     */
+    protected $langs = ['fr', 'nl'];
+
+    /**
      * An array of DOM crawler instances.
      *
      * @var array
@@ -94,7 +101,7 @@ class Dossier extends AbstractScraper
     {
         $crawlers = [];
 
-        foreach (['fr', 'nl'] as $lang) {
+        foreach ($this->langs as $lang) {
 
             list($pattern, $values) = $this->getProviderArguments($lang);
 
