@@ -105,6 +105,9 @@ class Dossier extends AbstractScraper
         // The third table row may contain a list of authors.
         $data['authors'] = $this->extractAuthors($rows->last());
 
+        // The fourth one indicates the type of procedure.
+        $data['procedure'] = $this->extractProcedureType();
+
         return $data;
     }
 
@@ -148,6 +151,18 @@ class Dossier extends AbstractScraper
                 'given_name_surname' => trim($anchor->text())
             ];
         });
+    }
+
+    /**
+     * Get the type of parliamentary procedure.
+     *
+     * @return string
+     */
+    protected function extractProcedureType()
+    {
+        $cells = $this->crawler->filter('table:nth-of-type(4) tr:nth-child(3) th');
+
+        return trim($cells->textOfNode(1));
     }
 
     /**
