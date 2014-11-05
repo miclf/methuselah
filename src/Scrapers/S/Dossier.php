@@ -56,6 +56,7 @@ class Dossier extends AbstractScraper
 
         $dossier['documents'] = $this->extractDocuments();
         $dossier['history']   = $this->getHistory();
+        $dossier['status']    = $this->getStatus();
 
         return $dossier;
     }
@@ -406,6 +407,54 @@ class Dossier extends AbstractScraper
     protected function isReferencingDocument(Crawler $row)
     {
         return (bool) count($this->parseDocumentLinks($row));
+    }
+
+    /**
+     * Get the current status data of the dossier.
+     *
+     * @return array
+     */
+    protected function getStatus()
+    {
+        // The fifth table of the page stores the status of the
+        // dossier so far. We will loop on all its rows except
+        // the first two, which contain no useful info.
+        $rows = $this->crawler->filter('table:nth-of-type(5) tr:nth-child(n+3)');
+
+        $status = [];
+
+        $rows->each(function ($row) use (&$status) {
+
+            $cells = $row->children();
+
+            $status[] = [
+                'group_name' => trim($cells->textOfNode(0)),
+                'status'     => trim($cells->textOfNode(1)),
+                'dates'      => $this->parseStatusDates($cells->textOfNode(2)),
+            ];
+        });
+
+        return $status;
+    }
+
+    /**
+     * Parse a set of dates from the status table.
+     *
+     * @param  string  $str
+     * @return array|null
+     */
+    protected function parseStatusDates($str)
+    {
+        $dates = [];
+
+        foreach (explode(',', $str) as $date) {
+
+            if ($date = $this->trim($date)) {
+                $dates[] = $this->parseDate($date);
+            }
+        }
+
+        return count($dates) ? $dates : null;
     }
 
     /**
