@@ -168,7 +168,7 @@ class Dossier extends AbstractScraper
     /**
      * Get the list of keywords.
      *
-     * @return array
+     * @return array|null
      */
     protected function extractKeywords()
     {
