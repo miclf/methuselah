@@ -55,12 +55,8 @@ class Dossier extends AbstractScraper
 
         $dossier = [];
 
-        $dossier['meta'] = $this->getMetadata();
-
-        $dossier['keywords'] = [
-            'fr' => $this->extractKeywords()
-        ];
-
+        $dossier['meta']      = $this->getMetadata();
+        $dossier['keywords']  = $this->extractKeywords();
         $dossier['documents'] = $this->extractDocuments();
         $dossier['history']   = $this->getHistory();
         $dossier['status']    = $this->getStatus();
@@ -204,17 +200,24 @@ class Dossier extends AbstractScraper
      */
     protected function extractKeywords()
     {
-        // All the keywords of the dossier are contained in a single
-        // table cell and separated by <br> elements. We explode
-        // this string and then clean the array that we got.
-        $cell = $this->crawlers['fr']->filter('table:nth-of-type(2) td');
+        $data = [];
 
-        if (!count($cell)) return null;
+        foreach ($this->langs as $lang) {
 
-        $keywords = explode('<br>', $cell->html());
+            // All the keywords of the dossier are contained in a single
+            // table cell and separated by <br> elements. We explode
+            // this string and then clean the array that we got.
+            $cell = $this->crawlers[$lang]->filter('table:nth-of-type(2) td');
 
-        // Trim values and remove empty ones.
-        return array_filter(array_map('trim', $keywords));
+            if (!count($cell)) return null;
+
+            $keywords = explode('<br>', $cell->html());
+
+            // Trim values and remove empty ones.
+            $data[$lang] = array_filter(array_map('trim', $keywords));
+        }
+
+        return $data;
     }
 
     /**
