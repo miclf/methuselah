@@ -116,14 +116,14 @@ class Dossier extends AbstractScraper
      */
     protected function getMetadata()
     {
-        // Get a crawler for the <tr> elements of the first table.
+        // Get crawlers for the <tr> elements of the first table.
         $rows   = $this->crawlers['fr']->filter('table:first-child tr');
         $nlRows = $this->crawlers['nl']->filter('table:first-child tr');
 
         // The first row stores the full number of the dossier.
         $data = $this->extractLegislatureAndDossierNumber($rows->first());
 
-        // The title of the dossier is located in the second row of the table.
+        // The next one hosts the title of the dossier.
         $data['title'] = [
             'fr' => trim($rows->textOfNode(1)),
             'nl' => trim($nlRows->textOfNode(1))
