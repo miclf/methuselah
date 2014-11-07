@@ -117,7 +117,7 @@ Required parameters: none.
 Optional parameters:
 - `legislature_number`: number of the legislature of which the list of MPs is needed.
 
-Example of returned data:
+##### Example of returned data:
 
 ```json
 [
@@ -132,6 +132,7 @@ Example of returned data:
 ]
 ```
 
+**********
 
 #### MP
 
@@ -143,7 +144,7 @@ Required parameters:
 Optional parameters:
 - `legislature_number`: number of the legislature from which data should be extracted of. Defaults to `54`. There should be no need to set this parameter, since the most recent data is generally what is wanted.
 
-Example of returned data:
+##### Example of returned data:
 
 ```json
 {
@@ -176,6 +177,8 @@ Example of returned data:
 }
 ```
 
+**********
+
 #### CommitteeList
 
 This retrieves the list of *current* working groups and committees of the Chamber. The website provides no way to get the list from a particular point in time.
@@ -184,7 +187,7 @@ Required parameters: none.
 
 Optional parameters: none.
 
-Example of returned data:
+##### Example of returned data:
 
 ```json
 [
@@ -203,6 +206,7 @@ Example of returned data:
 ]
 ```
 
+**********
 
 #### Committee
 
@@ -213,7 +217,7 @@ Required parameters:
 
 Optional parameters: none.
 
-Example of returned data:
+##### Example of returned data:
 
 ```json
 {
@@ -245,6 +249,7 @@ Example of returned data:
 }
 ```
 
+**********
 
 #### Dossier
 
@@ -258,6 +263,8 @@ Optional parameters: none.
 Example of returned array (shortened for clarity):
 
 (to be defined)
+
+**********
 
 
 ### Senate
@@ -273,7 +280,7 @@ Required parameters: none.
 Optional parameters:
 - `legislature_number`: number of the legislature of which the list of senators is needed.
 
-Example of returned data:
+##### Example of returned data:
 
 ```json
 [
@@ -288,6 +295,7 @@ Example of returned data:
 ]
 ```
 
+**********
 
 #### MP
 
@@ -298,7 +306,7 @@ Required parameters:
 
 Optional parameters: none.
 
-Example of returned data:
+##### Example of returned data:
 
 ```json
 {
@@ -329,6 +337,7 @@ Example of returned data:
 }
 ```
 
+**********
 
 #### CommitteeList
 
@@ -338,7 +347,7 @@ Required parameters: none.
 
 Optional parameters: none.
 
-Example of returned data:
+##### Example of returned data:
 
 ```json
 [
@@ -357,6 +366,7 @@ Example of returned data:
 ]
 ```
 
+**********
 
 #### Committee
 
@@ -367,7 +377,7 @@ Required parameters:
 
 Optional parameters: none.
 
-Example of returned data:
+##### Example of returned data:
 
 ```json
 {
