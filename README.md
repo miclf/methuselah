@@ -112,10 +112,11 @@ All of these scrapers live in the `\Pandemonium\Methuselah\Scrapers\K` namespace
 
 Without any parameter, it gets the list of *current* members of the Chamber. When provided a legislature number, it gets the list of *all the MPs who seated* during that legislature.
 
-Required parameters: none.
+##### Parameters
 
-Optional parameters:
-- `legislature_number`: number of the legislature of which the list of MPs is needed.
+Name                 | Type     | Description
+---------------------|----------|------------
+`legislature_number` | `number` | Number of the legislature of which the list of MPs is needed.
 
 ##### Example of returned data:
 
@@ -138,11 +139,12 @@ Optional parameters:
 
 This scraper gets info associated to a single member of the Chamber.
 
-Required parameters:
-- `identifier`: the Chamber identifier of the member.
+##### Parameters
 
-Optional parameters:
-- `legislature_number`: number of the legislature from which data should be extracted of. Defaults to `54`. There should be no need to set this parameter, since the most recent data is generally what is wanted.
+Name                 | Type     | Description
+---------------------|----------|------------
+`identifier`         | `string` | **Required**. The Chamber identifier of the member.
+`legislature_number` | `number` | Number of the legislature from which data should be extracted of. Defaults to `54`. There should be no need to set this parameter, since the most recent data is generally what is wanted.
 
 ##### Example of returned data:
 
@@ -183,9 +185,9 @@ Optional parameters:
 
 This retrieves the list of *current* working groups and committees of the Chamber. The website provides no way to get the list from a particular point in time.
 
-Required parameters: none.
+##### Parameters
 
-Optional parameters: none.
+This scraper has no parameter.
 
 ##### Example of returned data:
 
@@ -212,10 +214,11 @@ Optional parameters: none.
 
 This gets the names of a committee and the existing seats, categorized by types and political groups. The array data of each seat attributed to a member of the Chamber also stores the full name and the identifier of this member.
 
-Required parameters:
-- `identifier`: the Chamber identifier of the group or committee.
+##### Parameters
 
-Optional parameters: none.
+Name         | Type     | Description
+-------------|----------|------------
+`identifier` | `string` | **Required**. The Chamber identifier of the group or committee.
 
 ##### Example of returned data:
 
@@ -255,10 +258,11 @@ Optional parameters: none.
 
 This scraper gets information about a full dossier.
 
-Required parameters:
-- `identifier`: the Chamber identifier of the dossier. It matches the pattern `DDKDDDD`, where ‘D’ are digits and ‘K’ is a litteral uppercase ‘k’.
+##### Parameters
 
-Optional parameters: none.
+Name         | Type     | Description
+-------------|----------|------------
+`identifier` | `string` | **Required**. The Chamber identifier of the dossier. It matches the pattern `DDKDDDD`, where ‘D’ are digits and ‘K’ is a litteral uppercase ‘k’.
 
 Example of returned array (shortened for clarity):
 
@@ -275,10 +279,11 @@ All of these scrapers live in the `\Pandemonium\Methuselah\Scrapers\S` namespace
 
 Without any parameter, it gets the list of *current* members of the Senate. When provided a legislature number, it gets the list of *all the senators who seated* during that legislature.
 
-Required parameters: none.
+##### Parameters
 
-Optional parameters:
-- `legislature_number`: number of the legislature of which the list of senators is needed.
+Name                 | Type     | Description
+---------------------|----------|------------
+`legislature_number` | `number` | Number of the legislature of which the list of senators is needed.
 
 ##### Example of returned data:
 
@@ -301,10 +306,11 @@ Optional parameters:
 
 This scraper gets info associated to a single senator.
 
-Required parameters:
-- `identifier`: the Senate identifier of the senator.
+##### Parameters
 
-Optional parameters: none.
+Name         | Type     | Description
+-------------|----------|------------
+`identifier` | `string` | **Required**. The Senate identifier of the senator.
 
 ##### Example of returned data:
 
@@ -343,9 +349,9 @@ Optional parameters: none.
 
 This scraper gets the list of *current* working groups and committees of the Senate. The website provides no way to get the list from a particular point in time.
 
-Required parameters: none.
+##### Parameters
 
-Optional parameters: none.
+This scraper has no parameter.
 
 ##### Example of returned data:
 
@@ -372,10 +378,11 @@ Optional parameters: none.
 
 This gets the names of a committee and the existing seats, categorized by roles. Each seat’s array stores the full name, the identifier and the political group of the related senator.
 
-Required parameters:
-- `identifier`: the Senate identifier of the group or committee.
+##### Parameters
 
-Optional parameters: none.
+Name         | Type     | Description
+-------------|----------|------------
+`identifier` | `string` | **Required**. The Senate identifier of the group or committee.
 
 ##### Example of returned data:
 
