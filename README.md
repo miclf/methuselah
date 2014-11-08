@@ -55,6 +55,16 @@ These features and their options are described in more details further below.
 
 This project requires **PHP 5.4** or a newer version. It can be installed with the [Composer package manager](http://getcomposer.org/).
 
+There is no released version yet. To install this package, you need to require the development version in your `composer.json` file, like this:
+
+```json
+{
+    "require": {
+        "pandemonium/methuselah": "dev-master"
+    }
+}
+```
+
 
 ## Dependencies
 
