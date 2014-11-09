@@ -309,10 +309,11 @@ class Dossier extends AbstractScraper
         // the first three, which contain no history info.
         $selector = 'table:nth-of-type(4) tr:nth-child(n+4)';
         $rows     = $this->crawlers['fr']->filter($selector);
+        $nlRows   = $this->crawlers['nl']->filter($selector);
 
         $history = [];
 
-        $rows->each(function ($row) use (&$history) {
+        $rows->each(function ($row, $i) use (&$history, $nlRows) {
 
             // Skip the row if it contains no history data.
             if (!$this->hasHistoryData($row)) {
@@ -325,7 +326,8 @@ class Dossier extends AbstractScraper
             $data = [
                 'group_name' => $this->currentGroupName,
                 'date'       => $this->parseDate($cells->textOfNode(0)),
-                'content'    => trim($cells->textOfNode(2)),
+                'content_fr' => trim($cells->textOfNode(2)),
+                'content_nl' => trim($nlRows->eq($i)->children()->textOfNode(2)),
             ];
 
             // Store the data we got, plus any extra data we could obtain.
