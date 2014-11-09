@@ -320,14 +320,15 @@ class Dossier extends AbstractScraper
                 return;
             }
 
-            $cells = $row->children();
+            $cells   = $row->children();
+            $nlCells = $nlRows->eq($i)->children();
 
             // Here we gather the basic information of the history item.
             $data = [
                 'group_name' => $this->currentGroupName,
                 'date'       => $this->parseDate($cells->textOfNode(0)),
-                'content_fr' => trim($cells->textOfNode(2)),
-                'content_nl' => trim($nlRows->eq($i)->children()->textOfNode(2)),
+                'content_fr' => $this->getItemContent($cells),
+                'content_nl' => $this->getItemContent($nlCells),
             ];
 
             // Store the data we got, plus any extra data we could obtain.
@@ -445,6 +446,23 @@ class Dossier extends AbstractScraper
     protected function isReferencingDocument(Crawler $row)
     {
         return (bool) count($this->parseDocumentLinks($row));
+    }
+
+    /**
+     * Get the main content of a history item.
+     *
+     * @param  \Symfony\Component\DomCrawler\Crawler  $cells
+     * @return string
+     */
+    protected function getItemContent(Crawler $cells)
+    {
+        // We grab the content of the correct table cell and
+        // transform its line breaks before returning it.
+        $html = $cells->eq(2)->html();
+
+        $html = str_replace('<br>', "\n", $html);
+
+        return trim($html);
     }
 
     /**
