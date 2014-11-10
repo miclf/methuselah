@@ -415,16 +415,18 @@ Name         | Type     | Description
 }
 ```
 
+**********
 
 #### Dossier
 
 This scraper gets information about a full dossier.
 
-Required parameters:
-- `identifier`: the Senate identifier of the dossier. It is the number of the legislature, followed by a capital ‘S’ and, finally, the number of the dossier itself.
+##### Parameters
 
-Optional parameters: none.
+Name         | Type     | Description
+-------------|----------|------------
+`identifier` | `string` | **Required**. The Senate identifier of the dossier. It is the number of the legislature, followed by a capital ‘S’ and, finally, the number of the dossier itself.
 
-Example of returned array (shortened for clarity):
+##### Example of returned data:
 
 (to be defined)
