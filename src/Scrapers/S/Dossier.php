@@ -1,5 +1,6 @@
 <?php namespace Pandemonium\Methuselah\Scrapers\S;
 
+use Exception;
 use Pandemonium\Methuselah\Crawler\Crawler;
 
 /**
@@ -15,6 +16,17 @@ class Dossier extends AbstractScraper
      * @var array
      */
     protected $langs = ['fr', 'nl'];
+
+    /**
+     * The list of possible document types,
+     * mapped to their French names.
+     *
+     * @var array
+     */
+    protected $types = [
+        'AMENDMENTS'   => 'Amendements',
+        'LAW_PROPOSAL' => 'Proposition de loi',
+    ];
 
     /**
      * An array of DOM crawler instances.
@@ -48,6 +60,8 @@ class Dossier extends AbstractScraper
      * Scrape the page of a dossier and extract its information.
      *
      * @return array
+     *
+     * @throws \Exception if the type of a document cannot be recognized.
      */
     public function scrape()
     {
@@ -224,6 +238,8 @@ class Dossier extends AbstractScraper
      * Get the list of documents.
      *
      * @return array|null
+     *
+     * @throws \Exception if the type of a document cannot be recognized.
      */
     protected function extractDocuments()
     {
@@ -239,11 +255,32 @@ class Dossier extends AbstractScraper
 
             return [
                 'number' => $this->extractDocumentNumber($cells->textOfNode(0)),
-                'type'   => trim($cells->textOfNode(1)),
+                'type'   => $this->getDocumentTypeIdentifier($cells->textOfNode(1)),
                 'date'   => $this->parseDate($cells->textOfNode(2)),
                 'links'  => $this->parseDocumentLinks($cells->eq(0)),
             ];
         });
+    }
+
+    /**
+     * Get a normalized document type identifier.
+     *
+     * @param  string       $type
+     * @return string|null
+     *
+     * @throws \Exception if the type is not recognized.
+     */
+    protected function getDocumentTypeIdentifier($type)
+    {
+        $str = trim($type);
+
+        // The $type variable contains the French name of the type. We
+        // loop on a map to find the associated ‘normalized’ name.
+        foreach ($this->types as $identifier => $needle) {
+            if ($str === $needle) return $identifier;
+        }
+
+        throw new Exception('Cannot determine type of document');
     }
 
     /**
