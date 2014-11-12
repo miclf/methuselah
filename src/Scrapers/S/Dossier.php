@@ -23,7 +23,7 @@ class Dossier extends AbstractScraper
      *
      * @var array
      */
-    protected $types = [
+    protected $documentTypes = [
         'Proposition de loi'                   => 'LAW_PROPOSAL',
         'Révision de la constitution'          => 'CONSTITUTIONAL_REVISION',
         'Projet transmis par le Sénat'         => 'PROJECT_SENT_BY_SENATE',
@@ -287,7 +287,7 @@ class Dossier extends AbstractScraper
 
         // The $type variable contains the French name of the type. We
         // loop on a map to find the associated ‘normalized’ name.
-        foreach ($this->types as $needle => $identifier) {
+        foreach ($this->documentTypes as $needle => $identifier) {
             if ($str === $needle) return $identifier;
         }
 
