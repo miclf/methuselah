@@ -24,8 +24,19 @@ class Dossier extends AbstractScraper
      * @var array
      */
     protected $types = [
-        'AMENDMENTS'   => 'Amendements',
-        'LAW_PROPOSAL' => 'Proposition de loi',
+        'Proposition de loi'                   => 'LAW_PROPOSAL',
+        'Révision de la constitution'          => 'CONSTITUTIONAL_REVISION',
+        'Projet transmis par le Sénat'         => 'PROJECT_SENT_BY_SENATE',
+        'Amendements'                          => 'AMENDMENTS',
+        'Amendementen'                         => 'AMENDMENTS',
+        'Rapport fait au nom de la commission' => 'COMMITTEE_REPORT',
+        'Texte corrigé par la commission'      => 'UPDATED_BY_COMMITTEE',
+        'Texte adopté par la commission'       => 'APPROVED_BY_COMMITTEE',
+        'Texte adopté en séance plénière et transmis à la Chambre' =>
+        'APPROVED_BY_PLENARY_SENT_TO_CHAMBER',
+        'Texte adopté en séance plénière et soumis à la sanction royale' =>
+        'APPROVED_BY_PLENARY_SENT_TO_KING',
+        'Avis du Conseil d\'Etat'              => 'OPINION_COUNCIL_OF_STATE',
     ];
 
     /**
@@ -276,7 +287,7 @@ class Dossier extends AbstractScraper
 
         // The $type variable contains the French name of the type. We
         // loop on a map to find the associated ‘normalized’ name.
-        foreach ($this->types as $identifier => $needle) {
+        foreach ($this->types as $needle => $identifier) {
             if ($str === $needle) return $identifier;
         }
 
