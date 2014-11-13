@@ -212,10 +212,10 @@ class Dossier extends AbstractScraper
      */
     protected function extractProcedureType()
     {
-        $selector = 'table:nth-of-type(4) tr:nth-child(3) th';
-        $cells    = $this->crawlers['fr']->filter($selector);
+        $selector = 'table:nth-of-type(4) tr:nth-child(3) th:nth-child(2)';
+        $cell     = $this->crawlers['fr']->filter($selector);
 
-        return trim($cells->textOfNode(1));
+        return trim($cell->text());
     }
 
     /**
