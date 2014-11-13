@@ -559,7 +559,7 @@ class Dossier extends AbstractScraper
 
         $html = str_replace('<br>', "\n", $html);
 
-        return trim($html);
+        return trim(strip_tags($html));
     }
 
     /**
