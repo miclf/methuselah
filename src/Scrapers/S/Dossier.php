@@ -419,7 +419,7 @@ class Dossier extends AbstractScraper
     protected function hasHistoryData(Crawler $row)
     {
         // A row starting a new group contains no history data.
-        if ($this->isStartingNewGroup($row)) {
+        if ($this->isStartingNewGroup($row) || count($row->children()) !== 4) {
             return false;
         }
 
