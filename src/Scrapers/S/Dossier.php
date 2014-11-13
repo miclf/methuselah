@@ -302,7 +302,7 @@ class Dossier extends AbstractScraper
      */
     protected function extractDocumentNumber($str)
     {
-        $matches = $this->match('#\d+-\d+(?:/\d+)#', trim($str));
+        $matches = $this->match('#\d+-\d+(?:/\d+)?#', trim($str));
 
         return $matches[0];
     }
