@@ -320,7 +320,7 @@ class Dossier extends AbstractScraper
         // We will loop on all the links and extract their info.
         $node->filter('a')->each(function ($anchor) use (&$data, &$found) {
 
-            $url = 'http://senate.be'.$anchor->attr('href');
+            $url = $this->getDocumentUrl($anchor);
 
             // We look for a document format, normally specified inside
             // parentheses in the title attribute of each anchor.
@@ -343,6 +343,26 @@ class Dossier extends AbstractScraper
         });
 
         return $data;
+    }
+
+    /**
+     * Get the absolute URL of a document.
+     *
+     * @param  \Symfony\Component\DomCrawler\Crawler  $anchor
+     * @return string
+     */
+    protected function getDocumentUrl(Crawler $anchor)
+    {
+        // If the link goes to the site of the Chamber, we return
+        // its URL as is. Otherwise, it has a relative URL to the
+        // site of the Senate so we prepend the domain name.
+        $href = $anchor->attr('href');
+
+        if (str_contains($href, 'lachambre.be')) {
+            return $href;
+        }
+
+        return 'http://senate.be'.$href;
     }
 
     /**
