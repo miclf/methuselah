@@ -479,6 +479,14 @@ class Dossier extends AbstractScraper
         if (isset($this->historyGroups[$rowDepth])) {
             $this->currentGroupName = $this->historyGroups[$rowDepth];
         }
+
+        // If we reached the minimum possible depth and have a
+        // procedure type, we use it as the name of the group.
+        $procedureType = $this->data['meta']['procedure'];
+
+        if ($rowDepth === 1 && $procedureType !== null) {
+            $this->currentGroupName = $procedureType;
+        }
     }
 
     /**
