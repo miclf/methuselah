@@ -381,10 +381,8 @@ class Dossier extends AbstractScraper
      */
     protected function getHistory()
     {
-        // The fourth table of the page stores the history of the
-        // dossier so far. We will loop on all its rows except
-        // the first three, which contain no history info.
-        $selector = 'table:nth-of-type(4) tr:nth-child(n+4)';
+        $selector = $this->getHistorySelector();
+
         $rows     = $this->crawlers['fr']->filter($selector);
         $nlRows   = $this->crawlers['nl']->filter($selector);
 
@@ -413,6 +411,20 @@ class Dossier extends AbstractScraper
         });
 
         return $history;
+    }
+
+    /**
+     * Get the CSS selector matching history rows.
+     *
+     * @return string
+     */
+    protected function getHistorySelector()
+    {
+        // We will skip the first 2 or 3 rows (which contain no history info),
+        // depending on if there is a row storing the type of procedure.
+        $skip = ($this->data['meta']['procedure'] !== null) ? 4 : 3;
+
+        return 'table:nth-of-type(4) tr:nth-child(n+'.$skip.')';
     }
 
     /**
