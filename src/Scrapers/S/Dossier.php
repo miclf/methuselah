@@ -208,12 +208,16 @@ class Dossier extends AbstractScraper
     /**
      * Get the type of parliamentary procedure.
      *
-     * @return string
+     * @return string|null
      */
     protected function extractProcedureType()
     {
         $selector = 'table:nth-of-type(4) tr:nth-child(3) th:nth-child(2)';
         $cell     = $this->crawlers['fr']->filter($selector);
+
+        if (!count($cell)) {
+            return null;
+        }
 
         return trim($cell->text());
     }
