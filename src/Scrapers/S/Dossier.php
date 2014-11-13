@@ -11,6 +11,13 @@ use Pandemonium\Methuselah\Crawler\Crawler;
 class Dossier extends AbstractScraper
 {
     /**
+     * Stores the data that has been scraped.
+     *
+     * @var array
+     */
+    protected $data = [];
+
+    /**
      * The list of languages this scraper can extract data in.
      *
      * @var array
@@ -78,15 +85,13 @@ class Dossier extends AbstractScraper
     {
         $this->crawlers = $this->getCrawlers();
 
-        $dossier = [];
+        $this->data['meta']      = $this->getMetadata();
+        $this->data['keywords']  = $this->extractKeywords();
+        $this->data['documents'] = $this->extractDocuments();
+        $this->data['history']   = $this->getHistory();
+        $this->data['status']    = $this->getStatus();
 
-        $dossier['meta']      = $this->getMetadata();
-        $dossier['keywords']  = $this->extractKeywords();
-        $dossier['documents'] = $this->extractDocuments();
-        $dossier['history']   = $this->getHistory();
-        $dossier['status']    = $this->getStatus();
-
-        return $dossier;
+        return $this->data;
     }
 
     /**
