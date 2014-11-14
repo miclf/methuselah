@@ -40,9 +40,9 @@ class Dossier extends AbstractScraper
         'Texte corrigé par la commission'      => 'UPDATED_BY_COMMITTEE',
         'Texte adopté par la commission'       => 'APPROVED_BY_COMMITTEE',
         'Texte adopté en séance plénière et transmis à la Chambre' =>
-        'APPROVED_BY_PLENARY_SENT_TO_CHAMBER',
+        'APPROVED_BY_PLENARY-SENT_TO_CHAMBER',
         'Texte adopté en séance plénière et soumis à la sanction royale' =>
-        'APPROVED_BY_PLENARY_SENT_TO_KING',
+        'APPROVED_BY_PLENARY-SENT_TO_KING',
         'Avis du Conseil d\'Etat'              => 'OPINION_COUNCIL_OF_STATE',
     ];
 
