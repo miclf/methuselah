@@ -52,6 +52,25 @@ class Dossier extends AbstractScraper
     ];
 
     /**
+     * The list of possible types of procedures,
+     * mapped to their French names.
+     *
+     * @var array
+     */
+    protected $procedureTypes = [
+        'UNICAMERAL' =>
+        'Monocamérale Sénat',
+        'BICAMERAL-FROM-SENATE' =>
+        'Bicaméral, initiative Sénat',
+        'PARTLY_BICAMERAL-FROM-SENATE_81' =>
+        '(81) Partiellement bicaméral, initiative Sénat',
+        'URGENCY_PROCEDURE_78-79-80' =>
+        '(78+79+80) Procédure d\'évocation (urgence)',
+        'FREE_PROCEDURE' =>
+        'Procédure libre',
+    ];
+
+    /**
      * An array of DOM crawler instances.
      *
      * @var array
@@ -219,6 +238,8 @@ class Dossier extends AbstractScraper
      * Get the type of parliamentary procedure.
      *
      * @return string|null
+     *
+     * @throws \Exception if the type of procedure cannot be recognized.
      */
     protected function extractProcedureType()
     {
@@ -229,7 +250,15 @@ class Dossier extends AbstractScraper
             return null;
         }
 
-        return trim($cell->text());
+        $str = trim($cell->text());
+
+        // The $type variable contains the French name of the type. We
+        // loop on a map to find the associated ‘normalized’ name.
+        foreach ($this->procedureTypes as $type => $needle) {
+            if ($str === $needle) return $type;
+        }
+
+        throw new Exception('Cannot determine type of procedure');
     }
 
     /**
