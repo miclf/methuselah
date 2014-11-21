@@ -110,8 +110,8 @@ class Dossier extends AbstractScraper
         $this->crawlers = $this->getCrawlers();
 
         $this->data['meta']      = $this->getMetadata();
-        $this->data['keywords']  = $this->extractKeywords();
-        $this->data['documents'] = $this->extractDocuments();
+        $this->data['keywords']  = $this->getKeywords();
+        $this->data['documents'] = $this->getDocuments();
         $this->data['history']   = $this->getHistory();
         $this->data['status']    = $this->getStatus();
 
@@ -262,11 +262,11 @@ class Dossier extends AbstractScraper
     }
 
     /**
-     * Get the list of keywords.
+     * Extract the list of keywords.
      *
      * @return array|null
      */
-    protected function extractKeywords()
+    protected function getKeywords()
     {
         $data = [];
 
@@ -295,7 +295,7 @@ class Dossier extends AbstractScraper
      *
      * @throws \Exception if the type of a document cannot be recognized.
      */
-    protected function extractDocuments()
+    protected function getDocuments()
     {
         // The third table of the page contains the list of documents.
         // We grab all its rows except the first one, which stores
