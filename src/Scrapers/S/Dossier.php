@@ -662,6 +662,7 @@ class Dossier extends AbstractScraper
      */
     protected function parseDate($date)
     {
+        // We convert the DD/MM/YYYY format to YYYY-MM-DD.
         $parts = explode('/', trim($date));
 
         return
