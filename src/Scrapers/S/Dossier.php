@@ -308,7 +308,7 @@ class Dossier extends AbstractScraper
             $cells = $row->children();
 
             return [
-                'number' => $this->extractDocumentNumber($cells->textOfNode(0)),
+                'number' => $this->extractDocumentNumbers($cells->eq(0))[0],
                 'type'   => $this->getDocumentTypeIdentifier($cells->textOfNode(1)),
                 'date'   => $this->parseDate($cells->textOfNode(2)),
                 'links'  => $this->parseDocumentLinks($cells->eq(0)),
@@ -338,16 +338,22 @@ class Dossier extends AbstractScraper
     }
 
     /**
-     * Extract a document number from a string.
+     * Extract document numbers from HTML anchors.
      *
-     * @param  string  $str
-     * @return string
+     * @param  \Symfony\Component\DomCrawler\Crawler  $node
+     * @return array
      */
-    protected function extractDocumentNumber($str)
+    protected function extractDocumentNumbers(Crawler $node)
     {
-        $matches = $this->match('#\d+-\d+(?:/\d+)?#', trim($str));
+        $numbers = $node->filter('a')->each(function ($anchor) {
 
-        return $matches[0];
+            $matches = $this->match('#\d+-\d+(?:/\d+)?#', $anchor->attr('title'));
+
+            return $matches[0];
+        });
+
+        // Remove duplicates and reset the keys of the array.
+        return array_values(array_unique($numbers));
     }
 
     /**
@@ -567,9 +573,9 @@ class Dossier extends AbstractScraper
 
         if ($this->isReferencingDocument($row)) {
 
-            $str = $row->children()->last()->text();
+            $cell = $row->children()->last();
 
-            $extra['document'] = $this->extractDocumentNumber($str);
+            $extra['documents'] = $this->extractDocumentNumbers($cell);
         }
 
         return $extra;
