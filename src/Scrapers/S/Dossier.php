@@ -369,16 +369,22 @@ class Dossier extends AbstractScraper
         // We will loop on all the links and extract their info.
         $node->filter('a')->each(function ($anchor) use (&$data, &$found) {
 
-            $url    = $this->getDocumentUrl($anchor);
-            $format = $this->getDocumentFormat($anchor->attr('title'));
+            $url = $this->getDocumentUrl($anchor);
+
+            $pattern = '#(\d+-\d+(?:/\d+)?)\s+\((.+)\)#';
+            $matches = $this->match($pattern, $anchor->attr('title'));
 
             // The website of the Senate sometimes shows multiple links to
             // the exact same document. We then need to keep track of the
             // ones we already added so that we don’t store duplicates.
-            // We will also skip the doc if we can’t find its format.
-            if ($format && !in_array($url, $found)) {
+            // We will also skip the current doc if it can’t parsed.
+            if ($matches && !in_array($url, $found)) {
 
-                $data[] = compact('format', 'url');
+                $data[] = [
+                    'url'    => $url,
+                    'label'  => $matches[1],
+                    'format' => strtolower($matches[2]),
+                ];
 
                 $found[] = $url;
             }
@@ -405,20 +411,6 @@ class Dossier extends AbstractScraper
         }
 
         return 'http://senate.be'.$href;
-    }
-
-    /**
-     * Get the file type of a document.
-     *
-     * @param  string  $str
-     * @return string|null
-     */
-    protected function getDocumentFormat($str)
-    {
-        // The file type is normally specified inside parentheses.
-        if ($matches = $this->match('#\((.+)\)#', $str)) {
-            return strtolower($matches[1]);
-        }
     }
 
     /**
