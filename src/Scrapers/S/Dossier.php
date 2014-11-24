@@ -371,7 +371,7 @@ class Dossier extends AbstractScraper
 
             $url = $this->getDocumentUrl($anchor);
 
-            $pattern = '#(\d+-\d+(?:/\d+)?)\s+\((.+)\)#';
+            $pattern = '#(\d+-\d+(?:/\d+)?).+\((.+)\)$#';
             $matches = $this->match($pattern, $anchor->attr('title'));
 
             // The website of the Senate sometimes shows multiple links to
