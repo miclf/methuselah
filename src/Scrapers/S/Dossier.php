@@ -307,11 +307,13 @@ class Dossier extends AbstractScraper
 
             $cells = $row->children();
 
+            $links = $this->parseDocumentLinks($cells->eq(0));
+
             return [
-                'number' => $this->extractDocumentNumbers($cells->eq(0))[0],
+                'number' => $this->listDocumentNumbers($links)[0],
                 'type'   => $this->getDocumentTypeIdentifier($cells->textOfNode(1)),
                 'date'   => $this->parseDate($cells->textOfNode(2)),
-                'links'  => $this->parseDocumentLinks($cells->eq(0)),
+                'links'  => $links,
             ];
         });
     }
@@ -338,19 +340,15 @@ class Dossier extends AbstractScraper
     }
 
     /**
-     * Extract document numbers from HTML anchors.
+     * Get document numbers from a list of documents.
      *
-     * @param  \Symfony\Component\DomCrawler\Crawler  $node
+     * @param  array  $links
      * @return array
      */
-    protected function extractDocumentNumbers(Crawler $node)
+    protected function listDocumentNumbers(array $links)
     {
-        $numbers = $node->filter('a')->each(function ($anchor) {
-
-            $matches = $this->match('#\d+-\d+(?:/\d+)?#', $anchor->attr('title'));
-
-            return $matches[0];
-        });
+        // Get the label of each link.
+        $numbers = array_map(function ($link) {return $link['label'];}, $links);
 
         // Remove duplicates and reset the keys of the array.
         return array_values(array_unique($numbers));
@@ -563,25 +561,12 @@ class Dossier extends AbstractScraper
     {
         $extra = [];
 
-        if ($this->isReferencingDocument($row)) {
-
-            $cell = $row->children()->last();
-
-            $extra['documents'] = $this->extractDocumentNumbers($cell);
+        // Get document numbers referenced by the row.
+        if ($links = $this->parseDocumentLinks($row)) {
+            $extra['documents'] = $this->listDocumentNumbers($links);
         }
 
         return $extra;
-    }
-
-    /**
-     * Checks if the given row contains a link to a document.
-     *
-     * @param  \Symfony\Component\DomCrawler\Crawler  $row
-     * @return bool
-     */
-    protected function isReferencingDocument(Crawler $row)
-    {
-        return (bool) count($this->parseDocumentLinks($row));
     }
 
     /**
