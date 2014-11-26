@@ -175,7 +175,7 @@ class Dossier extends AbstractScraper
         $nlRows = $this->crawlers['nl']->filter('table:first-child tr');
 
         // The first row stores the full number of the dossier.
-        $data = $this->extractLegislatureAndDossierNumber($rows->first());
+        $data = $this->parseIdentifier($rows->first());
 
         // The next one hosts the title of the dossier.
         $data['title'] = [
@@ -198,7 +198,7 @@ class Dossier extends AbstractScraper
      * @param  \Symfony\Component\DomCrawler\Crawler  $row
      * @return array
      */
-    protected function extractLegislatureAndDossierNumber(Crawler $row)
+    protected function parseIdentifier(Crawler $row)
     {
         $identifier = (string) $row->children()->first();
 
