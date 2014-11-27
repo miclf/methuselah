@@ -594,24 +594,20 @@ class Dossier extends AbstractScraper
         // dossier so far. We will loop on all its rows except
         // the first two, which contain no useful info.
         $selector = 'table:nth-of-type(5) tr:nth-child(n+3)';
-        $rows     = $this->crawlers['fr']->filter($selector);
+        $frRows   = $this->crawlers['fr']->filter($selector);
         $nlRows   = $this->crawlers['nl']->filter($selector);
 
-        $status = [];
-
-        $rows->each(function ($row, $i) use (&$status, $nlRows) {
+        return $frRows->each(function ($row, $i) use ($nlRows) {
 
             $cells = $row->children();
 
-            $status[] = [
+            return [
                 'group_name' => trim($cells->textOfNode(0)),
                 'status_fr'  => trim($cells->textOfNode(1)),
                 'status_nl'  => trim($nlRows->eq($i)->children()->textOfNode(1)),
                 'dates'      => $this->parseStatusDates($cells->textOfNode(2)),
             ];
         });
-
-        return $status;
     }
 
     /**
