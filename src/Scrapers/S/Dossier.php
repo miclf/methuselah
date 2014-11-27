@@ -246,9 +246,7 @@ class Dossier extends AbstractScraper
         $selector = 'table:nth-of-type(4) tr:nth-child(3) th:nth-child(2)';
         $cell     = $this->crawlers['fr']->filter($selector);
 
-        if (!count($cell)) {
-            return null;
-        }
+        if (!count($cell)) return null;
 
         $str = trim($cell->text());
 
@@ -498,8 +496,7 @@ class Dossier extends AbstractScraper
         $depth = $row->filter('td:first-child')->attr('colspan');
 
         // We save the name of the new group for later reuse.
-        $this->currentGroupName = $name;
-        $this->historyGroups[$depth] = $name;
+        $this->currentGroupName = $this->historyGroups[$depth] = $name;
 
         return true;
     }
