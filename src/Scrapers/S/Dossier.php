@@ -574,8 +574,8 @@ class Dossier extends AbstractScraper
      */
     protected function getItemContent(Crawler $cells)
     {
-        // We grab the content of the correct table cell and
-        // transform its line breaks before returning it.
+        // We grab the content of the correct table cell
+        // and remove HTML tags before returning it.
         $html = $cells->eq(2)->html();
 
         $html = str_replace('<br>', "\n", $html);
