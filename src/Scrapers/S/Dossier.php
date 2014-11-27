@@ -155,9 +155,9 @@ class Dossier extends AbstractScraper
 
             list($pattern, $values) = $this->getProviderArguments($lang);
 
-            $page = $this->getDocument($pattern, $values);
+            $document = $this->getDocument($pattern, $values);
 
-            $crawlers[$lang] = $this->getCrawler($page);
+            $crawlers[$lang] = $this->getCrawler($document);
         }
 
         return $crawlers;
@@ -171,20 +171,20 @@ class Dossier extends AbstractScraper
     protected function getMetadata()
     {
         // Get crawlers for the <tr> elements of the first table.
-        $rows   = $this->crawlers['fr']->filter('table:first-child tr');
+        $frRows = $this->crawlers['fr']->filter('table:first-child tr');
         $nlRows = $this->crawlers['nl']->filter('table:first-child tr');
 
         // The first row stores the full number of the dossier.
-        $data = $this->parseIdentifier($rows->first());
+        $data = $this->parseIdentifier($frRows->first());
 
         // The next one hosts the title of the dossier.
         $data['title'] = [
-            'fr' => trim($rows->textOfNode(1)),
+            'fr' => trim($frRows->textOfNode(1)),
             'nl' => trim($nlRows->textOfNode(1))
         ];
 
         // The third table row may contain a list of authors.
-        $data['authors'] = $this->extractAuthors($rows->last());
+        $data['authors'] = $this->extractAuthors($frRows->last());
 
         // The fourth one indicates the type of procedure.
         $data['procedure'] = $this->extractProcedureType();
