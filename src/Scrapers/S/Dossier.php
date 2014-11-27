@@ -416,50 +416,68 @@ class Dossier extends AbstractScraper
      */
     protected function getHistory()
     {
-        $selector = $this->getHistorySelector();
+        list($frRows, $nlRows) = $this->getHistoryCrawlers();
 
-        $rows     = $this->crawlers['fr']->filter($selector);
-        $nlRows   = $this->crawlers['nl']->filter($selector);
+        // We will loop on all the rows of the history table and
+        // try to get data from each of them. We will get null
+        // values for rows without relevant information.
+        $history = $frRows->each(function ($frRow, $i) use ($nlRows) {
 
-        $history = [];
+            $nlRow = $nlRows->eq($i);
 
-        $rows->each(function ($row, $i) use (&$history, $nlRows) {
-
-            // Skip the row if it contains no history data.
-            if (!$this->hasHistoryData($row)) {
-                return;
-            }
-
-            $cells   = $row->children();
-            $nlCells = $nlRows->eq($i)->children();
-
-            // Here we gather the basic information of the history item.
-            $data = [
-                'group_name' => $this->currentGroupName,
-                'date'       => $this->parseDate($cells->textOfNode(0)),
-                'content_fr' => $this->getItemContent($cells),
-                'content_nl' => $this->getItemContent($nlCells),
-            ];
-
-            // Store the data we got, plus any extra data we could obtain.
-            $history[] = $data + $this->getExtraRowData($row);
+            return $this->parseHistoryItem($frRow, $nlRow);
         });
 
-        return $history;
+        // Remove null values and reset the keys of the array.
+        return array_values(array_filter($history));
     }
 
     /**
-     * Get the CSS selector matching history rows.
+     * Extract data from an history item.
      *
-     * @return string
+     * @param  \Symfony\Component\DomCrawler\Crawler  $frRow
+     * @param  \Symfony\Component\DomCrawler\Crawler  $nlRow
+     * @return array|null
      */
-    protected function getHistorySelector()
+    protected function parseHistoryItem(Crawler $frRow, Crawler $nlRow)
+    {
+        // Skip the row if it contains no history data.
+        if (!$this->hasHistoryData($frRow)) return;
+
+        $frCells = $frRow->children();
+
+        // Gather the basic information of the history item.
+        $data = [
+            'group_name' => $this->currentGroupName,
+            'date'       => $this->parseDate($frCells->textOfNode(0)),
+            'content_fr' => $this->getItemContent($frCells),
+            'content_nl' => $this->getItemContent($nlRow->children()),
+        ];
+
+        // Return the data we got, plus any extra data we can obtain.
+        return $data + $this->getExtraRowData($frRow);
+    }
+
+    /**
+     * Get crawlers for history rows.
+     *
+     * This returns an array of two crawlers, one with
+     * table rows in French and one with Dutch ones.
+     *
+     * @return array
+     */
+    protected function getHistoryCrawlers()
     {
         // We will skip the first 2 or 3 rows (which contain no history info),
         // depending on if there is a row storing the type of procedure.
         $skip = ($this->data['meta']['procedure'] !== null) ? 4 : 3;
 
-        return 'table:nth-of-type(4) tr:nth-child(n+'.$skip.')';
+        $selector = 'table:nth-of-type(4) tr:nth-child(n+'.$skip.')';
+
+        return [
+            $this->crawlers['fr']->filter($selector),
+            $this->crawlers['nl']->filter($selector),
+        ];
     }
 
     /**
