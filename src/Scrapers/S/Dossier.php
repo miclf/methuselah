@@ -481,6 +481,41 @@ class Dossier extends AbstractScraper
     }
 
     /**
+     * Get the main content of a history item.
+     *
+     * @param  \Symfony\Component\DomCrawler\Crawler  $cells
+     * @return string
+     */
+    protected function getItemContent(Crawler $cells)
+    {
+        // We grab the content of the correct table cell
+        // and remove HTML tags before returning it.
+        $html = $cells->eq(2)->html();
+
+        $html = str_replace('<br>', "\n", $html);
+
+        return trim(strip_tags($html));
+    }
+
+    /**
+     * Extract any special data an history row may contain.
+     *
+     * @param  \Symfony\Component\DomCrawler\Crawler  $row
+     * @return array
+     */
+    protected function getExtraRowData(Crawler $row)
+    {
+        $extra = [];
+
+        // Get document numbers referenced by the row.
+        if ($links = $this->parseDocumentLinks($row)) {
+            $extra['documents'] = $this->listDocumentNumbers($links);
+        }
+
+        return $extra;
+    }
+
+    /**
      * Determine if a row contains history data.
      *
      * @param  \Symfony\Component\DomCrawler\Crawler  $row
@@ -564,41 +599,6 @@ class Dossier extends AbstractScraper
         $colspan = $row->filter('td:nth-child(3)')->attr('colspan');
 
         return 5 - $colspan;
-    }
-
-    /**
-     * Extract any special data an history row may contain.
-     *
-     * @param  \Symfony\Component\DomCrawler\Crawler  $row
-     * @return array
-     */
-    protected function getExtraRowData(Crawler $row)
-    {
-        $extra = [];
-
-        // Get document numbers referenced by the row.
-        if ($links = $this->parseDocumentLinks($row)) {
-            $extra['documents'] = $this->listDocumentNumbers($links);
-        }
-
-        return $extra;
-    }
-
-    /**
-     * Get the main content of a history item.
-     *
-     * @param  \Symfony\Component\DomCrawler\Crawler  $cells
-     * @return string
-     */
-    protected function getItemContent(Crawler $cells)
-    {
-        // We grab the content of the correct table cell
-        // and remove HTML tags before returning it.
-        $html = $cells->eq(2)->html();
-
-        $html = str_replace('<br>', "\n", $html);
-
-        return trim(strip_tags($html));
     }
 
     /**
