@@ -433,6 +433,28 @@ class Dossier extends AbstractScraper
     }
 
     /**
+     * Get crawlers for history rows.
+     *
+     * This returns an array of two crawlers, one with
+     * table rows in French and one with Dutch ones.
+     *
+     * @return array
+     */
+    protected function getHistoryCrawlers()
+    {
+        // We will skip the first 2 or 3 rows (which contain no history info),
+        // depending on if there is a row storing the type of procedure.
+        $skip = ($this->data['meta']['procedure'] !== null) ? 4 : 3;
+
+        $selector = 'table:nth-of-type(4) tr:nth-child(n+'.$skip.')';
+
+        return [
+            $this->crawlers['fr']->filter($selector),
+            $this->crawlers['nl']->filter($selector),
+        ];
+    }
+
+    /**
      * Extract data from an history item.
      *
      * @param  \Symfony\Component\DomCrawler\Crawler  $frRow
@@ -456,28 +478,6 @@ class Dossier extends AbstractScraper
 
         // Return the data we got, plus any extra data we can obtain.
         return $data + $this->getExtraRowData($frRow);
-    }
-
-    /**
-     * Get crawlers for history rows.
-     *
-     * This returns an array of two crawlers, one with
-     * table rows in French and one with Dutch ones.
-     *
-     * @return array
-     */
-    protected function getHistoryCrawlers()
-    {
-        // We will skip the first 2 or 3 rows (which contain no history info),
-        // depending on if there is a row storing the type of procedure.
-        $skip = ($this->data['meta']['procedure'] !== null) ? 4 : 3;
-
-        $selector = 'table:nth-of-type(4) tr:nth-child(n+'.$skip.')';
-
-        return [
-            $this->crawlers['fr']->filter($selector),
-            $this->crawlers['nl']->filter($selector),
-        ];
     }
 
     /**
