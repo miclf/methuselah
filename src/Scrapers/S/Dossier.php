@@ -218,12 +218,17 @@ class Dossier extends AbstractScraper
      */
     protected function extractAuthors(Crawler $row)
     {
-        $anchors = $row->filter('a');
+        $text = $this->trim($row->text());
 
-        if (!count($anchors)) return null;
+        if (!$text) return null;
+
+        // Check if the node contains a government name.
+        if (starts_with($text, 'Gouvernement')) {
+            return ['government' => mb_substr($text, 13)];
+        }
 
         // We will loop on all the links and extract their info.
-        return $anchors->each(function ($anchor) {
+        return $row->filter('a')->each(function ($anchor) {
 
             $matches = $this->match('#ID=(\d+)#', $anchor->attr('href'));
 
