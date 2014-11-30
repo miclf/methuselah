@@ -36,7 +36,7 @@ The current list of info that can be retrieved is described below. The **K** let
 
 - List of current or past members of the parliament ([K](#mplist), [S](#mplist-1))
 - Personal info of a member ([K](#mp), [S](#mp-1))
-- Details of a dossier ([K](#dossier))
+- Details of a dossier ([K](#dossier), [S](#dossier-1))
 - List of existing committees ([K](#committeelist), [S](#committeelist-1))
 - Details and seats of a committee ([K](#committee), [S](#committee-1))
 
@@ -424,3 +424,19 @@ Name         | Type     | Description
     ]
 }
 ```
+
+**********
+
+#### Dossier
+
+This scraper gets information about a full dossier.
+
+##### Parameters
+
+Name         | Type     | Description
+-------------|----------|------------
+`identifier` | `string` | **Required**. The Senate identifier of the dossier. It is the number of the legislature, followed by a capital ‘S’ and, finally, the number of the dossier itself.
+
+##### Example of returned data:
+
+(to be defined)
