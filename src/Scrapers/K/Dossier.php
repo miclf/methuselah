@@ -52,8 +52,9 @@ class Dossier extends AbstractScraper
     {
         $htmlSource = $this->getCrawler()->html();
 
-        $xml = with(new HtmlToXmlConverter)->convert($htmlSource);
+        $xml = (new HtmlToXmlConverter)->convert($htmlSource);
 
-        return with(new XmlToArrayConverter)->convert($xml);
+        return (new XmlToArrayConverter)->convert($xml);
+
     }
 }
