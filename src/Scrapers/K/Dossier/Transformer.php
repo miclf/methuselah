@@ -30,7 +30,7 @@ class Transformer
     }
 
     /**
-     * Convert a date to an ISO 8601 date format.
+     * Convert a date to the YYYY-MM-DD ISO 8601 format.
      *
      * @param  string  $date
      * @return string
