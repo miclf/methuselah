@@ -3,7 +3,7 @@
 use Exception;
 
 /**
- * Reorganize the tree of a dossier to an improved structure.
+ * Reorganize the default tree of a dossier to an improved structure.
  *
  * @author Michaël Lecerf <michael@estsurinter.net>
  */
