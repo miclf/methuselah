@@ -12,6 +12,9 @@ class Transformer
     // Include mapping data.
     use MappingTrait;
 
+    // Include dictionaries.
+    use DictionariesTrait;
+
     /**
      * The source tree that will be transformed.
      *
