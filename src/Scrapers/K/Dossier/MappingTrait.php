@@ -14,6 +14,7 @@ trait MappingTrait
      */
     protected $mapping = [
 
+        // These nodes will move to the root of the new tree.
         '' => [
             // Full title of the dossier
             'intitule.intitule-complet' => 'title',
@@ -21,6 +22,7 @@ trait MappingTrait
             'intitule-court'  => 'shortTitle',
         ],
 
+        // These nodes will be grouped as metadata.
         'meta' => [
             // Number of the dossier in K format (00K0000)
             'n-du-document'   => 'meta.number',
