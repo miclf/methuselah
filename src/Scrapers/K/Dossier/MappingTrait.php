@@ -14,11 +14,14 @@ trait MappingTrait
      */
     protected $mapping = [
 
-        'meta' => [
+        '' => [
             // Full title of the dossier
             'intitule.intitule-complet' => 'title',
             // ‘Short’ title
             'intitule-court'  => 'shortTitle',
+        ],
+
+        'meta' => [
             // Number of the dossier in K format (00K0000)
             'n-du-document'   => 'meta.number',
             // Bicameral number of the dossier
