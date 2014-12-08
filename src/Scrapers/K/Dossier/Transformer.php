@@ -36,6 +36,28 @@ class Transformer
     }
 
     /**
+     * Look for an entry in a key-value dictionary.
+     *
+     * @param  string        $needle      The entry to look for
+     * @param  string|array  $dictionary  A dictionary array or a property name
+     * @return mixed
+     *
+     * @throws \Exception if the given key cannot be found in the dictionary.
+     */
+    protected function findInDictionary($needle, $dictionary)
+    {
+        if (is_string($dictionary)) {
+            $dictionary = $this->$dictionary;
+        }
+
+        foreach ($dictionary as $key => $value) {
+            if ($key === $needle) return $value;
+        }
+
+        throw new Exception("Cannot find key [$needle] in dictionary.");
+    }
+
+    /**
      * Convert a date to the YYYY-MM-DD ISO 8601 format.
      *
      * @param  string  $date
