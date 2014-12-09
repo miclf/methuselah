@@ -27,6 +27,8 @@ class Transformer
      *
      * @param  array  $source
      * @return array
+     *
+     * @throws \Exception if a key cannot be found in a dictionary.
      */
     public function transform(array $source)
     {
@@ -47,6 +49,8 @@ class Transformer
      * @param  string  $rootNode  Path to the root of the mappings
      * @param  array   $mappings  List of mappings to apply
      * @return array
+     *
+     * @throws \Exception if a key cannot be found in a dictionary.
      */
     protected function map($rootNode, array $mappings)
     {
@@ -108,7 +112,26 @@ class Transformer
      */
     protected function getMappingValue($path, array $parameters)
     {
-        return array_get($this->source, $path);
+        $value = array_get($this->source, $path);
+
+        return $this->processValue($value, $parameters);
+    }
+
+    /**
+     * Process a mapping value according to its related parameters.
+     *
+     * @param  mixed  $value
+     * @param  array  $parameters
+     * @return mixed
+     */
+    protected function processValue($value, array $parameters)
+    {
+        // Does the value needs to be replaced by a normalized constant?
+        if (isset($parameters['dictionary'])) {
+            $value = $this->findInDictionary($value, $parameters['dictionary']);
+        }
+
+        return $value;
     }
 
     /**
