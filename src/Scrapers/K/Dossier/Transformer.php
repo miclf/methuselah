@@ -32,7 +32,83 @@ class Transformer
     {
         $this->source = $source;
 
-        return $source;
+        $tree = [];
+
+        foreach ($this->mapping as $key => $mappings) {
+            $tree += $this->map($key, $mappings);
+        }
+
+        return $tree;
+    }
+
+    /**
+     * Apply a series of mappings.
+     *
+     * @param  string  $rootNode  Path to the root of the mappings
+     * @param  array   $mappings  List of mappings to apply
+     * @return array
+     */
+    protected function map($rootNode, array $mappings)
+    {
+        $data = [];
+
+        foreach ($mappings as $sourceKey => $parameters) {
+
+            $parameters = $this->normalizeParameters($rootNode, $parameters);
+
+            $value = $this->getMappingValue($sourceKey, $parameters);
+
+            array_set($data, $parameters['destination'], $value);
+        }
+
+        return $data;
+    }
+
+    /**
+     * Convert mapping parameters to a normalized array.
+     *
+     * @param  string        $rootNode
+     * @param  array|string  $parameters
+     * @return array
+     */
+    protected function normalizeParameters($rootNode, $parameters)
+    {
+        // If the argument consists of a simple string, it
+        // references the destination path of the mapping.
+        if (is_string($parameters)) {
+            $parameters = ['destination' => $parameters];
+        }
+
+        $parameters['destination'] = $this->compileDestination(
+            $rootNode,
+            $parameters['destination']
+        );
+
+        return $parameters;
+    }
+
+    /**
+     * Build the destination path of a mapping.
+     *
+     * @param  string  $root
+     * @param  string  $path
+     * @return string
+     */
+    protected function compileDestination($root, $path)
+    {
+        return $root ? "{$root}.{$path}" : $path;
+    }
+
+    /**
+     * Get a node value from the source tree.
+     *
+     * @param  string  $path
+     * @param  array   $parameters
+     * @return mixed
+     */
+    protected function getMappingValue($path, array $parameters)
+    {
+        return array_get($this->source, $path);
     }
 
     /**
