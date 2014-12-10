@@ -135,6 +135,24 @@ class Transformer
     }
 
     /**
+     * Call a modifier on a value.
+     *
+     * @param  string  $modifier  Name of the modifier method
+     * @param  mixed   $value     The value to modify
+     * @return mixed
+     *
+     * @throws \Exception if the specified modifier does not exist.
+     */
+    protected function callModifier($modifier, $value)
+    {
+        if (method_exists($this, $modifier)) {
+            return $this->$modifier($value);
+        }
+
+        throw new Exception("Modifier [$modifier] does not exist");
+    }
+
+    /**
      * Look for an entry in a key-value dictionary.
      *
      * @param  string        $needle      The entry to look for
