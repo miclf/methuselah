@@ -29,6 +29,7 @@ class Transformer
      * @return array
      *
      * @throws \Exception if a key cannot be found in a dictionary.
+     * @throws \Exception if trying to call a nonexisting modifier.
      */
     public function transform(array $source)
     {
@@ -51,6 +52,7 @@ class Transformer
      * @return array
      *
      * @throws \Exception if a key cannot be found in a dictionary.
+     * @throws \Exception if trying to call a nonexisting modifier.
      */
     protected function map($rootNode, array $mappings)
     {
@@ -126,6 +128,11 @@ class Transformer
      */
     protected function processValue($value, array $parameters)
     {
+        // Does the value needs to be modified in some way?
+        if (isset($parameters['modifier'])) {
+            $value = $this->callModifier($parameters['modifier'], $value);
+        }
+
         // Does the value needs to be replaced by a normalized constant?
         if (isset($parameters['dictionary'])) {
             $value = $this->findInDictionary($value, $parameters['dictionary']);
