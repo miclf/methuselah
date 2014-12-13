@@ -175,7 +175,7 @@ class Transformer
         }
 
         foreach ($dictionary as $key => $value) {
-            if ($key === $needle) return $value;
+            if ((string) $key === $needle) return $value;
         }
 
         throw new Exception("Cannot find key [$needle] in dictionary.");
