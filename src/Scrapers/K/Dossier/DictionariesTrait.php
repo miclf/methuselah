@@ -20,6 +20,8 @@ trait DictionariesTrait
         '11' => '???',
         '15' => 'COMMUNICATION_TO_PARLIAMENT',
         '23' => 'REPORT',
+        '31' => 'AMENDMENT',
+        '36' => 'OPINION_COUNCIL_OF_STATE',
         '50' => 'TABLE_OR_LIST',
         '64' => 'CONCERTATION_COMMITTEE_DECISION',
         '66' => 'ELECTIONS',
@@ -33,5 +35,6 @@ trait DictionariesTrait
     protected $dossierStatuses = [
         'PENDANT CHAMBRE' => 'PENDING',
         'RETIRE CHAMBRE'  => 'REMOVED',
+        'CADUQUE CHAMBRE' => 'VOID',
     ];
 }
