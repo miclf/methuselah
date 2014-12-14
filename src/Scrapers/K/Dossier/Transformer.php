@@ -23,6 +23,13 @@ class Transformer
     protected $source = [];
 
     /**
+     * The transformed tree.
+     *
+     * @var array
+     */
+    protected $tree = [];
+
+    /**
      * Transform the given tree.
      *
      * @param  array  $source
@@ -35,13 +42,11 @@ class Transformer
     {
         $this->source = $source;
 
-        $tree = [];
-
         foreach ($this->mapping as $key => $mappings) {
-            $tree += $this->map($key, $mappings);
+            $this->tree += $this->map($key, $mappings);
         }
 
-        return $tree;
+        return $this->tree;
     }
 
     /**
