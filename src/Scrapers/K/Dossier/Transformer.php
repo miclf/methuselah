@@ -213,4 +213,17 @@ class Transformer
 
         throw new Exception("Unrecognized date format [$date]");
     }
+
+    /**
+     * Prepend the number of a dossier to a document number.
+     *
+     * @param  string  $documentNumber
+     * @return string
+     */
+    protected function prependDossierNumber($documentNumber)
+    {
+        $dossierNumber = array_get($this->tree, 'meta.number');
+
+        return $dossierNumber.$documentNumber;
+    }
 }
