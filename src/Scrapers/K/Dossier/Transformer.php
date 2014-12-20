@@ -111,6 +111,22 @@ class Transformer
     }
 
     /**
+     * Return a subset of the source’s data using ‘dot notation’.
+     *
+     * This allows to use the key ‘foo.bar.baz’ to get the value of
+     * $this->source['foo']['bar']['baz'], thus making it easy to
+     * read data that is nested deep in the source array.
+     *
+     * @param  string  $path     ‘path’ to the target subset of data
+     * @param  mixed   $default  Default value to return if nothing is found
+     * @return mixed
+     */
+    protected function filterSource($path, $default = null)
+    {
+        return array_get($this->source, $path, $default);
+    }
+
+    /**
      * Get a node value from the source tree.
      *
      * @param  string  $path
