@@ -39,6 +39,7 @@ The current list of info that can be retrieved is described below. The **K** let
 - Details of a dossier ([K](#dossier), [S](#dossier-1))
 - List of existing committees ([K](#committeelist), [S](#committeelist-1))
 - Details and seats of a committee ([K](#committee), [S](#committee-1))
+- List of agenda pages of plenary sessions ([K](#plenaryagendalist))
 
 These features and their options are described in more details further below.
 
@@ -296,13 +297,13 @@ This scraper has no parameter.
         "identifier": "1502_00",
         "startDate": "2015-01-05",
         "endDate": "2015-01-09",
-        "url": "http://www.lachambre.be/kvvcr/showpage.cfm?section=/agenda&language=fr&cfm=/site/wwwcfm/agenda/plenagenda.cfm?pat=PROD-Plenum&plen=1502_00&type=full"
+        "url": "http://www.lachambre.be/url/to/agenda/page/1502_00"
     },
     {
         "identifier": "1451_02",
         "startDate": "2014-12-15",
         "endDate": "2014-12-19",
-        "url": "http://www.lachambre.be/kvvcr/showpage.cfm?section=/agenda&language=fr&cfm=/site/wwwcfm/agenda/plenagenda.cfm?pat=PROD-Plenum&plen=1451_02&type=full"
+        "url": "http://www.lachambre.be/url/to/agenda/page/1451_02"
     }
 ]
 ```
