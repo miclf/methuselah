@@ -125,9 +125,9 @@ Without any parameter, it gets the list of *current* members of the Chamber. Whe
 
 ##### Parameters
 
-Name                 | Type     | Description
----------------------|----------|------------
-`legislature_number` | `number` | Number of the legislature of which the list of MPs is needed.
+Name               | Type   | Description
+-------------------|--------|------------
+legislature_number | number | Number of the legislature of which the list of MPs is needed.
 
 ##### Example of returned data:
 
@@ -152,10 +152,10 @@ This scraper gets info associated to a single member of the Chamber.
 
 ##### Parameters
 
-Name                 | Type     | Description
----------------------|----------|------------
-`identifier`         | `string` | **Required**. The Chamber identifier of the member.
-`legislature_number` | `number` | Number of the legislature from which data should be extracted of. Defaults to `54`. There should be no need to set this parameter, since the most recent data is generally what is wanted.
+Name               | Type   | Description
+-------------------|--------|------------
+identifier         | string | **Required**. The Chamber identifier of the member.
+legislature_number | number | Number of the legislature from which data should be extracted of. Defaults to `54`. There should be no need to set this parameter, since the most recent data is generally what is wanted.
 
 ##### Example of returned data:
 
@@ -227,9 +227,9 @@ This gets the names of a committee and the existing seats, categorized by types 
 
 ##### Parameters
 
-Name         | Type     | Description
--------------|----------|------------
-`identifier` | `string` | **Required**. The Chamber identifier of the group or committee.
+Name       | Type   | Description
+-----------|--------|------------
+identifier | string | **Required**. The Chamber identifier of the group or committee.
 
 ##### Example of returned data:
 
@@ -271,9 +271,9 @@ This scraper gets information about a full dossier.
 
 ##### Parameters
 
-Name         | Type     | Description
--------------|----------|------------
-`identifier` | `string` | **Required**. The Chamber identifier of the dossier. It matches the pattern `DDKDDDD`, where ‘D’ are digits and ‘K’ is a litteral uppercase ‘k’.
+Name       | Type   | Description
+-----------|--------|------------
+identifier | string | **Required**. The Chamber identifier of the dossier. It matches the pattern `DDKDDDD`, where ‘D’ are digits and ‘K’ is a litteral uppercase ‘k’.
 
 Example of returned array (shortened for clarity):
 
@@ -319,9 +319,9 @@ Without any parameter, it gets the list of *current* members of the Senate. When
 
 ##### Parameters
 
-Name                 | Type     | Description
----------------------|----------|------------
-`legislature_number` | `number` | Number of the legislature of which the list of senators is needed.
+Name               | Type   | Description
+-------------------|--------|------------
+legislature_number | number | Number of the legislature of which the list of senators is needed.
 
 ##### Example of returned data:
 
@@ -346,9 +346,9 @@ This scraper gets info associated to a single senator.
 
 ##### Parameters
 
-Name         | Type     | Description
--------------|----------|------------
-`identifier` | `string` | **Required**. The Senate identifier of the senator.
+Name       | Type   | Description
+-----------|--------|------------
+identifier | string | **Required**. The Senate identifier of the senator.
 
 ##### Example of returned data:
 
@@ -418,9 +418,9 @@ This gets the names of a committee and the existing seats, categorized by roles.
 
 ##### Parameters
 
-Name         | Type     | Description
--------------|----------|------------
-`identifier` | `string` | **Required**. The Senate identifier of the group or committee.
+Name       | Type   | Description
+-----------|--------|------------
+identifier | string | **Required**. The Senate identifier of the group or committee.
 
 ##### Example of returned data:
 
@@ -461,9 +461,9 @@ This scraper gets information about a full dossier.
 
 ##### Parameters
 
-Name         | Type     | Description
--------------|----------|------------
-`identifier` | `string` | **Required**. The Senate identifier of the dossier. It is the number of the legislature, followed by a capital ‘S’ and, finally, the number of the dossier itself.
+Name       | Type   | Description
+-----------|--------|------------
+identifier | string | **Required**. The Senate identifier of the dossier. It is the number of the legislature, followed by a capital ‘S’ and, finally, the number of the dossier itself.
 
 ##### Example of returned data:
 
