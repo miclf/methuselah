@@ -39,6 +39,7 @@ The current list of info that can be retrieved is described below. The **K** let
 - Details of a dossier ([K](#dossier), [S](#dossier-1))
 - List of existing committees ([K](#committeelist), [S](#committeelist-1))
 - Details and seats of a committee ([K](#committee), [S](#committee-1))
+- List of agenda pages of plenary sessions ([K](#plenaryagendalist))
 
 These features and their options are described in more details further below.
 
