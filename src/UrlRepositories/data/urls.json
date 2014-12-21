@@ -10,7 +10,8 @@
             "committee_list": "kvvcr/showpage.cfm?section=/none&language={lang}&cfm=/site/wwwcfm/comm/LstCom.cfm",
             "committee": "kvvcr/showpage.cfm?section=/comm&language={lang}&cfm=/site/wwwcfm/comm/com.cfm?com={identifier}",
             "agenda_list": {
-                "plenary": "kvvcr/showpage.cfm?section=/agenda&language=fr&cfm=agendaList.cfm"
+                "plenary": "kvvcr/showpage.cfm?section=/agenda&language=fr&cfm=agendaList.cfm",
+                "committee": "kvvcr/showpage.cfm?&section=none&language=fr&cfm=/site/wwwcfm/agenda/comagendalist.cfm"
             }
         },
         "s": {

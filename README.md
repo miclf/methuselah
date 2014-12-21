@@ -40,6 +40,7 @@ The current list of info that can be retrieved is described below. The **K** let
 - List of existing committees ([K](#committeelist), [S](#committeelist-1))
 - Details and seats of a committee ([K](#committee), [S](#committee-1))
 - List of agenda pages of plenary sessions ([K](#plenaryagendalist))
+- List of agenda pages of committees ([K](#committeeweekagendalist))
 
 These features and their options are described in more details further below.
 
@@ -307,6 +308,27 @@ This scraper has no parameter.
     }
 ]
 ```
+
+**********
+
+#### CommitteeWeekAgendaList
+
+This gets a list of links of committee week agendas that are *currently* published online. As it is also the case for plenary sessions, the website provides no way to get past data.
+
+##### Parameters
+
+This scraper has no parameter.
+
+##### Example of returned data:
+
+```json
+[
+    "http://www.lachambre.be/url/to/an/agenda/page",
+    "http://www.lachambre.be/url/to/another/agenda/page"
+]
+```
+
+**********
 
 
 ### Senate
