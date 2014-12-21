@@ -8,7 +8,10 @@
             },
             "mp": "kvvcr/showpage.cfm?section=/depute&language={lang}&rightmenu=right_depute&cfm=cvview54.cfm?key={identifier}&lactivity={legislatureNumber}",
             "committee_list": "kvvcr/showpage.cfm?section=/none&language={lang}&cfm=/site/wwwcfm/comm/LstCom.cfm",
-            "committee": "kvvcr/showpage.cfm?section=/comm&language={lang}&cfm=/site/wwwcfm/comm/com.cfm?com={identifier}"
+            "committee": "kvvcr/showpage.cfm?section=/comm&language={lang}&cfm=/site/wwwcfm/comm/com.cfm?com={identifier}",
+            "agenda_list": {
+                "plenary": "kvvcr/showpage.cfm?section=/agenda&language=fr&cfm=agendaList.cfm"
+            }
         },
         "s": {
             "baseUrl": "http://senat.be/www/?MIval=/",
