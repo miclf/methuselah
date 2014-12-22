@@ -19,17 +19,17 @@ class CommitteeList extends AbstractScraper
      */
     protected $types = [
         // French
-        "SPÉCIALES"               => 'special',
-        "COMITÉS D'AVIS"          => 'advisory',
-        "GROUPES DE TRAVAIL"      => 'working-group',
-        "COMMISSIONS PERMANENTES" => 'permanent',
-        "DÉLÉGATIONS INTERNATIONALES" => 'international-delegation',
+        "SPÉCIALES"                     => 'special',
+        "COMITÉS D'AVIS"                => 'advisory',
+        "GROUPES DE TRAVAIL"            => 'working-group',
+        "COMMISSIONS PERMANENTES"       => 'permanent',
+        "DÉLÉGATIONS INTERNATIONALES"   => 'international-delegation',
 
         // Dutch
-        "BIJZONDERE"              => 'special',
-        "ADVIESCOMITÉS"           => 'advisory',
-        "WERKGROEPEN"             => 'working-group',
-        "VASTE COMMISSIES"        => 'permanent',
+        "BIJZONDERE"                    => 'special',
+        "ADVIESCOMITÉS"                 => 'advisory',
+        "WERKGROEPEN"                   => 'working-group',
+        "VASTE COMMISSIES"              => 'permanent',
         "INTERNATIONALE AFGEVAARDIGDEN" => 'international-delegation',
     ];
 
