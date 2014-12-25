@@ -203,7 +203,7 @@ class PlenaryAgendaList extends AbstractScraper
      * Map a set of key names with a series of matched values.
      *
      * @param  array  $map      Array of keys, each one having the number
-     *                          of its related macth as a value
+     *                          of its related match as a value
      * @param  array  $matches  Array of data to map with the keys
      * @return array
      */
