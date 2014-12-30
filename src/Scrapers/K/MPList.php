@@ -18,12 +18,8 @@ class MPList extends AbstractScraper
     {
         $hasLegislatureNumber = (bool) $this->getOption('legislature_number');
 
-        $crawler = $this->getCrawler();
-
-        // Get the <table> storing the list of MPs and loop on its rows.
-        $rows = $crawler->filter('table[width="100%"] tr');
-
-        $list = $rows->each(function ($row, $i) use ($hasLegislatureNumber) {
+        // Get the table rows storing the info on MPs and loop on them.
+        $list = $this->getRows()->each(function ($row, $i) use ($hasLegislatureNumber) {
 
             // Get the <td> elements of this table row.
             $cells = $row->children();
@@ -77,6 +73,16 @@ class MPList extends AbstractScraper
         });
 
         return $this->trimArray($list);
+    }
+
+    /**
+     * Get all the HTML table rows storing MP data.
+     *
+     * @return \Symfony\Component\DomCrawler\Crawler
+     */
+    protected function getRows()
+    {
+        return $this->getCrawler()->filter('table[width="100%"] tr');
     }
 
     /**
