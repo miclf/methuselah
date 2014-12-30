@@ -14,8 +14,6 @@ class MPList extends AbstractScraper
      */
     public function scrape()
     {
-        $list = [];
-
         $hasLegislatureNumber = (bool) $this->getOption('legislature_number');
 
         $crawler = $this->getCrawler();
@@ -23,7 +21,7 @@ class MPList extends AbstractScraper
         // Get the <table> storing the list of MPs and loop on its rows.
         $rows = $crawler->filter('table[width="100%"] tr');
 
-        $rows->each(function ($row, $i) use (&$list, $hasLegislatureNumber) {
+        $list = $rows->each(function ($row, $i) use ($hasLegislatureNumber) {
 
             // Get the <td> elements of this table row.
             $cells = $row->children();
@@ -56,9 +54,8 @@ class MPList extends AbstractScraper
 
                 // Store the scraped data and stop the current iteration.
                 ksort($mp);
-                $list[] = $mp;
 
-                return;
+                return $mp;
             }
 
             // Second <td>.
@@ -79,8 +76,8 @@ class MPList extends AbstractScraper
             // All the needed cells of the row have been processed. We can
             // now add the data of the current MP to the list.
             ksort($mp);
-            $list[] = $mp;
 
+            return $mp;
         });
 
         return $this->trimArray($list);
