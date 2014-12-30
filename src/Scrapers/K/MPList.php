@@ -19,14 +19,8 @@ class MPList extends AbstractScraper
         // Get the table rows storing the info on MPs and loop on them.
         $list = $this->getRows()->each(function ($row, $i) {
 
-            // Get the <td> elements of this table row.
             $cells = $row->children();
 
-
-            // Process the first <td> cell.
-            // It contains an achor linking to the page of the MP. We
-            // will extract the surname and given name of the MP and
-            // its Chamber ID from this anchor.
             $mp = $this->getMPInfo($cells->eq(0));
 
 
@@ -41,15 +35,8 @@ class MPList extends AbstractScraper
                 return $mp;
             }
 
-            // Second table cell.
-            // This one has an anchor containing the name and the
-            // Chamber ID of the ‘political group’. This group
-            // may be an official group or a party name.
             $group = $this->getGroupInfo($cells->eq(1));
 
-
-            // All the needed cells of the row have been processed. We can
-            // now add the data of the current MP to the list.
             $data = $mp + $group;
 
             ksort($data);
