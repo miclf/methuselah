@@ -16,10 +16,8 @@ class MPList extends AbstractScraper
      */
     public function scrape()
     {
-        $hasLegislatureNumber = (bool) $this->getOption('legislature_number');
-
         // Get the table rows storing the info on MPs and loop on them.
-        $list = $this->getRows()->each(function ($row, $i) use ($hasLegislatureNumber) {
+        $list = $this->getRows()->each(function ($row, $i) {
 
             // Get the <td> elements of this table row.
             $cells = $row->children();
@@ -42,7 +40,7 @@ class MPList extends AbstractScraper
             // In the lists of previous legislatures, the following cells are
             // empty and the information is not available anymore. We then
             // stop the scraping of the row here and go to the next one.
-            if ($hasLegislatureNumber) {
+            if ($this->wantsSpecificLegislature()) {
 
                 // Store the scraped data and stop the current iteration.
                 ksort($mp);
@@ -83,6 +81,17 @@ class MPList extends AbstractScraper
     protected function getRows()
     {
         return $this->getCrawler()->filter('table[width="100%"] tr');
+    }
+
+    /**
+     * Check if a specific legislature number has been
+     * provided as an option for the scraper.
+     *
+     * @return bool
+     */
+    protected function wantsSpecificLegislature()
+    {
+        return (bool) $this->getOption('legislature_number');
     }
 
     /**
