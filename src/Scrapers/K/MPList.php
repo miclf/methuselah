@@ -1,5 +1,7 @@
 <?php namespace Pandemonium\Methuselah\Scrapers\K;
 
+use Symfony\Component\DomCrawler\Crawler;
+
 /**
  * Extract data from the list of members of the Chamber.
  *
@@ -38,13 +40,7 @@ class MPList extends AbstractScraper
 
             $mp['surname_given_name'] = $anchor->text();
 
-            // Chamber MP identifiers normally consist entirely of digits.
-            // But they can also use the capital letter ‘O’, which really
-            // looks like a zero but isn’t.
-            $pattern = '#key=([\dO]+)#';
-            $matches = $this->match($pattern, $anchor->attr('href'));
-
-            $mp['identifier'] = $matches[1];
+            $mp['identifier'] = $this->getMPIdentifier($anchor);
 
 
             // In the lists of previous legislatures, the following cells are
@@ -81,6 +77,24 @@ class MPList extends AbstractScraper
         });
 
         return $this->trimArray($list);
+    }
+
+    /**
+     * Get the Chamber identifier of a MP.
+     *
+     * @param  \Symfony\Component\DomCrawler\Crawler  $anchor
+     * @return string
+     */
+    protected function getMPIdentifier(Crawler $anchor)
+    {
+        // Chamber MP identifiers normally consist entirely of digits.
+        // But they can also use the capital letter ‘O’, which really
+        // looks like a zero but isn’t.
+        $pattern = '#key=([\dO]+)#';
+
+        $matches = $this->match($pattern, $anchor->attr('href'));
+
+        return $matches[1];
     }
 
     /**
