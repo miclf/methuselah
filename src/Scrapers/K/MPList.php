@@ -22,19 +22,12 @@ class MPList extends AbstractScraper
             // Get the <td> elements of this table row.
             $cells = $row->children();
 
-            // This will store the data of the current MP.
-            $mp = [];
-
 
             // Process the first <td> cell.
             // It contains an achor linking to the page of the MP. We
             // will extract the surname and given name of the MP and
             // its Chamber ID from this anchor.
-            $anchor = $cells->eq(0)->filter('a');
-
-            $mp['surname_given_name'] = $anchor->text();
-
-            $mp['identifier'] = $this->getMPIdentifier($anchor);
+            $mp = $this->getMPInfo($cells->eq(0));
 
 
             // In the lists of previous legislatures, the following cells are
@@ -86,6 +79,22 @@ class MPList extends AbstractScraper
     protected function wantsSpecificLegislature()
     {
         return (bool) $this->getOption('legislature_number');
+    }
+
+    /**
+     * Get the name and identifier of a MP.
+     *
+     * @param  \Symfony\Component\DomCrawler\Crawler  $cell
+     * @return array
+     */
+    protected function getMPInfo(Crawler $cell)
+    {
+        $anchor = $cell->filter('a');
+
+        return [
+            'surname_given_name' => $anchor->text(),
+            'identifier'         => $this->getMPIdentifier($anchor)
+        ];
     }
 
     /**
