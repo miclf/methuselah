@@ -24,9 +24,9 @@ class MPList extends AbstractScraper
             $mp = $this->getMPInfo($cells->eq(0));
 
 
-            // In the lists of previous legislatures, the following cells are
-            // empty and the information is not available anymore. We then
-            // stop the scraping of the row here and go to the next one.
+            // In the specific lists of legislatures, no information is
+            // available about the political group of the MP. We stop
+            // the scraping of the row here and go to the next one.
             if ($this->wantsSpecificLegislature()) {
 
                 // Store the scraped data and stop the current iteration.
