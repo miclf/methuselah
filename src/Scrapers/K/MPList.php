@@ -48,26 +48,20 @@ class MPList extends AbstractScraper
                 return $mp;
             }
 
-            // Second <td>.
-            // This one has an anchor containing the name and the Chamber ID of
-            // the ‘political group’. This group may be an official group or a
-            // party name.
-            $anchor = $cells->eq(1)->filter('a');
-
-            $mp['political_group'] = $anchor->text();
-
-            $pattern = '#namegroup=([^&]+)&#';
-            $matches = $this->match($pattern, $anchor->attr('href'));
-
-            // Group identifiers are URL-encoded, so we need to decode them.
-            $mp['political_group_identifier'] = urldecode($matches[1]);
+            // Second table cell.
+            // This one has an anchor containing the name and the
+            // Chamber ID of the ‘political group’. This group
+            // may be an official group or a party name.
+            $group = $this->getGroupInfo($cells->eq(1));
 
 
             // All the needed cells of the row have been processed. We can
             // now add the data of the current MP to the list.
-            ksort($mp);
+            $data = $mp + $group;
 
-            return $mp;
+            ksort($data);
+
+            return $data;
         });
 
         return $this->trimArray($list);
@@ -110,6 +104,38 @@ class MPList extends AbstractScraper
         $matches = $this->match($pattern, $anchor->attr('href'));
 
         return $matches[1];
+    }
+
+    /**
+     * Get the name and identifier of a political group.
+     *
+     * @param  \Symfony\Component\DomCrawler\Crawler  $cell
+     * @return array
+     */
+    protected function getGroupInfo(Crawler $cell)
+    {
+        $anchor = $cell->filter('a');
+
+        return [
+            'political_group'            => $anchor->text(),
+            'political_group_identifier' => $this->getGroupIdentifier($anchor)
+        ];
+    }
+
+    /**
+     * Get the Chamber identifier of a political group.
+     *
+     * @param  \Symfony\Component\DomCrawler\Crawler  $anchor
+     * @return string
+     */
+    protected function getGroupIdentifier(Crawler $anchor)
+    {
+        $pattern = '#namegroup=([^&]+)&#';
+
+        $matches = $this->match($pattern, $anchor->attr('href'));
+
+        // Group identifiers are URL-encoded, so we need to decode them.
+        return urldecode($matches[1]);
     }
 
     /**
