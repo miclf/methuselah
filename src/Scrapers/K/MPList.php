@@ -28,20 +28,12 @@ class MPList extends AbstractScraper
             // available about the political group of the MP. We stop
             // the scraping of the row here and go to the next one.
             if ($this->wantsSpecificLegislature()) {
-
-                // Store the scraped data and stop the current iteration.
-                ksort($mp);
-
-                return $mp;
+                return $this->sort($mp);
             }
 
             $group = $this->getGroupInfo($cells->eq(1));
 
-            $data = $mp + $group;
-
-            ksort($data);
-
-            return $data;
+            return $this->sort($mp + $group);
         });
 
         return $this->trimArray($list);
@@ -132,6 +124,19 @@ class MPList extends AbstractScraper
 
         // Group identifiers are URL-encoded, so we need to decode them.
         return urldecode($matches[1]);
+    }
+
+    /**
+     * Sort an array by key.
+     *
+     * @param  array  $array
+     * @return array
+     */
+    protected function sort(array $array)
+    {
+        ksort($array);
+
+        return $array;
     }
 
     /**
