@@ -16,27 +16,48 @@ class MPList extends AbstractScraper
      */
     public function scrape()
     {
-        // Get the table rows storing the info on MPs and loop on them.
-        $list = $this->getRows()->each(function ($row, $i) {
+        if ($this->wantsSpecificLegislature()) {
+            $list = $this->listMPInfo();
+        } else {
+            $list = $this->listMPAndGroupInfo();
+        }
+
+        return $this->trimArray($list);
+    }
+
+    /**
+     * Get the list of info for all MPs.
+     *
+     * @return array
+     */
+    protected function listMPInfo()
+    {
+        return $this->getRows()->each(function ($row) {
+
+            $cell = $row->children()->eq(0);
+
+            $mp = $this->getMPInfo($cell);
+
+            return $this->sort($mp);
+        });
+    }
+
+    /**
+     * Get the list of info for all MPs, including groups.
+     *
+     * @return array
+     */
+    protected function listMPAndGroupInfo()
+    {
+        return $this->getRows()->each(function ($row) {
 
             $cells = $row->children();
 
-            $mp = $this->getMPInfo($cells->eq(0));
-
-
-            // In the specific lists of legislatures, no information is
-            // available about the political group of the MP. We stop
-            // the scraping of the row here and go to the next one.
-            if ($this->wantsSpecificLegislature()) {
-                return $this->sort($mp);
-            }
-
+            $mp    = $this->getMPInfo($cells->eq(0));
             $group = $this->getGroupInfo($cells->eq(1));
 
             return $this->sort($mp + $group);
         });
-
-        return $this->trimArray($list);
     }
 
     /**
