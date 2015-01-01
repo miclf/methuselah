@@ -34,9 +34,7 @@ class MPList extends AbstractScraper
     {
         return $this->getRows()->each(function ($row) {
 
-            $cell = $row->children()->eq(0);
-
-            $mp = $this->getMPInfo($cell);
+            $mp = $this->getMPInfo($row);
 
             return $this->sort($mp);
         });
@@ -51,10 +49,8 @@ class MPList extends AbstractScraper
     {
         return $this->getRows()->each(function ($row) {
 
-            $cells = $row->children();
-
-            $mp    = $this->getMPInfo($cells->eq(0));
-            $group = $this->getGroupInfo($cells->eq(1));
+            $mp    = $this->getMPInfo($row);
+            $group = $this->getGroupInfo($row);
 
             return $this->sort($mp + $group);
         });
@@ -84,12 +80,12 @@ class MPList extends AbstractScraper
     /**
      * Get the name and identifier of a MP.
      *
-     * @param  \Symfony\Component\DomCrawler\Crawler  $cell
+     * @param  \Symfony\Component\DomCrawler\Crawler  $row
      * @return array
      */
-    protected function getMPInfo(Crawler $cell)
+    protected function getMPInfo(Crawler $row)
     {
-        $anchor = $cell->filter('a');
+        $anchor = $row->filter('td:first-child a');
 
         return [
             'surname_given_name' => $anchor->text(),
@@ -118,12 +114,12 @@ class MPList extends AbstractScraper
     /**
      * Get the name and identifier of a political group.
      *
-     * @param  \Symfony\Component\DomCrawler\Crawler  $cell
+     * @param  \Symfony\Component\DomCrawler\Crawler  $row
      * @return array
      */
-    protected function getGroupInfo(Crawler $cell)
+    protected function getGroupInfo(Crawler $row)
     {
-        $anchor = $cell->filter('a');
+        $anchor = $row->filter('td:nth-child(2) a');
 
         return [
             'political_group'            => $anchor->text(),
