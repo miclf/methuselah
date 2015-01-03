@@ -24,20 +24,17 @@ class MPList extends AbstractScraper
 
         $rows->each(function ($row, $i) use (&$list) {
 
-            // Get the first <td> element of this table row.
-            $cell = $row->children()->eq(0);
-
             // This will store the data of the current MP.
             $mp = [];
 
 
-            // The cell contains an anchor linking to the page of the MP.
-            // We will extract her or his surname and given name and the
-            // Senate ID from this anchor.
-            $anchor = $cell->filter('tr:first-child a');
+            // The table row contains an anchor linking to the page of
+            // the MP. We will extract her or his surname and given
+            // name and the Senate ID from this anchor.
+            $anchor = $row->filter('a');
 
-            // If the cell contains no link, we probably reached empty rows
-            // at the end of the table. We skip the row.
+            // If the row contains no link, we probably reached empty
+            // rows at the end of the table. We skip the row.
             if (!count($anchor)) return;
 
             $matches = $this->match('#ID=([\d]+)#', $anchor->attr('href'));
