@@ -47,7 +47,7 @@ class MPList extends AbstractScraper
 
         });
 
-        return $this->trimArray($list);
+        return $list;
     }
 
     /**
