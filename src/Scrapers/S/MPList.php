@@ -18,13 +18,7 @@ class MPList extends AbstractScraper
     {
         $list = [];
 
-        $crawler = $this->getCrawler();
-
-        // Get the <table> storing the list of MPs and loop on its rows.
-        // The correct table is the second one of the page
-        $rows = $crawler->filter('table:nth-of-type(2)>tr');
-
-        $rows->each(function ($row, $i) use (&$list) {
+        $this->getRows()->each(function ($row, $i) use (&$list) {
 
             // This will store the data of the current MP.
             $list[] = $this->getMPInfo($row);
@@ -35,6 +29,17 @@ class MPList extends AbstractScraper
         $list = array_filter($list);
 
         return $list;
+    }
+
+    /**
+     * Get the HTML table rows to parse.
+     *
+     * @return \Symfony\Component\DomCrawler\Crawler
+     */
+    protected function getRows()
+    {
+        // The correct HTML table is the second one of the page.
+        return $this->getCrawler()->filter('table:nth-of-type(2)>tr');
     }
 
     /**
