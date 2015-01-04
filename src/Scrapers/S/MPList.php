@@ -52,6 +52,26 @@ class MPList extends AbstractScraper
     }
 
     /**
+     * Get the name and identifier of a MP.
+     *
+     * @param  \Symfony\Component\DomCrawler\Crawler  $row
+     * @return array|null
+     */
+    protected function getMPInfo(Crawler $row)
+    {
+        $anchor = $row->filter('a');
+
+        // We skip the row if it does not contain any anchor
+        // nor, as a result, any info about a MP.
+        if (!count($anchor)) return;
+
+        return [
+            'identifier'         => $this->getMPIdentifier($anchor),
+            'surname_given_name' => $anchor->text()
+        ];
+    }
+
+    /**
      * Get the Senate identifier of a MP.
      *
      * @param  \Symfony\Component\DomCrawler\Crawler  $anchor
