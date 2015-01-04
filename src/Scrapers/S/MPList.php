@@ -16,19 +16,12 @@ class MPList extends AbstractScraper
      */
     public function scrape()
     {
-        $list = [];
-
-        $this->getRows()->each(function ($row, $i) use (&$list) {
-
-            // This will store the data of the current MP.
-            $list[] = $this->getMPInfo($row);
-
+        $list = $this->getRows()->each(function ($row, $i) {
+            return $this->getMPInfo($row);
         });
 
         // Remove potential null values from the list.
-        $list = array_filter($list);
-
-        return $list;
+        return array_filter($list);
     }
 
     /**
