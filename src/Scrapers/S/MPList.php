@@ -1,5 +1,7 @@
 <?php namespace Pandemonium\Methuselah\Scrapers\S;
 
+use Symfony\Component\DomCrawler\Crawler;
+
 /**
  * Extract data from the list of senators.
  *
@@ -14,43 +16,58 @@ class MPList extends AbstractScraper
      */
     public function scrape()
     {
-        $list = [];
-
-        $crawler = $this->getCrawler();
-
-        // Get the <table> storing the list of MPs and loop on its rows.
-        // The correct table is the second one of the page
-        $rows = $crawler->filter('table:nth-of-type(2)>tr');
-
-        $rows->each(function ($row, $i) use (&$list) {
-
-            // Get the first <td> element of this table row.
-            $cell = $row->children()->eq(0);
-
-            // This will store the data of the current MP.
-            $mp = [];
-
-
-            // The cell contains an anchor linking to the page of the MP.
-            // We will extract her or his surname and given name and the
-            // Senate ID from this anchor.
-            $anchor = $cell->filter('tr:first-child a');
-
-            // If the cell contains no link, we probably reached empty rows
-            // at the end of the table. We skip the row.
-            if (!count($anchor)) return;
-
-            $matches = $this->match('#ID=([\d]+)#', $anchor->attr('href'));
-            $mp['identifier'] = $matches[1];
-
-            $mp['surname_given_name'] = $anchor->text();
-
-            // Add the data of the current MP to the list.
-            $list[] = $mp;
-
+        $list = $this->getRows()->each(function ($row, $i) {
+            return $this->getMPInfo($row);
         });
 
-        return $this->trimArray($list);
+        // Remove potential null values from the list.
+        return array_filter($list);
+    }
+
+    /**
+     * Get the HTML table rows to parse.
+     *
+     * @return \Symfony\Component\DomCrawler\Crawler
+     */
+    protected function getRows()
+    {
+        // The correct HTML table is the second one of the page.
+        return $this->getCrawler()->filter('table:nth-of-type(2)>tr');
+    }
+
+    /**
+     * Get the name and identifier of a MP.
+     *
+     * @param  \Symfony\Component\DomCrawler\Crawler  $row
+     * @return array|null
+     */
+    protected function getMPInfo(Crawler $row)
+    {
+        $anchor = $row->filter('a');
+
+        // We skip the row if it does not contain any anchor
+        // nor, as a result, any info about a MP.
+        if (!count($anchor)) return;
+
+        return [
+            'identifier'         => $this->getMPIdentifier($anchor),
+            'surname_given_name' => $anchor->text()
+        ];
+    }
+
+    /**
+     * Get the Senate identifier of a MP.
+     *
+     * @param  \Symfony\Component\DomCrawler\Crawler  $anchor
+     * @return string
+     */
+    protected function getMPIdentifier(Crawler $anchor)
+    {
+        $pattern = '#ID=([\d]+)#';
+
+        $matches = $this->match($pattern, $anchor->attr('href'));
+
+        return $matches[1];
     }
 
     /**
