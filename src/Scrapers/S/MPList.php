@@ -27,26 +27,12 @@ class MPList extends AbstractScraper
         $rows->each(function ($row, $i) use (&$list) {
 
             // This will store the data of the current MP.
-            $mp = [];
-
-
-            // The table row contains an anchor linking to the page of
-            // the MP. We will extract her or his surname and given
-            // name and the Senate ID from this anchor.
-            $anchor = $row->filter('a');
-
-            // If the row contains no link, we probably reached empty
-            // rows at the end of the table. We skip the row.
-            if (!count($anchor)) return;
-
-            $mp['identifier'] = $this->getMPIdentifier($anchor);
-
-            $mp['surname_given_name'] = $anchor->text();
-
-            // Add the data of the current MP to the list.
-            $list[] = $mp;
+            $list[] = $this->getMPInfo($row);
 
         });
+
+        // Remove potential null values from the list.
+        $list = array_filter($list);
 
         return $list;
     }
