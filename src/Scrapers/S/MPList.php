@@ -1,5 +1,7 @@
 <?php namespace Pandemonium\Methuselah\Scrapers\S;
 
+use Symfony\Component\DomCrawler\Crawler;
+
 /**
  * Extract data from the list of senators.
  *
@@ -37,8 +39,7 @@ class MPList extends AbstractScraper
             // rows at the end of the table. We skip the row.
             if (!count($anchor)) return;
 
-            $matches = $this->match('#ID=([\d]+)#', $anchor->attr('href'));
-            $mp['identifier'] = $matches[1];
+            $mp['identifier'] = $this->getMPIdentifier($anchor);
 
             $mp['surname_given_name'] = $anchor->text();
 
@@ -48,6 +49,21 @@ class MPList extends AbstractScraper
         });
 
         return $list;
+    }
+
+    /**
+     * Get the Senate identifier of a MP.
+     *
+     * @param  \Symfony\Component\DomCrawler\Crawler  $anchor
+     * @return string
+     */
+    protected function getMPIdentifier(Crawler $anchor)
+    {
+        $pattern = '#ID=([\d]+)#';
+
+        $matches = $this->match($pattern, $anchor->attr('href'));
+
+        return $matches[1];
     }
 
     /**
