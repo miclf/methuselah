@@ -4,12 +4,16 @@ use Exception;
 use Pandemonium\Methuselah\Crawler\Crawler;
 
 /**
- * Extract links to current week agenda pages
- * of committees of the Chamber.
+ * Extract links to current agenda pages
+ * of weeks of committee meetings.
+ *
+ * Each of the returned URLs targets a page listing
+ * all the meetings of committees (or group of
+ * committees) that are planned for the week.
  *
  * @author Michaël Lecerf <michael@estsurinter.net>
  */
-class CommitteeAgendaList extends AbstractScraper
+class CommitteeMeetingWeekList extends AbstractScraper
 {
     /**
      * List of patterns to extract date

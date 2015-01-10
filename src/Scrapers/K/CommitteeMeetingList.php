@@ -2,11 +2,15 @@
 
 /**
  * Extract links to current agenda pages
- * of committees of the Chamber.
+ * of detailed committees meetings.
+ *
+ * Each of the returned URLs targets a page detailing
+ * the meetings of a given committee (or group of
+ * committees) that are planned for the week.
  *
  * @author Michaël Lecerf <michael@estsurinter.net>
  */
-class CommitteeWeekAgendaList extends AbstractScraper
+class CommitteeMeetingList extends AbstractScraper
 {
     /**
      * Scrape the page of committee agenda lists
