@@ -48,6 +48,17 @@ class DocumentProvider
     {
         $source = $this->urlRepository->find($key, $values);
 
+        return $this->getFrom($source);
+    }
+
+    /**
+     * Get a web page from a given location.
+     *
+     * @param  string  $source  A local path or remote URL
+     * @return string           Source code of the page
+     */
+    public function getFrom($source)
+    {
         if ($this->isRemote($source)) {
             return $this->download($source);
         }
