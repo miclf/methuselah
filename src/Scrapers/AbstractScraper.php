@@ -66,6 +66,30 @@ abstract class AbstractScraper implements ScraperInterface
     }
 
     /**
+     * Get a prefilled DOM crawler from a given location.
+     *
+     * @param  string  $source   A local path or remote URL
+     * @param  string  $charset
+     * @return \Symfony\Component\DomCrawler\Crawler
+     */
+    public function getCrawlerFrom($source, $charset = null)
+    {
+        $document = $this->documentProvider->getFrom($source);
+
+        if (is_null($charset)) {
+            $charset = $this->charset;
+        }
+
+        $crawler = $this->newCrawler();
+
+        // We explicitly specify the character set to avoid issues
+        // with documents using old charsets such as ISO-8859-1.
+        $crawler->addHtmlContent($document, $charset);
+
+        return $crawler;
+    }
+
+    /**
      * Return the appropriate parameters for the document provider.
      *
      * This returns an indexed array of two elements. The first is the
