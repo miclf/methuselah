@@ -53,16 +53,11 @@ abstract class AbstractScraper implements ScraperInterface
      */
     public function getCrawler($document = null, $charset = null)
     {
-        if (is_null($document)) $document = $this->getDocument();
-        if (is_null($charset))  $charset  = $this->charset;
+        if (is_null($document)) {
+            $document = $this->getDocument();
+        }
 
-        $crawler = $this->newCrawler();
-
-        // We explicitly specify the character set to avoid issues
-        // with documents using old charsets such as ISO-8859-1.
-        $crawler->addHtmlContent($document, $charset);
-
-        return $crawler;
+        return $this->buildCrawler($document, $charset);
     }
 
     /**
@@ -76,6 +71,18 @@ abstract class AbstractScraper implements ScraperInterface
     {
         $document = $this->documentProvider->getFrom($source);
 
+        return $this->buildCrawler($document, $charset);
+    }
+
+    /**
+     * Set up a DOM crawler and fill it with the given document.
+     *
+     * @param  string  $document
+     * @param  string  $charset
+     * @return \Symfony\Component\DomCrawler\Crawler
+     */
+    protected function buildCrawler($document, $charset = null)
+    {
         if (is_null($charset)) {
             $charset = $this->charset;
         }
