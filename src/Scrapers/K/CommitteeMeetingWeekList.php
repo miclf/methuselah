@@ -69,6 +69,22 @@ class CommitteeMeetingWeekList extends AbstractScraper
     }
 
     /**
+     * Get a DOM crawler prefilled with the whole document.
+     *
+     * @param  string  $document
+     * @param  string  $charset
+     * @return \Symfony\Component\DomCrawler\Crawler
+     */
+    public function getCrawler($document = null, $charset = null)
+    {
+        if ($crawler = $this->getOption('crawler')) {
+            return $crawler;
+        }
+
+        return parent::getCrawler();
+    }
+
+    /**
      * Check if a given anchor targets the
      * agenda page of a committee week.
      *
