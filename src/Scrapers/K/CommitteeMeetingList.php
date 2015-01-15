@@ -57,6 +57,8 @@ class CommitteeMeetingList extends AbstractScraper
     {
         if ($crawler = $this->getOption('crawler')) {
             return $crawler;
+        } elseif ($url = $this->getOption('url')) {
+            return parent::getCrawlerFrom($url);
         }
 
         return parent::getCrawler();
