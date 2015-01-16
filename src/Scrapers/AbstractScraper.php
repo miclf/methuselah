@@ -53,8 +53,39 @@ abstract class AbstractScraper implements ScraperInterface
      */
     public function getCrawler($document = null, $charset = null)
     {
-        if (is_null($document)) $document = $this->getDocument();
-        if (is_null($charset))  $charset  = $this->charset;
+        if (is_null($document)) {
+            $document = $this->getDocument();
+        }
+
+        return $this->buildCrawler($document, $charset);
+    }
+
+    /**
+     * Get a prefilled DOM crawler from a given location.
+     *
+     * @param  string  $source   A local path or remote URL
+     * @param  string  $charset
+     * @return \Symfony\Component\DomCrawler\Crawler
+     */
+    public function getCrawlerFrom($source, $charset = null)
+    {
+        $document = $this->documentProvider->getFrom($source);
+
+        return $this->buildCrawler($document, $charset);
+    }
+
+    /**
+     * Set up a DOM crawler and fill it with the given document.
+     *
+     * @param  string  $document
+     * @param  string  $charset
+     * @return \Symfony\Component\DomCrawler\Crawler
+     */
+    protected function buildCrawler($document, $charset = null)
+    {
+        if (is_null($charset)) {
+            $charset = $this->charset;
+        }
 
         $crawler = $this->newCrawler();
 

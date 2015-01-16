@@ -1,182 +1,199 @@
 <?php namespace Pandemonium\Methuselah\Scrapers\K;
 
-use Exception;
+use Illuminate\Container\Container;
 use Pandemonium\Methuselah\Crawler\Crawler;
 
 /**
- * Extract links to current week agenda pages
- * of committees of the Chamber.
+ * Extract links to current agenda pages
+ * of detailed committees meetings.
+ *
+ * Each of the returned URLs targets a page detailing
+ * the meetings of a given committee (or group of
+ * committees) that are planned for the week.
  *
  * @author Michaël Lecerf <michael@estsurinter.net>
  */
 class CommitteeAgendaList extends AbstractScraper
 {
     /**
-     * List of patterns to extract date
-     * ranges from week labels.
+     * An instance of a DOM crawler.
      *
-     * @var array
+     * @var \Pandemonium\Methuselah\Crawler\Crawler
      */
-    protected $weekLabelPatterns = [
-        'week' => [
-            'regex'   => '#du (?:\w+) (\d{1,2}) (\w+) (\d{4}) au (?:.+) (\d{1,2}) (\w+) (\d{4})#',
-            'matches' => [
-                'startDay' => 1, 'startMonth' => 2, 'startYear' => 3,
-                'endDay'   => 4, 'endMonth'   => 5, 'endYear'   => 6,
-            ],
-        ],
-    ];
+    protected $crawler;
 
     /**
-     * Scrape the page of committee agenda lists
-     * to find links to week agenda pages.
+     * Scrape the committee agenda to find links
+     * to pages of committee meetings.
+     *
+     * When we reach the main page of the committee agenda,
+     * we can face three different types of content:
+     *
+     *   1. A list of multiple weeks of meetings
+     *   2. A series of meetings for a given week
+     *   3. A page listing meetings of a specific committee
+     *
+     * This scraper detects the type of content that is on the page and
+     * acts accordingly. The returned result is always supposed to be
+     * a list of URLs, each one targeting a page listing meetings
+     * for a specific committee (or group of committees).
      *
      * @return array
      */
     public function scrape()
     {
-        $anchors = $this->getAgendaAnchors()->each(function ($node) {
+        // Store a crawler for the main page of committee agenda.
+        // We will reuse it later in a way that will depend on
+        // the type of content it stores.
+        $this->crawler = $this->getCrawler();
 
-            if (!$matches = $this->matchCommitteeWeek($node)) return;
+        $commAgendaUrls = [];
 
-            list($startDate, $endDate) = $this->getDateRange($node->text());
-
-            return [
-                'identifier' => $matches[1],
-                'startDate'  => $startDate,
-                'endDate'    => $endDate,
-                'url'        => $this->makeAgendaUrl($matches[1]),
-            ];
-        });
-
-        // Remove null values and reset indices.
-        return array_values(array_filter($anchors));
-    }
-
-    /**
-     * Return the HTML anchors in the main
-     * content area of the document.
-     *
-     * @return \Pandemonium\Methuselah\Crawler\Crawler
-     */
-    protected function getAgendaAnchors()
-    {
-        return $this->getCrawler()->filter('#content a');
-    }
-
-    /**
-     * Check if a given anchor targets the
-     * agenda page of a committee week.
-     *
-     * @param  \Symfony\Component\DomCrawler\Crawler  $anchor
-     * @return array
-     */
-    protected function matchCommitteeWeek(Crawler $anchor)
-    {
-        // This pattern captures the identifier of the committee week.
-        $pattern = '#pat=PROD-commissions&week=(\d+)#';
-
-        return $this->match($pattern, $anchor->attr('href'));
-    }
-
-    /**
-     * Build an absolute agenda page URL from an identifier.
-     *
-     * @param  string  $identifier
-     * @return string
-     */
-    protected function makeAgendaUrl($identifier)
-    {
-        return
-            'http://www.lachambre.be/kvvcr/showpage.cfm'.
-            '?section=none&language=fr&cfm=/site/wwwcfm/agenda/comagendaWeek.cfm'.
-            '?pat=PROD-commissions&week='.$identifier;
-    }
-
-    /**
-     * Extract a range of dates from a string.
-     *
-     * This returns an array of two ISO 8601 dates. The
-     * first one represents the beginning of the range
-     * and the second one represents its end date.
-     *
-     * @param  string  $str
-     * @return array
-     *
-     * @throws \Exception if no date range is found.
-     */
-    protected function getDateRange($str)
-    {
-        foreach ($this->weekLabelPatterns as $pattern) {
-
-            $matches = $this->match($pattern['regex'], $str);
-
-            if (!$matches) continue;
-
-            // Create local variables from to their corresponding matches.
-            extract($this->mapMatches($pattern['matches'], $matches));
-
-            return [
-                $this->formatDate($startYear, $startMonth, $startDay),
-                $this->formatDate($endYear, $endMonth, $endDay),
-            ];
+        // Case 3: a page listing meetings of a specific committee.
+        if ($this->isSingleCommitteeAgenda()) {
+            // Not implemented yet.
         }
 
-        throw new Exception("Could not find any date range in [$str]");
+        if ($this->isListOfWeeks()) {
+            // Case 1: a list of multiple weeks of meetings.
+            $commAgendaUrls = $this->getAgendasForMultipleWeeks();
+        } else {
+            // Case 2: a series of meetings for a given week.
+            $commAgendaUrls = $this->getAgendasForSingleWeek();
+        }
+
+        return $commAgendaUrls;
     }
 
     /**
-     * Map a set of key names with a series of matched values.
+     * Check if the current page lists meetings
+     * of a specific committee.
      *
-     * @param  array  $map      Array of keys, each one having the number
-     *                          of its related match as a value
-     * @param  array  $matches  Array of data to map with the keys
+     * @return bool
+     */
+    protected function isSingleCommitteeAgenda()
+    {
+        // TODO: implement this.
+        return false;
+    }
+
+    /**
+     * Check if the current page contains a
+     * list of multiple weeks of meetings.
+     *
+     * @return bool
+     */
+    protected function isListOfWeeks()
+    {
+        $selector = "h3:contains('TABLEAU DES REUNIONS DE COMMISSION')";
+
+        $span = $this->crawler->filter($selector);
+
+        return (bool) count($span);
+    }
+
+    /**
+     * From a list of multiple weeks of meetings, get a list
+     * of URLs of meeting pages of specific committees.
+     *
      * @return array
      */
-    protected function mapMatches(array $map, array $matches)
+    protected function getAgendasForMultipleWeeks()
     {
-        foreach ($map as $name => $matchIndex) {
-            $map[$name] = $matches[$matchIndex];
+        $commAgendaUrls = [];
+
+        foreach ($this->getWeekUrls() as $weekUrl) {
+            $urls = $this->getCommitteeAgendaUrls($weekUrl);
+            $commAgendaUrls = array_merge($urls, $commAgendaUrls);
         }
 
-        return $map;
+        return $this->sort($commAgendaUrls);
     }
 
     /**
-     * Format date components into an ISO 8601 date.
+     * Scrape an array of URLs from a list
+     * of multiple weeks of meetings.
      *
-     * @param  int         $year   Year part of the date
-     * @param  int|string  $month  Number or name of the month
-     * @param  int         $day    Day
-     * @return string
+     * @return array
      */
-    protected function formatDate($year, $month, $day)
+    protected function getWeekUrls()
     {
-        if (!ctype_digit($month)) {
-            $month = $this->getMonthNumber($month);
-        }
+        $scraper = $this->makeScraper('CommitteeMeetingWeekList');
 
-        return sprintf('%04d-%02d-%02d', $year, $month, $day);
+        // We already have a crawler storing the content
+        // to scrape, so we inject it to avoid uselessly
+        // downloading this content one more time.
+        $scraper->setOptions(['crawler' => $this->crawler]);
+
+        $data = $scraper->scrape();
+
+        // The scraper gives us a bunch of data about each week. We extract
+        // the URLs because that’s the only info we’re interested in.
+        $weekUrls = array_pluck($data, 'url');
+
+        return $this->sort($weekUrls);
     }
 
     /**
-     * Get the number of a month from its French name.
+     * Scrape an array of URLs from a given page listing
+     * a series of meetings for a given week.
      *
-     * @param  string  $name
-     * @return int
+     * @param  string  $weekUrl
+     * @return array
      */
-    protected function getMonthNumber($name)
+    protected function getCommitteeAgendaUrls($weekUrl)
     {
-        $monthNames = [
-            'janvier', 'février',  'mars',
-            'avril',   'mai',      'juin',
-            'juillet', 'août',     'septembre',
-            'octobre', 'novembre', 'décembre',
-        ];
+        $scraper = $this->makeScraper('CommitteeMeetingList');
 
-        // Month numbers start at 1 and not 0, so we need
-        // to increment the array index that we get.
-        return array_search($name, $monthNames) + 1;
+        $scraper->setOptions(['url' => $weekUrl]);
+
+        return $scraper->scrape();
+    }
+
+    /**
+     * Scrape an array of URLs from a given DOM crawler
+     * listing a series of meetings for a given week.
+     *
+     * @return array
+     */
+    protected function getAgendasForSingleWeek()
+    {
+        $scraper = $this->makeScraper('CommitteeMeetingList');
+
+        // Since this class’ DOM crawler already stores the content
+        // we want to scrape, we will simply pass it, thus avoiding
+        // to uselessly download the page once again.
+        $scraper->setOptions(['crawler' => $this->crawler]);
+
+        $urls = $scraper->scrape();
+
+        return $this->sort($urls);
+    }
+
+    /**
+     * Instantiate an agenda scraper of the given class.
+     *
+     * @param  string  $class
+     * @return \Pandemonium\Methuselah\Scrapers\ScraperInterface
+     */
+    protected function makeScraper($class)
+    {
+        $fullClassName = __NAMESPACE__.'\\'.$class;
+
+        return (new Container)->make($fullClassName);
+    }
+
+    /**
+     * Sort an array by value.
+     *
+     * @param  array  $array
+     * @return array
+     */
+    protected function sort(array $array)
+    {
+        sort($array);
+
+        return $array;
     }
 
     /**
@@ -190,6 +207,6 @@ class CommitteeAgendaList extends AbstractScraper
      */
     protected function getProviderArguments()
     {
-        return ['k.agenda_list.committee_weeks', []];
+        return ['k.agenda_list.committee', []];
     }
 }
