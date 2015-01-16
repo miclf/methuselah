@@ -4,10 +4,10 @@ use Illuminate\Container\Container;
 use Pandemonium\Methuselah\Crawler\Crawler;
 
 /**
- * Extract links to current agenda pages
+ * Extract identifiers of current agenda pages
  * of detailed committees meetings.
  *
- * Each of the returned URLs targets a page detailing
+ * Each of the returned IDs targets a page detailing
  * the meetings of a given committee (or group of
  * committees) that are planned for the week.
  *
@@ -23,8 +23,8 @@ class CommitteeAgendaList extends AbstractScraper
     protected $crawler;
 
     /**
-     * Scrape the committee agenda to find links
-     * to pages of committee meetings.
+     * Scrape the committee agenda to find identifiers
+     * of pages of committee meetings.
      *
      * When we reach the main page of the committee agenda,
      * we can face three different types of content:
@@ -35,7 +35,7 @@ class CommitteeAgendaList extends AbstractScraper
      *
      * This scraper detects the type of content that is on the page and
      * acts accordingly. The returned result is always supposed to be
-     * a list of URLs, each one targeting a page listing meetings
+     * a list of IDs, each one targeting a page listing meetings
      * for a specific committee (or group of committees).
      *
      * @return array
@@ -47,7 +47,7 @@ class CommitteeAgendaList extends AbstractScraper
         // the type of content it stores.
         $this->crawler = $this->getCrawler();
 
-        $commAgendaUrls = [];
+        $commAgendaIds = [];
 
         // Case 3: a page listing meetings of a specific committee.
         if ($this->isSingleCommitteeAgenda()) {
@@ -56,13 +56,13 @@ class CommitteeAgendaList extends AbstractScraper
 
         if ($this->isListOfWeeks()) {
             // Case 1: a list of multiple weeks of meetings.
-            $commAgendaUrls = $this->getAgendasForMultipleWeeks();
+            $commAgendaIds = $this->getAgendasForMultipleWeeks();
         } else {
             // Case 2: a series of meetings for a given week.
-            $commAgendaUrls = $this->getAgendasForSingleWeek();
+            $commAgendaIds = $this->getAgendasForSingleWeek();
         }
 
-        return $commAgendaUrls;
+        return $commAgendaIds;
     }
 
     /**
@@ -94,20 +94,20 @@ class CommitteeAgendaList extends AbstractScraper
 
     /**
      * From a list of multiple weeks of meetings, get a list
-     * of URLs of meeting pages of specific committees.
+     * of IDs of meeting pages of specific committees.
      *
      * @return array
      */
     protected function getAgendasForMultipleWeeks()
     {
-        $commAgendaUrls = [];
+        $commAgendaIds = [];
 
         foreach ($this->getWeekUrls() as $weekUrl) {
-            $urls = $this->getCommitteeAgendaUrls($weekUrl);
-            $commAgendaUrls = array_merge($urls, $commAgendaUrls);
+            $urls = $this->getCommitteeAgendaIds($weekUrl);
+            $commAgendaIds = array_merge($urls, $commAgendaIds);
         }
 
-        return $this->sort($commAgendaUrls);
+        return $this->sort($commAgendaIds);
     }
 
     /**
@@ -135,13 +135,13 @@ class CommitteeAgendaList extends AbstractScraper
     }
 
     /**
-     * Scrape an array of URLs from a given page listing
-     * a series of meetings for a given week.
+     * Scrape an array of identifiers from a given page
+     * listing a series of meetings for a given week.
      *
      * @param  string  $weekUrl
      * @return array
      */
-    protected function getCommitteeAgendaUrls($weekUrl)
+    protected function getCommitteeAgendaIds($weekUrl)
     {
         $scraper = $this->makeScraper('CommitteeMeetingList');
 
@@ -151,7 +151,7 @@ class CommitteeAgendaList extends AbstractScraper
     }
 
     /**
-     * Scrape an array of URLs from a given DOM crawler
+     * Scrape an array of IDs from a given DOM crawler
      * listing a series of meetings for a given week.
      *
      * @return array
@@ -165,9 +165,9 @@ class CommitteeAgendaList extends AbstractScraper
         // to uselessly download the page once again.
         $scraper->setOptions(['crawler' => $this->crawler]);
 
-        $urls = $scraper->scrape();
+        $identifiers = $scraper->scrape();
 
-        return $this->sort($urls);
+        return $this->sort($identifiers);
     }
 
     /**
