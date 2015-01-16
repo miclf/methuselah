@@ -1,10 +1,10 @@
 <?php namespace Pandemonium\Methuselah\Scrapers\K;
 
 /**
- * Extract links to current agenda pages
+ * Extract identifiers of current agenda pages
  * of detailed committees meetings.
  *
- * Each of the returned URLs targets a page detailing
+ * Each of the returned IDs targets a page detailing
  * the meetings of a given committee (or group of
  * committees) that are planned for the week.
  *
@@ -14,7 +14,7 @@ class CommitteeMeetingList extends AbstractScraper
 {
     /**
      * Scrape the page of committee agenda lists
-     * to find links to agenda pages.
+     * to find identifiers of agenda pages.
      *
      * @return array
      */
