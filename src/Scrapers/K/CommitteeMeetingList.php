@@ -20,19 +20,19 @@ class CommitteeMeetingList extends AbstractScraper
      */
     public function scrape()
     {
-        $urls = [];
+        $identifiers = [];
 
         foreach ($this->getAgendaAnchors() as $DOMElement) {
 
             $href = $DOMElement->getAttribute('href');
 
-            if (!$this->matchCommitteeWeek($href)) continue;
+            if (!$matches = $this->matchCommitteeWeek($href)) continue;
 
-            $urls[] = 'http://www.lachambre.be/kvvcr/'.$this->removeHash($href);
+            $identifiers[] = $matches[1];
         }
 
         // Remove duplicates and reset indices.
-        return array_values(array_unique($urls));
+        return array_values(array_unique($identifiers));
     }
 
     /**
