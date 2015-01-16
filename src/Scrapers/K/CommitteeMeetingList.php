@@ -80,19 +80,6 @@ class CommitteeMeetingList extends AbstractScraper
     }
 
     /**
-     * Remove the hash from a URL.
-     *
-     * @param  string  $href
-     * @return string
-     */
-    protected function removeHash($href)
-    {
-        $hashStartPosition = mb_strrpos($href, '#');
-
-        return mb_substr($href, 0, $hashStartPosition);
-    }
-
-    /**
      * Return the appropriate parameters for the document provider.
      *
      * This returns an indexed array of two elements. The first is the
