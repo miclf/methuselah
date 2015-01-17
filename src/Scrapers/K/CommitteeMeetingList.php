@@ -1,10 +1,10 @@
 <?php namespace Pandemonium\Methuselah\Scrapers\K;
 
 /**
- * Extract links to current agenda pages
+ * Extract identifiers of current agenda pages
  * of detailed committees meetings.
  *
- * Each of the returned URLs targets a page detailing
+ * Each of the returned IDs targets a page detailing
  * the meetings of a given committee (or group of
  * committees) that are planned for the week.
  *
@@ -14,25 +14,25 @@ class CommitteeMeetingList extends AbstractScraper
 {
     /**
      * Scrape the page of committee agenda lists
-     * to find links to agenda pages.
+     * to find identifiers of agenda pages.
      *
      * @return array
      */
     public function scrape()
     {
-        $urls = [];
+        $identifiers = [];
 
         foreach ($this->getAgendaAnchors() as $DOMElement) {
 
             $href = $DOMElement->getAttribute('href');
 
-            if (!$this->matchCommitteeWeek($href)) continue;
+            if (!$matches = $this->matchCommitteeWeek($href)) continue;
 
-            $urls[] = 'http://www.lachambre.be/kvvcr/'.$this->removeHash($href);
+            $identifiers[] = $matches[1];
         }
 
         // Remove duplicates and reset indices.
-        return array_values(array_unique($urls));
+        return array_values(array_unique($identifiers));
     }
 
     /**
@@ -77,19 +77,6 @@ class CommitteeMeetingList extends AbstractScraper
         $pattern = '#pat=PROD-commissions&type=full&com=(\d+-\d+_\d+)#';
 
         return $this->match($pattern, $href);
-    }
-
-    /**
-     * Remove the hash from a URL.
-     *
-     * @param  string  $href
-     * @return string
-     */
-    protected function removeHash($href)
-    {
-        $hashStartPosition = mb_strrpos($href, '#');
-
-        return mb_substr($href, 0, $hashStartPosition);
     }
 
     /**
