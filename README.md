@@ -334,25 +334,6 @@ This scraper has no parameter.
 
 **********
 
-#### CommitteeWeekAgendaList
-
-This gets a list of links of committee week agendas that are *currently* published online. As it is also the case for plenary sessions, the website provides no way to get past data.
-
-##### Parameters
-
-This scraper has no parameter.
-
-##### Example of returned data:
-
-```json
-[
-    "http://www.lachambre.be/url/to/an/agenda/page",
-    "http://www.lachambre.be/url/to/another/agenda/page"
-]
-```
-
-**********
-
 
 ### Senate
 
