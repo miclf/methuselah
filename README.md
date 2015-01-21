@@ -313,7 +313,7 @@ This scraper has no parameter.
 
 #### CommitteeAgendaList
 
-This gets a list of links of committee agendas that are *currently* published online. As it is also the case for plenary sessions, the website provides no way to get past data.
+This gets a list of identifiers of committee agendas that are *currently* published online. As it is also the case for plenary sessions, the website provides no way to get past data.
 
 ##### Parameters
 
@@ -323,37 +323,12 @@ This scraper has no parameter.
 
 ```json
 [
-    {
-        "identifier": "1502",
-        "startDate": "2015-01-05",
-        "endDate": "2015-01-09",
-        "url": "http://www.lachambre.be/url/to/agenda/page/1502"
-    },
-    {
-        "identifier": "1451",
-        "startDate": "2014-12-15",
-        "endDate": "2014-12-19",
-        "url": "http://www.lachambre.be/url/to/agenda/page/1451"
-    }
-]
-```
-
-**********
-
-#### CommitteeWeekAgendaList
-
-This gets a list of links of committee week agendas that are *currently* published online. As it is also the case for plenary sessions, the website provides no way to get past data.
-
-##### Parameters
-
-This scraper has no parameter.
-
-##### Example of returned data:
-
-```json
-[
-    "http://www.lachambre.be/url/to/an/agenda/page",
-    "http://www.lachambre.be/url/to/another/agenda/page"
+    "1503-001_00",
+    "1503-002_01",
+    "1503-003_02",
+    "1504-001_00",
+    "1504-002_00",
+    "1504-005_00"
 ]
 ```
 
