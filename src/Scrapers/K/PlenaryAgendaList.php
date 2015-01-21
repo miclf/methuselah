@@ -47,7 +47,6 @@ class PlenaryAgendaList extends AbstractScraper
                 'identifier' => $matches[1],
                 'startDate'  => $startDate,
                 'endDate'    => $endDate,
-                'url'        => $this->makeAgendaUrl($matches[1]),
             ];
         });
 
@@ -82,20 +81,6 @@ class PlenaryAgendaList extends AbstractScraper
         $pattern = '#pat=PROD-Plenum&plen=(\d+_\d+)&type=full#';
 
         return $this->match($pattern, $anchor->attr('href'));
-    }
-
-    /**
-     * Build an absolute agenda page URL from an identifier.
-     *
-     * @param  string  $identifier
-     * @return string
-     */
-    protected function makeAgendaUrl($identifier)
-    {
-        return
-            'http://www.lachambre.be/kvvcr/showpage.cfm'.
-            '?section=/agenda&language=fr&cfm=/site/wwwcfm/agenda/plenagenda.cfm'.
-            '?pat=PROD-Plenum&plen='.$identifier.'&type=full';
     }
 
     /**
