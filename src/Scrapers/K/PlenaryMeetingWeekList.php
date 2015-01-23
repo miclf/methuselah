@@ -9,7 +9,7 @@ use Pandemonium\Methuselah\Crawler\Crawler;
  *
  * @author Michaël Lecerf <michael@estsurinter.net>
  */
-class PlenaryAgendaList extends AbstractScraper
+class PlenaryMeetingWeekList extends AbstractScraper
 {
     /**
      * List of patterns to extract date
