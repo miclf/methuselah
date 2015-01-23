@@ -4,7 +4,7 @@ use Exception;
 use Pandemonium\Methuselah\Crawler\Crawler;
 
 /**
- * Extract identifiers of current agenda pages
+ * Extract data of current agenda pages of weeks
  * of plenary sessions of the Chamber.
  *
  * @author Michaël Lecerf <michael@estsurinter.net>
