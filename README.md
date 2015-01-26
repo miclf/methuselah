@@ -284,7 +284,7 @@ Example of returned array (shortened for clarity):
 
 #### PlenaryAgendaList
 
-This retrieves a list of links of plenary session week agendas that are *currently* published online. The website provides no way to get the list from a particular point in time nor to access archives of agendas.
+This retrieves a list of identifiers of plenary session week agendas that are *currently* published online. The website provides no way to get the list from a particular point in time nor to access archives of agendas.
 
 ##### Parameters
 
@@ -294,18 +294,8 @@ This scraper has no parameter.
 
 ```json
 [
-    {
-        "identifier": "1502_00",
-        "startDate": "2015-01-05",
-        "endDate": "2015-01-09",
-        "url": "http://www.lachambre.be/url/to/agenda/page/1502_00"
-    },
-    {
-        "identifier": "1451_02",
-        "startDate": "2014-12-15",
-        "endDate": "2014-12-19",
-        "url": "http://www.lachambre.be/url/to/agenda/page/1451_02"
-    }
+    "1502_01",
+    "1503_00"
 ]
 ```
 
