@@ -1,10 +1,10 @@
 <?php namespace Pandemonium\Methuselah\Scrapers\K;
 
-use Exception;
+use Illuminate\Container\Container;
 use Pandemonium\Methuselah\Crawler\Crawler;
 
 /**
- * Extract links to current agenda pages
+ * Extract identifiers of current agenda pages
  * of plenary sessions of the Chamber.
  *
  * @author Michaël Lecerf <michael@estsurinter.net>
@@ -12,245 +12,92 @@ use Pandemonium\Methuselah\Crawler\Crawler;
 class PlenaryAgendaList extends AbstractScraper
 {
     /**
-     * List of patterns to extract date
-     * ranges from week labels.
+     * An instance of a DOM crawler.
      *
-     * @var array
+     * @var \Pandemonium\Methuselah\Crawler\Crawler
      */
-    protected $weekLabelPatterns = [
-        'week' => [
-            'regex'   => '#du (\d{1,2}) au (\d{1,2}) (.+) (\d{4})#',
-            'matches' => [
-                'startDay' => 1, 'startMonth' => 3, 'startYear' => 4,
-                'endDay'   => 2, 'endMonth'   => 3, 'endYear'   => 4,
-            ],
-        ],
-    ];
+    protected $crawler;
 
     /**
-     * Scrape the page of plenary agenda lists
-     * to find links to agenda pages.
+     * Scrape the plenary agenda to find identifiers
+     * of pages of plenary meetings.
+     *
+     * When we reach the main page of the plenary agenda,
+     * we can face two different types of content:
+     *
+     *   1. A list of multiple weeks of plenary sessions
+     *   2. A page with one or more plenaries for a given week
+     *
+     * This scraper detects the type of content that is on the page and
+     * acts accordingly. The returned result is always supposed to be
+     * a list of IDs or the 'self' keyword. Each ID targets a page
+     * listing one or more plenary sessions.
      *
      * @return array
-     *
-     * @throws \Exception if no date range is found in a matching anchor.
      */
     public function scrape()
     {
-        $anchors = $this->getAgendaAnchors()->each(function ($node) {
+        $this->crawler = $this->getCrawler();
 
-            if (!$matches = $this->matchPlenaryWeek($node)) return;
-
-            list($startDate, $endDate) = $this->getDateRange($node->text());
-
-            return [
-                'identifier' => $matches[1],
-                'startDate'  => $startDate,
-                'endDate'    => $endDate,
-                'url'        => $this->makeAgendaUrl($matches[1]),
-            ];
-        });
-
-        return $this->removeInvalidAnchors($anchors);
-    }
-
-    /**
-     * Return the HTML anchors in the main
-     * content area of the document.
-     *
-     * @return \Pandemonium\Methuselah\Crawler\Crawler
-     */
-    protected function getAgendaAnchors()
-    {
-        return $this->getCrawler()->filter('#content a');
-    }
-
-    /**
-     * Check if a given anchor targets the
-     * agenda page of a plenary week.
-     *
-     * @param  \Symfony\Component\DomCrawler\Crawler  $anchor
-     * @return array
-     */
-    protected function matchPlenaryWeek(Crawler $anchor)
-    {
-        if (!str_contains($anchor->text(), 'Semaine')) {
-            return [];
+        // Case 1: a list of multiple weeks of plenary sessions.
+        if ($this->isListOfWeeks()) {
+            return $this->getAgendasForMultipleWeeks();
         }
 
-        // This pattern captures the identifier of the plenary week.
-        $pattern = '#pat=PROD-Plenum&plen=(\d+_\d+)&type=full#';
-
-        return $this->match($pattern, $anchor->attr('href'));
+        // Case 2: a page with one or more plenaries for a given week.
+        return $plenaryAgendaIds = ['self'];
     }
 
     /**
-     * Build an absolute agenda page URL from an identifier.
+     * Check if the current page contains a
+     * list of multiple weeks of plenaries.
      *
-     * @param  string  $identifier
-     * @return string
+     * @return bool
      */
-    protected function makeAgendaUrl($identifier)
+    protected function isListOfWeeks()
     {
-        return
-            'http://www.lachambre.be/kvvcr/showpage.cfm'.
-            '?section=/agenda&language=fr&cfm=/site/wwwcfm/agenda/plenagenda.cfm'.
-            '?pat=PROD-Plenum&plen='.$identifier.'&type=full';
+        $selector = "h3:contains('Recherche dans ')";
+
+        $span = $this->crawler->filter($selector);
+
+        return (bool) count($span);
     }
 
     /**
-     * Remove invalid anchors to plenary week agendas.
+     * From a list of multiple weeks of plenaries, get a
+     * list of IDs of agenda pages of plenary sessions.
      *
-     * Invalid anchors are duplicate ones as well as those
-     * that have been replaced by newer versions.
-     *
-     * @param  array  $anchors
      * @return array
      */
-    protected function removeInvalidAnchors(array $anchors)
+    protected function getAgendasForMultipleWeeks()
     {
-        $anchors = $this->removeDuplicates($anchors);
+        $scraper = $this->makeScraper('PlenaryMeetingWeekList');
 
-        return $this->removeOutdatedAnchors($anchors);
+        // We already have a crawler storing the content
+        // to scrape, so we inject it to avoid uselessly
+        // downloading this content one more time.
+        $scraper->setOptions(['crawler' => $this->crawler]);
+
+        // The scraper gives us a bunch of data about each week. We extract
+        // the IDs because that’s the only info we’re interested in.
+        $weekIdentifiers = array_pluck($scraper->scrape(), 'identifier');
+
+        sort($weekIdentifiers);
+
+        return $weekIdentifiers;
     }
 
     /**
-     * Remove duplicates from an array of anchors.
+     * Instantiate an agenda scraper of the given class.
      *
-     * @param  array  $anchors
-     * @return array
+     * @param  string  $class
+     * @return \Pandemonium\Methuselah\Scrapers\ScraperInterface
      */
-    protected function removeDuplicates(array $anchors)
+    protected function makeScraper($class)
     {
-        $identifiers = [];
+        $fullClassName = __NAMESPACE__.'\\'.$class;
 
-        return array_filter($anchors, function ($anchor) use (&$identifiers) {
-
-            if (is_null($anchor) || in_array($anchor['identifier'], $identifiers)) {
-                return false;
-            }
-
-            $identifiers[] = $anchor['identifier'];
-
-            return true;
-        });
-    }
-
-    /**
-     * Keep only the most recent anchor for each
-     * week in an array of week anchors.
-     *
-     * @param  array  $anchors
-     * @return array
-     */
-    protected function removeOutdatedAnchors(array $anchors)
-    {
-        $valid    = [];
-        $versions = [];
-
-        foreach ($anchors as $anchor) {
-
-            list($weekNumber, $version) = explode('_', $anchor['identifier']);
-
-            // If there is no registered version for the current anchor yet or
-            // if this anchor’s version is newer than the currently registered
-            // one, we’ll keep the current anchor as the new most recent one.
-            if (
-                !isset($versions[$weekNumber]) ||
-                $version > $versions[$weekNumber]
-            ) {
-                $versions[$weekNumber] = $version;
-                $valid[$weekNumber]    = $anchor;
-            }
-        }
-
-        return array_values($valid);
-    }
-
-    /**
-     * Extract a range of dates from a string.
-     *
-     * This returns an array of two ISO 8601 dates. The
-     * first one represents the beginning of the range
-     * and the second one represents its end date.
-     *
-     * @param  string  $str
-     * @return array
-     *
-     * @throws \Exception if no date range is found.
-     */
-    protected function getDateRange($str)
-    {
-        foreach ($this->weekLabelPatterns as $pattern) {
-
-            $matches = $this->match($pattern['regex'], $str);
-
-            if (!$matches) continue;
-
-            // Create local variables from to their corresponding matches.
-            extract($this->mapMatches($pattern['matches'], $matches));
-
-            return [
-                $this->formatDate($startYear, $startMonth, $startDay),
-                $this->formatDate($endYear, $endMonth, $endDay),
-            ];
-        }
-
-        throw new Exception("Could not find any date range in [$str]");
-    }
-
-    /**
-     * Map a set of key names with a series of matched values.
-     *
-     * @param  array  $map      Array of keys, each one having the number
-     *                          of its related match as a value
-     * @param  array  $matches  Array of data to map with the keys
-     * @return array
-     */
-    protected function mapMatches(array $map, array $matches)
-    {
-        foreach ($map as $name => $matchIndex) {
-            $map[$name] = $matches[$matchIndex];
-        }
-
-        return $map;
-    }
-
-    /**
-     * Format date components into an ISO 8601 date.
-     *
-     * @param  int         $year   Year part of the date
-     * @param  int|string  $month  Number or name of the month
-     * @param  int         $day    Day
-     * @return string
-     */
-    protected function formatDate($year, $month, $day)
-    {
-        if (!ctype_digit($month)) {
-            $month = $this->getMonthNumber($month);
-        }
-
-        return sprintf('%04d-%02d-%02d', $year, $month, $day);
-    }
-
-    /**
-     * Get the number of a month from its French name.
-     *
-     * @param  string  $name
-     * @return int
-     */
-    protected function getMonthNumber($name)
-    {
-        $monthNames = [
-            'janvier', 'février',  'mars',
-            'avril',   'mai',      'juin',
-            'juillet', 'août',     'septembre',
-            'octobre', 'novembre', 'décembre',
-        ];
-
-        // Month numbers start at 1 and not 0, so we need
-        // to increment the array index that we get.
-        return array_search($name, $monthNames) + 1;
+        return (new Container)->make($fullClassName);
     }
 
     /**
