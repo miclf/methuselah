@@ -9,6 +9,7 @@
     ],
     "require": {
         "guzzlehttp/guzzle": "4.1.*",
+        "illuminate/console": "5.0.*@dev",
         "illuminate/container": "4.2.*",
         "illuminate/support": "4.2.*",
         "patchwork/utf8": "1.1.*",
