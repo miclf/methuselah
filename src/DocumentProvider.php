@@ -1,5 +1,6 @@
 <?php namespace Pandemonium\Methuselah;
 
+use Exception;
 use Pandemonium\Methuselah\UrlRepositories\UrlRepositoryInterface;
 use Pandemonium\Methuselah\UrlRepositories\JsonUrlRepository;
 use GuzzleHttp\Client;
@@ -137,9 +138,15 @@ class DocumentProvider
      *
      * @param  string  $path
      * @return string
+     *
+     * @throws \Exception if the given path does not exist.
      */
     protected function load($path)
     {
+        if (!file_exists($path)) {
+            throw new Exception("File '{$path}' does not exist");
+        }
+
         return file_get_contents($path);
     }
 
