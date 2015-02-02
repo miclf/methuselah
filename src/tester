@@ -1,9 +1,10 @@
 #!/usr/bin/env php
 <?php
+use Symfony\Component\Console\Application;
 
 require __DIR__.'/../vendor/autoload.php';
 
-$tester = new Symfony\Component\Console\Application('Methuselah Document Tester', '0.0');
 
+$tester = new Application('Methuselah Document Tester', '0.0');
 
 exit($tester->run());
