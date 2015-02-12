@@ -1,0 +1,7 @@
+{
+    "parliaments": {
+        "k": {
+            "baseUrl": "tests/DocumentTester/Documents/K/"
+        }
+    }
+}
