@@ -7,4 +7,6 @@ require __DIR__.'/../vendor/autoload.php';
 
 $tester = new Application('Methuselah Document Tester', '0.0');
 
+$tester->add(new Pandemonium\Methuselah\DocumentTester\K\CommitteeListTester);
+
 exit($tester->run());

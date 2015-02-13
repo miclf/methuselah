@@ -1,7 +1,8 @@
 {
     "parliaments": {
         "k": {
-            "baseUrl": "tests/DocumentTester/Documents/K/"
+            "baseUrl": "tests/DocumentTester/Documents/K/",
+            "committee_list": "Committee/list.{lang}.html"
         }
     }
 }
