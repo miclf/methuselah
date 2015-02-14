@@ -2,6 +2,7 @@
     "parliaments": {
         "k": {
             "baseUrl": "tests/DocumentTester/Documents/K/",
+            "committee": "Committee/{identifier}.{lang}.html",
             "committee_list": "Committee/list.{lang}.html"
         }
     }
