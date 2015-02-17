@@ -1,0 +1,15 @@
+#!/usr/bin/env php
+<?php
+use Symfony\Component\Console\Application;
+
+require __DIR__.'/../vendor/autoload.php';
+
+
+$tester = new Application('Methuselah Document Tester', '0.0');
+
+$tester->add(new Pandemonium\Methuselah\DocumentTester\K\CommitteeTester);
+$tester->add(new Pandemonium\Methuselah\DocumentTester\K\CommitteeListTester);
+$tester->add(new Pandemonium\Methuselah\DocumentTester\K\MPTester);
+$tester->add(new Pandemonium\Methuselah\DocumentTester\K\MPListTester);
+
+exit($tester->run());
