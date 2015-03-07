@@ -2,6 +2,7 @@
 
 use Pandemonium\Methuselah\Scrapers\K\Dossier\HtmlToXmlConverter;
 use Pandemonium\Methuselah\Scrapers\K\Dossier\XmlToArrayConverter;
+use Pandemonium\Methuselah\Scrapers\K\Dossier\Transformer;
 
 /**
  * Extract data from the pages of dossiers of the Chamber.
@@ -17,7 +18,9 @@ class Dossier extends AbstractScraper
      */
     public function scrape()
     {
-        return $this->getDossierAsTree();
+        $tree = $this->getDossierAsTree();
+
+        return $this->transform($tree);
     }
 
     /**
@@ -52,8 +55,19 @@ class Dossier extends AbstractScraper
     {
         $htmlSource = $this->getCrawler()->html();
 
-        $xml = with(new HtmlToXmlConverter)->convert($htmlSource);
+        $xml = (new HtmlToXmlConverter)->convert($htmlSource);
 
-        return with(new XmlToArrayConverter)->convert($xml);
+        return (new XmlToArrayConverter)->convert($xml);
+    }
+
+    /**
+     * Reorganize the data tree to an improved structure.
+     *
+     * @param  array  $tree
+     * @return array
+     */
+    protected function transform(array $tree)
+    {
+        return (new Transformer)->transform($tree);
     }
 }
