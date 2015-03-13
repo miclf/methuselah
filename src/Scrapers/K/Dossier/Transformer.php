@@ -65,7 +65,7 @@ class Transformer
 
         foreach ($mappings as $sourceKey => $parameters) {
 
-            $parameters = $this->normalizeParameters($rootNode, $parameters);
+            $parameters = $this->normalizeParameters($parameters);
 
             $value = $this->getMappingValue($sourceKey, $parameters);
 
@@ -126,22 +126,16 @@ class Transformer
     /**
      * Convert mapping parameters to a normalized array.
      *
-     * @param  string        $rootNode
      * @param  array|string  $parameters
      * @return array
      */
-    protected function normalizeParameters($rootNode, $parameters)
+    protected function normalizeParameters($parameters)
     {
         // If the argument consists of a simple string, it
         // references the destination path of the mapping.
         if (is_string($parameters)) {
             $parameters = ['destination' => $parameters];
         }
-
-        $parameters['destination'] = $this->compileDestination(
-            $rootNode,
-            $parameters['destination']
-        );
 
         return $parameters;
     }
