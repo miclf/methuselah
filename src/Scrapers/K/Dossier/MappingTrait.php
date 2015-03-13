@@ -60,5 +60,26 @@ trait MappingTrait
             ],
         ],
 
+        // Mapping to apply to main documents.
+        'main_document' => [
+            // Number of the document in K format (00K0000000)
+            'n-du-document' => 'number',
+            // Type of document
+            'type.code' => [
+                'destination' => 'dossierType',
+                'dictionary'  => 'dossierTypes',
+            ],
+            // Date of submission
+            'date-de-depot' => [
+                'destination' => 'dates.submission',
+                'modifier'    => 'dateToIso'
+            ],
+            // Date of distribution among the MPs
+            'date-de-distribution' => [
+                'destination' => 'dates.distribution',
+                'modifier'    => 'dateToIso'
+            ],
+        ],
+
     ];
 }
