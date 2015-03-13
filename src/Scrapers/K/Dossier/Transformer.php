@@ -42,9 +42,9 @@ class Transformer
     {
         $this->source = $source;
 
-        foreach ($this->mapping as $key => $mappings) {
-            $this->tree += $this->map($key, $mappings);
-        }
+        $this->tree['meta'] = $this->map($this->mapping['meta']);
+
+        $this->tree += $this->mapDocuments();
 
         return $this->tree;
     }
