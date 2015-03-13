@@ -67,7 +67,7 @@ class Transformer
 
             $parameters = $this->normalizeParameters($parameters);
 
-            $value = $this->getMappingValue($sourceKey, $parameters);
+            $value = $this->getMappingValue($dataSource, $sourceKey, $parameters);
 
             array_set($data, $parameters['destination'], $value);
         }
@@ -171,13 +171,18 @@ class Transformer
     /**
      * Get a node value from the source tree.
      *
+     * @param  array   $dataSource
      * @param  string  $path
      * @param  array   $parameters
      * @return mixed
      */
-    protected function getMappingValue($path, array $parameters)
+    protected function getMappingValue(array $dataSource = null, $path, array $parameters = [])
     {
-        $value = array_get($this->source, $path);
+        if (!$dataSource) {
+            $dataSource = $this->source;
+        }
+
+        $value = array_get($dataSource, $path);
 
         return $this->processValue($value, $parameters);
     }
