@@ -14,16 +14,12 @@ trait MappingTrait
      */
     protected $mapping = [
 
-        // These nodes will move to the root of the new tree.
-        '' => [
+        // These nodes will be grouped as metadata.
+        'meta' => [
             // Full title of the dossier
             'intitule.intitule-complet' => 'title',
             // ‘Short’ title
             'intitule-court'  => 'shortTitle',
-        ],
-
-        // These nodes will be grouped as metadata.
-        'meta' => [
             // Number of the dossier in K format (00K0000)
             'n-du-document'   => 'number',
             // Bicameral number of the dossier
@@ -60,6 +56,51 @@ trait MappingTrait
             // Sending date
             'chambre-etou-senat.document-principal.0.date-denvoi' => [
                 'destination' => 'dates.sending',
+                'modifier'    => 'dateToIso'
+            ],
+        ],
+
+        // Mapping to apply to main documents.
+        'main_document' => [
+            // Number of the document in K format (00K0000000)
+            'n-du-document' => 'number',
+            // Type of document
+            'type.code' => [
+                'destination' => 'dossierType',
+                'dictionary'  => 'dossierTypes',
+            ],
+            // Date of submission
+            'date-de-depot' => [
+                'destination' => 'dates.submission',
+                'modifier'    => 'dateToIso'
+            ],
+            // Date of distribution among the MPs
+            'date-de-distribution' => [
+                'destination' => 'dates.distribution',
+                'modifier'    => 'dateToIso'
+            ],
+        ],
+
+        // Mapping to apply to subdocuments.
+        'subdocument' => [
+            // Number of the document in K format (00K0000000)
+            'numero' => [
+                'destination' => 'number',
+                'modifier'    => 'prependDossierNumber'
+            ],
+            // Type of document
+            'type.code' => [
+                'destination' => 'dossierType',
+                'dictionary'  => 'dossierTypes',
+            ],
+            // Date of submission
+            'date' => [
+                'destination' => 'dates.submission',
+                'modifier'    => 'dateToIso'
+            ],
+            // Date of distribution among the MPs
+            'date-de-distribution' => [
+                'destination' => 'dates.distribution',
                 'modifier'    => 'dateToIso'
             ],
         ],

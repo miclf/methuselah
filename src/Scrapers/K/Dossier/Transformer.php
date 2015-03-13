@@ -42,9 +42,9 @@ class Transformer
     {
         $this->source = $source;
 
-        foreach ($this->mapping as $key => $mappings) {
-            $this->tree += $this->map($key, $mappings);
-        }
+        $this->tree['meta'] = $this->map($this->mapping['meta']);
+
+        $this->tree += $this->mapDocuments();
 
         return $this->tree;
     }
@@ -52,22 +52,22 @@ class Transformer
     /**
      * Apply a series of mappings.
      *
-     * @param  string  $rootNode  Path to the root of the mappings
-     * @param  array   $mappings  List of mappings to apply
+     * @param  array  $mappings    List of mappings to apply
+     * @param  array  $dataSource  Optional subset of data to use as data source
      * @return array
      *
      * @throws \Exception if a key cannot be found in a dictionary.
      * @throws \Exception if trying to call a nonexisting modifier.
      */
-    protected function map($rootNode, array $mappings)
+    protected function map(array $mappings, array $dataSource = null)
     {
         $data = [];
 
         foreach ($mappings as $sourceKey => $parameters) {
 
-            $parameters = $this->normalizeParameters($rootNode, $parameters);
+            $parameters = $this->normalizeParameters($parameters);
 
-            $value = $this->getMappingValue($sourceKey, $parameters);
+            $value = $this->getMappingValue($dataSource, $sourceKey, $parameters);
 
             array_set($data, $parameters['destination'], $value);
         }
@@ -76,24 +76,66 @@ class Transformer
     }
 
     /**
+     * Apply mappings for the documents of the dossier.
+     *
+     * @return array
+     */
+    protected function mapDocuments()
+    {
+        $data = array_merge($this->mapMainDocuments(), $this->mapSubdocuments());
+
+        return ['documents' => $data];
+    }
+
+    /**
+     * Apply mappings for the main documents of the dossier.
+     *
+     * @return array
+     */
+    protected function mapMainDocuments()
+    {
+        $data = [];
+
+        $documents = $this->filterSource('chambre-etou-senat.document-principal');
+
+        foreach ($documents as $i => $document) {
+            $data[] = $this->map($this->mapping['main_document'], $document);
+        }
+
+        return $data;
+    }
+
+    /**
+     * Apply mappings for the subdocuments of the dossier.
+     *
+     * @return array
+     */
+    protected function mapSubdocuments()
+    {
+        $data = [];
+
+        $documents = $this->filterSource('chambre-etou-senat.document-principal.0.sous-documents.documents-suivants');
+
+        foreach ($documents as $i => $document) {
+            $data[] = $this->map($this->mapping['subdocument'], $document);
+        }
+
+        return $data;
+    }
+
+    /**
      * Convert mapping parameters to a normalized array.
      *
-     * @param  string        $rootNode
      * @param  array|string  $parameters
      * @return array
      */
-    protected function normalizeParameters($rootNode, $parameters)
+    protected function normalizeParameters($parameters)
     {
         // If the argument consists of a simple string, it
         // references the destination path of the mapping.
         if (is_string($parameters)) {
             $parameters = ['destination' => $parameters];
         }
-
-        $parameters['destination'] = $this->compileDestination(
-            $rootNode,
-            $parameters['destination']
-        );
 
         return $parameters;
     }
@@ -129,13 +171,18 @@ class Transformer
     /**
      * Get a node value from the source tree.
      *
+     * @param  array   $dataSource
      * @param  string  $path
      * @param  array   $parameters
      * @return mixed
      */
-    protected function getMappingValue($path, array $parameters)
+    protected function getMappingValue(array $dataSource = null, $path, array $parameters = [])
     {
-        $value = array_get($this->source, $path);
+        if (!$dataSource) {
+            $dataSource = $this->source;
+        }
+
+        $value = array_get($dataSource, $path);
 
         return $this->processValue($value, $parameters);
     }
@@ -214,17 +261,12 @@ class Transformer
     {
         // Date in DD/MM/YYYY format.
         if (preg_match('#(\d{2})/(\d{2})/(\d{4})#', $date, $matches)) {
-
             return $matches[3].'-'.$matches[2].'-'.$matches[1];
         }
 
         // Date as a series of numbers, in YYYYMMDD format.
         if (ctype_digit($date) && strlen($date) === 8) {
-
-            return
-                substr($date, 0, 4) . '-' .
-                substr($date, 4, 2) . '-' .
-                substr($date, 6);
+            return substr($date, 0, 4).'-'.substr($date, 4, 2).'-'.substr($date, 6);
         }
 
         throw new Exception("Unrecognized date format [$date]");
