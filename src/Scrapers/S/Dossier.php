@@ -33,6 +33,7 @@ class Dossier extends AbstractScraper
     protected $documentTypes = [
         'Proposition de loi'                   => 'LAW_PROPOSAL',
         'Projet de loi'                        => 'LAW_PROJECT',
+        'Proposition de résolution'            => 'RESOLUTION_PROPOSAL',
         'Révision de la constitution'          => 'CONSTITUTIONAL_REVISION',
         'Projet transmis par le Sénat'         => 'PROJECT_SENT_BY_SENATE',
         'Amendement'                           => 'AMENDMENT',
@@ -47,6 +48,10 @@ class Dossier extends AbstractScraper
         'APPROVED_BY_PLENARY-SENT_TO_SENATE',
         'Texte adopté en séance plénière et soumis à la sanction royale' =>
         'APPROVED_BY_PLENARY-SENT_TO_KING',
+        'Projet évoqué par le Sénat'           => 'PROJECT_EVOQUE_SENAT',
+        'Décision de ne pas amender'           => 'DECISION_DE_NE_PAS_AMENDER',
+        'Décisions Commission parlementaire de Concertation' =>
+        'DECISIONS_COMMISSION_CONCERTATION',
         'Liste'                                => 'LIST',
         'Avis du Conseil d\'Etat'              => 'OPINION_COUNCIL_OF_STATE',
     ];
