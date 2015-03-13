@@ -76,6 +76,54 @@ class Transformer
     }
 
     /**
+     * Apply mappings for the documents of the dossier.
+     *
+     * @return array
+     */
+    protected function mapDocuments()
+    {
+        $data = array_merge($this->mapMainDocuments(), $this->mapSubdocuments());
+
+        return ['documents' => $data];
+    }
+
+    /**
+     * Apply mappings for the main documents of the dossier.
+     *
+     * @return array
+     */
+    protected function mapMainDocuments()
+    {
+        $data = [];
+
+        $documents = $this->filterSource('chambre-etou-senat.document-principal');
+
+        foreach ($documents as $i => $document) {
+            $data[] = $this->map($this->mapping['main_document'], $document);
+        }
+
+        return $data;
+    }
+
+    /**
+     * Apply mappings for the subdocuments of the dossier.
+     *
+     * @return array
+     */
+    protected function mapSubdocuments()
+    {
+        $data = [];
+
+        $documents = $this->filterSource('chambre-etou-senat.document-principal.0.sous-documents.documents-suivants');
+
+        foreach ($documents as $i => $document) {
+            $data[] = $this->map($this->mapping['subdocument'], $document);
+        }
+
+        return $data;
+    }
+
+    /**
      * Convert mapping parameters to a normalized array.
      *
      * @param  string        $rootNode
