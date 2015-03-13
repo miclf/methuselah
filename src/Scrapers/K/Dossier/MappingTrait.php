@@ -81,5 +81,29 @@ trait MappingTrait
             ],
         ],
 
+        // Mapping to apply to subdocuments.
+        'subdocument' => [
+            // Number of the document in K format (00K0000000)
+            'numero' => [
+                'destination' => 'number',
+                'modifier'    => 'prependDossierNumber'
+            ],
+            // Type of document
+            'type.code' => [
+                'destination' => 'dossierType',
+                'dictionary'  => 'dossierTypes',
+            ],
+            // Date of submission
+            'date' => [
+                'destination' => 'dates.submission',
+                'modifier'    => 'dateToIso'
+            ],
+            // Date of distribution among the MPs
+            'date-de-distribution' => [
+                'destination' => 'dates.distribution',
+                'modifier'    => 'dateToIso'
+            ],
+        ],
+
     ];
 }
