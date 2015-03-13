@@ -262,17 +262,12 @@ class Transformer
     {
         // Date in DD/MM/YYYY format.
         if (preg_match('#(\d{2})/(\d{2})/(\d{4})#', $date, $matches)) {
-
             return $matches[3].'-'.$matches[2].'-'.$matches[1];
         }
 
         // Date as a series of numbers, in YYYYMMDD format.
         if (ctype_digit($date) && strlen($date) === 8) {
-
-            return
-                substr($date, 0, 4) . '-' .
-                substr($date, 4, 2) . '-' .
-                substr($date, 6);
+            return substr($date, 0, 4).'-'.substr($date, 4, 2).'-'.substr($date, 6);
         }
 
         throw new Exception("Unrecognized date format [$date]");
