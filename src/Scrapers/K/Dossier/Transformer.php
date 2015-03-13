@@ -52,14 +52,14 @@ class Transformer
     /**
      * Apply a series of mappings.
      *
-     * @param  string  $rootNode  Path to the root of the mappings
-     * @param  array   $mappings  List of mappings to apply
+     * @param  array  $mappings    List of mappings to apply
+     * @param  array  $dataSource  Optional subset of data to use as data source
      * @return array
      *
      * @throws \Exception if a key cannot be found in a dictionary.
      * @throws \Exception if trying to call a nonexisting modifier.
      */
-    protected function map($rootNode, array $mappings)
+    protected function map(array $mappings, array $dataSource = null)
     {
         $data = [];
 
