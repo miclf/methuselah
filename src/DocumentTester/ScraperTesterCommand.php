@@ -1,6 +1,5 @@
 <?php namespace Pandemonium\Methuselah\DocumentTester;
 
-use Illuminate\Console\Command;
 use Illuminate\Container\Container;
 use Symfony\Component\Console\Input\InputOption;
 
@@ -9,7 +8,7 @@ use Symfony\Component\Console\Input\InputOption;
  *
  * @author Michaël Lecerf <michael@estsurinter.net>
  */
-abstract class ScraperTesterCommand extends Command implements TestResultHandlerInterface
+abstract class ScraperTesterCommand extends IlluminateCommand implements TestResultHandlerInterface
 {
     /**
      * The scraper tester.
