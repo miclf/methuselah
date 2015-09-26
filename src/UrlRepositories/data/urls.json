@@ -22,7 +22,9 @@
                 "legislature": "WieIsWie/LijstDerSenatoren&LEG={legislatureNumber}&LANG=fr"
             },
             "mp": "showSenator&ID={identifier}&LANG=fr",
-            "committee_list": "WieIsWie/LijstVanCommissies&LANG={lang}"
+            "committee_list": "WieIsWie/LijstVanCommissies&LANG={lang}",
+            "committee": "WieIsWie/Commissie&COMID={identifier}&LANG={lang}",
+            "dossier": "dossier&LEG={legislatureNumber}&NR={dossierNumber}&LANG={lang}"
         }
     }
 }
