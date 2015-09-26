@@ -21,6 +21,7 @@ class CommitteeList extends AbstractScraper
         // French
         "SPÉCIALES"                     => 'special',
         "COMITÉS D'AVIS"                => 'advisory',
+        "SOUS-COMMISIONS"               => 'subcommittees',
         "GROUPES DE TRAVAIL"            => 'working-group',
         "COMMISSIONS PERMANENTES"       => 'permanent',
         "DÉLÉGATIONS INTERNATIONALES"   => 'international-delegation',
@@ -28,6 +29,7 @@ class CommitteeList extends AbstractScraper
         // Dutch
         "BIJZONDERE"                    => 'special',
         "ADVIESCOMITÉS"                 => 'advisory',
+        "SUBCOMMISSIES"                 => 'subcommittees',
         "WERKGROEPEN"                   => 'working-group',
         "VASTE COMMISSIES"              => 'permanent',
         "INTERNATIONALE AFGEVAARDIGDEN" => 'international-delegation',
