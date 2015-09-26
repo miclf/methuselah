@@ -212,8 +212,14 @@ class MP extends AbstractScraper
 
             if ($text = trim($link->nodeValue)) {
 
-                $key = str_contains($text, '@') ? 'email' : 'website';
-                $data[$key] = $text;
+                if (str_contains($text, '@')) {
+                    // The website of the Chamber shamelessly violates all
+                    // the basic accessibility rules by displaying the
+                    // e-mail addresses as reversed strings…
+                    $data['email'] = strrev($text);
+                } else {
+                    $data['website'] = $text;
+                }
             }
         }
 
