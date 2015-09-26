@@ -80,6 +80,29 @@ class CommitteeMeetingList extends AbstractScraper
     }
 
     /**
+     * Set up a DOM crawler and fill it with the given document.
+     *
+     * @param  string  $document
+     * @param  string  $charset
+     * @return \QueryPath\DOMQuery
+     */
+    protected function buildCrawler($document, $charset = null)
+    {
+        if (is_null($charset)) {
+            $charset = $this->charset;
+        }
+
+        // Convert the content of the document to UTF-8 in case it
+        // uses another encoding (I’m looking at you, ISO-8859-1).
+        if ($charset !== 'UTF-8') {
+            $document = mb_convert_encoding($document, 'UTF-8', $charset);
+        }
+
+        // Create an HTML5-aware crawler.
+        return \html5qp($document);
+    }
+
+    /**
      * Return the appropriate parameters for the document provider.
      *
      * This returns an indexed array of two elements. The first is the
