@@ -25,6 +25,8 @@ class Committee extends AbstractScraper
      */
     protected $roles = [
         'presidents'  => 'Président',
+        'first_vice_presidents' => 'Premier Vice-Président',
+        'second_vice_presidents' => 'Deuxième Vice-Président',
         'members'     => 'Membres',
         'substitutes' => 'Membres Suppléants',
     ];
