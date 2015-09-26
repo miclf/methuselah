@@ -48,6 +48,8 @@ class MP extends AbstractScraper
      */
     protected $roles = [
         'president'  => 'Président',
+        'first_vice_president'  => 'Premi',
+        'second_vice_president'  => 'Deuxième vice-président',
         'member'     => 'Membre',
         'substitute' => 'Suppléant',
     ];
