@@ -24,7 +24,7 @@ class CommitteeMeetingList extends AbstractScraper
 
         foreach ($this->getAgendaAnchors() as $DOMElement) {
 
-            $href = $DOMElement->getAttribute('href');
+            $href = $DOMElement->attr('href');
 
             if (!$matches = $this->matchCommitteeWeek($href)) continue;
 
@@ -39,11 +39,11 @@ class CommitteeMeetingList extends AbstractScraper
      * Return the HTML anchors in the main
      * content area of the document.
      *
-     * @return \Pandemonium\Methuselah\Crawler\Crawler
+     * @return \QueryPath\DOMQuery
      */
     protected function getAgendaAnchors()
     {
-        return $this->getCrawler()->filter('#content a');
+        return $this->getCrawler()->find('#content a');
     }
 
     /**
@@ -77,6 +77,29 @@ class CommitteeMeetingList extends AbstractScraper
         $pattern = '#pat=PROD-commissions&type=full&com=(\d+-\d+_\d+)#';
 
         return $this->match($pattern, $href);
+    }
+
+    /**
+     * Set up a DOM crawler and fill it with the given document.
+     *
+     * @param  string  $document
+     * @param  string  $charset
+     * @return \QueryPath\DOMQuery
+     */
+    protected function buildCrawler($document, $charset = null)
+    {
+        if (is_null($charset)) {
+            $charset = $this->charset;
+        }
+
+        // Convert the content of the document to UTF-8 in case it
+        // uses another encoding (I’m looking at you, ISO-8859-1).
+        if ($charset !== 'UTF-8') {
+            $document = mb_convert_encoding($document, 'UTF-8', $charset);
+        }
+
+        // Create an HTML5-aware crawler.
+        return \html5qp($document);
     }
 
     /**
