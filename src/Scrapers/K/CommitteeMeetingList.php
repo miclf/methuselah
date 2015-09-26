@@ -24,7 +24,7 @@ class CommitteeMeetingList extends AbstractScraper
 
         foreach ($this->getAgendaAnchors() as $DOMElement) {
 
-            $href = $DOMElement->getAttribute('href');
+            $href = $DOMElement->attr('href');
 
             if (!$matches = $this->matchCommitteeWeek($href)) continue;
 
@@ -39,11 +39,11 @@ class CommitteeMeetingList extends AbstractScraper
      * Return the HTML anchors in the main
      * content area of the document.
      *
-     * @return \Pandemonium\Methuselah\Crawler\Crawler
+     * @return \QueryPath\DOMQuery
      */
     protected function getAgendaAnchors()
     {
-        return $this->getCrawler()->filter('#content a');
+        return $this->getCrawler()->find('#content a');
     }
 
     /**
