@@ -23,7 +23,7 @@ class CommitteeMeetingWeekList extends AbstractScraper
      */
     protected $weekLabelPatterns = [
         'week' => [
-            'regex'   => '#du (?:\w+) (\d{1,2}) (\w+) (\d{4}) au (?:.+) (\d{1,2}) (\w+) (\d{4})#',
+            'regex'   => '#du (?:\w+) (\d{1,2}) (\w+) (\d{4}) au (?:.+) (\d{1,2}) (\w+) (\d{4})#u',
             'matches' => [
                 'startDay' => 1, 'startMonth' => 2, 'startYear' => 3,
                 'endDay'   => 4, 'endMonth'   => 5, 'endYear'   => 6,
