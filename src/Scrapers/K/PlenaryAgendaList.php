@@ -56,7 +56,7 @@ class PlenaryAgendaList extends AbstractScraper
      */
     protected function isListOfWeeks()
     {
-        $selector = "h3:contains('Recherche dans ')";
+        $selector = "td>a:contains('Semaine du ')";
 
         $span = $this->crawler->filter($selector);
 
