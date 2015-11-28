@@ -19,7 +19,7 @@ class PlenaryMeetingWeekList extends AbstractScraper
      */
     protected $weekLabelPatterns = [
         'week' => [
-            'regex'   => '#du (\d{1,2}) au (\d{1,2}) (.+) (\d{4})#',
+            'regex'   => '#du (\d{1,2}) au (\d{1,2}) (\w+) (\d{4})#u',
             'matches' => [
                 'startDay' => 1, 'startMonth' => 3, 'startYear' => 4,
                 'endDay'   => 2, 'endMonth'   => 3, 'endYear'   => 4,
