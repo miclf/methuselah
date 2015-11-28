@@ -25,6 +25,13 @@ class PlenaryMeetingWeekList extends AbstractScraper
                 'endDay'   => 2, 'endMonth'   => 3, 'endYear'   => 4,
             ],
         ],
+        'week_overlapping_two_months' => [
+            'regex'   => '#du (\d{1,2}) (\w+) au (\d{1,2}) (\w+) (\d{4})#u',
+            'matches' => [
+                'startDay' => 1, 'startMonth' => 2, 'startYear' => 5,
+                'endDay'   => 3, 'endMonth'   => 4, 'endYear'   => 5,
+            ],
+        ],
     ];
 
     /**
