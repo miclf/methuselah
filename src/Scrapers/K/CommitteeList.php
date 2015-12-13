@@ -20,6 +20,7 @@ class CommitteeList extends AbstractScraper
     protected $types = [
         // French
         "SPÉCIALES"                     => 'special',
+        "TEMPORAIRES"                   => 'temporary',
         "COMITÉS D'AVIS"                => 'advisory',
         "SOUS-COMMISIONS"               => 'subcommittees',
         "GROUPES DE TRAVAIL"            => 'working-group',
@@ -28,6 +29,7 @@ class CommitteeList extends AbstractScraper
 
         // Dutch
         "BIJZONDERE"                    => 'special',
+        "TIJDELIJKE"                    => 'temporary',
         "ADVIESCOMITÉS"                 => 'advisory',
         "SUBCOMMISSIES"                 => 'subcommittees',
         "WERKGROEPEN"                   => 'working-group',
