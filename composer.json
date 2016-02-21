@@ -12,8 +12,8 @@
         "illuminate/container": "4.2 - 5.1",
         "illuminate/support": "4.2 - 5.1",
         "patchwork/utf8": "1.1.*",
-        "symfony/css-selector": "2.7.*",
-        "symfony/dom-crawler": "2.7.*",
+        "symfony/css-selector": "2.7.*|3.0.*",
+        "symfony/dom-crawler": "2.7.*|3.0.*",
         "querypath/querypath": "dev-master"
     },
     "require-dev": {
