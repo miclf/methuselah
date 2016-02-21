@@ -18,15 +18,21 @@ class PlenaryMeetingWeekList extends AbstractScraper
      * @var array
      */
     protected $weekLabelPatterns = [
+        // Normal case. Examples:
+        // ‘Semaine du lundi 1er février 2015 au vendredi 5 février 2015’
+        // ‘Semaine du lundi 15 février 2015 au vendredi 19 février 2015’
         'week' => [
-            'regex'   => '#du (\d{1,2}) au (\d{1,2}) (\w+) (\d{4})#u',
+            'regex'   => '#du (\d{1,2})(?:er)? au (\d{1,2})(?:er)? (\w+) (\d{4})#u',
             'matches' => [
                 'startDay' => 1, 'startMonth' => 3, 'startYear' => 4,
                 'endDay'   => 2, 'endMonth'   => 3, 'endYear'   => 4,
             ],
         ],
+        // Case where a range starts in a month and ends in the next one.
+        // Example:
+        // ‘Semaine du lundi 28 janvier 2015 au vendredi 1er février 2015’
         'week_overlapping_two_months' => [
-            'regex'   => '#du (\d{1,2}) (\w+) au (\d{1,2}) (\w+) (\d{4})#u',
+            'regex'   => '#du (\d{1,2})(?:er)? (\w+) au (\d{1,2})(?:er)? (\w+) (\d{4})#u',
             'matches' => [
                 'startDay' => 1, 'startMonth' => 2, 'startYear' => 5,
                 'endDay'   => 3, 'endMonth'   => 4, 'endYear'   => 5,
