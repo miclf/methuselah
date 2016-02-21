@@ -44,6 +44,8 @@ class PlenaryAgendaList extends AbstractScraper
             return $this->getAgendasForMultipleWeeks();
         }
 
+        // TODO: handle case where no plenary is scheduled at all.
+
         // Case 2: a page with one or more plenaries for a given week.
         return $plenaryAgendaIds = ['self'];
     }

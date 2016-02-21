@@ -52,33 +52,33 @@ class CommitteeMeetingWeekList extends AbstractScraper
      */
     public function scrape()
     {
-        $anchors = $this->getAgendaAnchors()->each(function ($node) {
+        $identifiers = [];
 
-            if (!$matches = $this->matchCommitteeWeek($node)) return;
+        foreach ($this->getAgendaAnchors() as $node) {
+
+            if (!$matches = $this->matchCommitteeWeek($node)) continue;
 
             list($startDate, $endDate) = $this->getDateRange($node->text());
 
-            return [
+            $identifiers[] = [
                 'identifier' => $matches[1],
                 'startDate'  => $startDate,
                 'endDate'    => $endDate,
                 'url'        => $this->makeAgendaUrl($matches[1]),
             ];
-        });
+        }
 
         // Remove null values and reset indices.
-        return array_values(array_filter($anchors));
+        return array_values(array_filter($identifiers));
     }
 
     /**
      * Return the HTML anchors in the main
      * content area of the document.
-     *
-     * @return \Pandemonium\Methuselah\Crawler\Crawler
      */
     protected function getAgendaAnchors()
     {
-        return $this->getCrawler()->filter('#content a');
+        return $this->getCrawler()->find('#content a');
     }
 
     /**
@@ -101,10 +101,10 @@ class CommitteeMeetingWeekList extends AbstractScraper
      * Check if a given anchor targets the
      * agenda page of a committee week.
      *
-     * @param  \Symfony\Component\DomCrawler\Crawler  $anchor
+     * @param  \QueryPath\DOMQuery  $anchor
      * @return array
      */
-    protected function matchCommitteeWeek(Crawler $anchor)
+    protected function matchCommitteeWeek(\QueryPath\DOMQuery $anchor)
     {
         // This pattern captures the identifier of the committee week.
         $pattern = '#pat=PROD-commissions&week=(\d+)#';

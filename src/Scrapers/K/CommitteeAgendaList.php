@@ -51,7 +51,7 @@ class CommitteeAgendaList extends AbstractScraper
 
         // Case 3: a page listing meetings of a specific committee.
         if ($this->isSingleCommitteeAgenda()) {
-            // Not implemented yet.
+            return $commAgendaIds = ['self'];
         }
 
         if ($this->isListOfWeeks()) {
@@ -73,8 +73,11 @@ class CommitteeAgendaList extends AbstractScraper
      */
     protected function isSingleCommitteeAgenda()
     {
-        // TODO: implement this.
-        return false;
+        $selector = "title:contains('AGENDA COMMISSION')";
+
+        $title = $this->crawler->filter($selector);
+
+        return (bool) count($title);
     }
 
     /**
