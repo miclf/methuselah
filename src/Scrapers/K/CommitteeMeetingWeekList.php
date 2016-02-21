@@ -22,11 +22,24 @@ class CommitteeMeetingWeekList extends AbstractScraper
      * @var array
      */
     protected $weekLabelPatterns = [
+        // Normal case. Examples:
+        // ‘Semaine du lundi 10 février 2015 au vendredi 14 février 2015’
+        // ‘Week van maandag 10 februari 2015 tot vrijdag 14 februari 2015’
         'week' => [
             'regex'   => '#du (?:\w+) (\d{1,2}) (\w+) (\d{4}) au (?:.+) (\d{1,2}) (\w+) (\d{4})#u',
             'matches' => [
                 'startDay' => 1, 'startMonth' => 2, 'startYear' => 3,
                 'endDay'   => 4, 'endMonth'   => 5, 'endYear'   => 6,
+            ],
+        ],
+        // Case where the year is missing for the first date. Examples:
+        // ‘Semaine du lundi 10 février au vendredi 14 février 2015’
+        // ‘Week van maandag 10 februari tot vrijdag 14 februari 2015’
+        'week_with_missing_year' => [
+            'regex'   => '#du (?:\w+) (\d{1,2}) (\w+) au (?:.+) (\d{1,2}) (\w+) (\d{4})#u',
+            'matches' => [
+                'startDay' => 1, 'startMonth' => 2, 'startYear' => 5,
+                'endDay'   => 3, 'endMonth'   => 4, 'endYear'   => 5,
             ],
         ],
     ];
