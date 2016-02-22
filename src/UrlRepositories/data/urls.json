@@ -24,7 +24,10 @@
             "mp": "showSenator&ID={identifier}&LANG=fr",
             "committee_list": "WieIsWie/LijstVanCommissies&LANG={lang}",
             "committee": "WieIsWie/Commissie&COMID={identifier}&LANG={lang}",
-            "dossier": "dossier&LEG={legislatureNumber}&NR={dossierNumber}&LANG={lang}"
+            "dossier": "dossier&LEG={legislatureNumber}&NR={dossierNumber}&LANG={lang}",
+            "agenda_list": {
+                "committee_weeks": "Agenda/Week&when={weekType}&LANG={lang}"
+            }
         }
     }
 }
