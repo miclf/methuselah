@@ -26,6 +26,7 @@
             "committee": "WieIsWie/Commissie&COMID={identifier}&LANG={lang}",
             "dossier": "dossier&LEG={legislatureNumber}&NR={dossierNumber}&LANG={lang}",
             "agenda_list": {
+                "plenary_weeks": "Agenda/Week&when={weekType}&LANG={lang}",
                 "committee_weeks": "Agenda/Week&when={weekType}&LANG={lang}"
             }
         }
