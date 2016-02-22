@@ -29,7 +29,7 @@ class CommitteeAgendaList extends AbstractScraper
         $commAgendaIds = [];
 
         foreach ($this->getWeekUrls() as $weekUrl) {
-            $urls = $this->getCommitteeAgendaIds($weekUrl);
+            $urls = $this->getAgendaIds($weekUrl);
             $commAgendaIds = array_merge($urls, $commAgendaIds);
         }
 
@@ -57,7 +57,7 @@ class CommitteeAgendaList extends AbstractScraper
      * @param  string  $weekUrl
      * @return array
      */
-    protected function getCommitteeAgendaIds($weekUrl)
+    protected function getAgendaIds($weekUrl)
     {
         $scraper = $this->makeScraper('CommitteeMeetingList');
 
