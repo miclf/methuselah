@@ -22,7 +22,7 @@ class CommitteeMeetingList extends AbstractScraper
 
             $href = $DOMElement->attr('href');
 
-            if (!$matches = $this->matchCommitteeWeek($href)) continue;
+            if (!$matches = $this->matchValidAgendaLink($href)) continue;
 
             $identifiers[] = $matches[1];
         }
@@ -61,13 +61,12 @@ class CommitteeMeetingList extends AbstractScraper
     }
 
     /**
-     * Check if a given URL targets the
-     * agenda page of a committee week.
+     * Check if a given URL targets a valid agenda page.
      *
      * @param  string  $href
      * @return array
      */
-    protected function matchCommitteeWeek($href)
+    protected function matchValidAgendaLink($href)
     {
         // This pattern captures the identifier of the committee week.
         return $this->match('#ID=(\d+)&TYP=comag#', $href);
