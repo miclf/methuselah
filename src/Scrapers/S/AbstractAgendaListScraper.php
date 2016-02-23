@@ -39,14 +39,14 @@ abstract class AbstractAgendaListScraper extends AbstractScraper
      */
     public function scrape()
     {
-        $agendaIds = [];
+        $allMeetings = [];
 
         foreach ($this->getWeekUrls() as $weekUrl) {
-            $urls = $this->getAgendaIds($weekUrl);
-            $agendaIds = array_merge($urls, $agendaIds);
+            $allMeetings += $this->getAgendaIds($weekUrl);
         }
 
-        return $this->sort($agendaIds);
+        // Sort by identifiers then remove them.
+        return array_values($this->sort($allMeetings));
     }
 
     /**
@@ -100,7 +100,7 @@ abstract class AbstractAgendaListScraper extends AbstractScraper
      */
     protected function sort(array $array)
     {
-        sort($array);
+        ksort($array);
 
         return $array;
     }
