@@ -13,7 +13,7 @@ class PlenaryMeetingList extends AbstractMeetingListScraper
      *
      * @var string
      */
-    protected $linkPattern = '#ID=(\d+)&TYP=plenag#';
+    protected $linkPattern = '#DATUM=\'(\d{2}/\d{2}/\d{4})\'&ID=(\d+)&TYP=plenag#';
 
     /**
      * The key to request from the URL repository.

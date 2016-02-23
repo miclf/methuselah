@@ -13,7 +13,7 @@ class CommitteeMeetingList extends AbstractMeetingListScraper
      *
      * @var string
      */
-    protected $linkPattern = '#ID=(\d+)&TYP=comag#';
+    protected $linkPattern = '#DATUM=\'(\d{2}/\d{2}/\d{4})\'&ID=(\d+)&TYP=comag#';
 
     /**
      * The key to request from the URL repository.

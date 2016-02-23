@@ -23,14 +23,14 @@ abstract class AbstractMeetingListScraper extends AbstractScraper
     protected $urlRepositoryKey;
 
     /**
-     * Scrape the page of agenda lists to
-     * find identifiers of agenda pages.
+     * Scrape the page of agenda lists to find dates
+     * and identifiers of agenda meetings.
      *
      * @return array
      */
     public function scrape()
     {
-        $identifiers = [];
+        $meetings = [];
 
         foreach ($this->getAgendaAnchors() as $DOMElement) {
 
@@ -38,13 +38,13 @@ abstract class AbstractMeetingListScraper extends AbstractScraper
 
             if (!$matches = $this->matchValidAgendaLink($href)) continue;
 
-            $identifiers[] = $matches[1];
+            $meetings[$matches[2]] = [
+                'date' => $this->extractDate($matches[1]),
+                'identifier' => $matches[2],
+            ];
         }
 
-        // Remove duplicates and reset indices.
-        $identifiers = array_values(array_unique($identifiers));
-
-        return $this->sort($identifiers);
+        return $this->sort($meetings);
     }
 
     /**
@@ -87,6 +87,21 @@ abstract class AbstractMeetingListScraper extends AbstractScraper
     }
 
     /**
+     * Extract a date from a string.
+     *
+     * @param  string       $str
+     * @return string|null
+     */
+    protected function extractDate($str)
+    {
+        $date = explode('/', $str);
+
+        // Date is in the `MM/DD/YYYY` format.
+        // We convert it to ISO 8601.
+        return $date[2].'-'.$date[0].'-'.$date[1];
+    }
+
+    /**
      * Sort an array by value.
      *
      * @param  array  $array
@@ -94,7 +109,7 @@ abstract class AbstractMeetingListScraper extends AbstractScraper
      */
     protected function sort(array $array)
     {
-        sort($array);
+        ksort($array);
 
         return $array;
     }
