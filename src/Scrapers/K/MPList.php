@@ -137,10 +137,10 @@ class MPList extends AbstractScraper
     {
         $pattern = '#namegroup=([^&]+)&#';
 
-        $matches = $this->match($pattern, $anchor->attr('href'));
+        $identifier = $this->match($pattern, $anchor->attr('href'))[1];
 
         // Group identifiers are URL-encoded, so we need to decode them.
-        return urldecode($matches[1]);
+        return urldecode($identifier);
     }
 
     /**
