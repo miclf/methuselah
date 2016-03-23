@@ -139,6 +139,9 @@ class MPList extends AbstractScraper
 
         $identifier = $this->match($pattern, $anchor->attr('href'))[1];
 
+        // Prevent ‘é’ characters to be decoded incorrectly.
+        $identifier = str_replace('%E9', 'é', $identifier);
+
         // Group identifiers are URL-encoded, so we need to decode them.
         return urldecode($identifier);
     }
