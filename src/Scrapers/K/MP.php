@@ -34,10 +34,12 @@ class MP extends AbstractScraper
      * @var array
      */
     protected $roles = [
-        'president'  => 'Président',
-        'member'     => 'Membre Effectif',
-        'substitute' => 'Membre Suppléant',
-        'nonvoter'   => 'Membre sans voix délibérative',
+        # /!\ The ‘vice-president’ line must stay before the ‘president’ one.
+        'vice-president' => 'Vice-Président',
+        'president'      => 'Président',
+        'member'         => 'Membre Effectif',
+        'substitute'     => 'Membre Suppléant',
+        'nonvoter'       => 'Membre sans voix délibérative',
     ];
 
     /**
