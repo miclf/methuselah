@@ -293,7 +293,7 @@ class MP extends AbstractScraper
             }
         }
 
-        return $committees ?: null;
+        return $committees;
     }
 
     /**
