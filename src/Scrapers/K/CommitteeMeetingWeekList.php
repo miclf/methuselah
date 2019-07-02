@@ -26,7 +26,7 @@ class CommitteeMeetingWeekList extends AbstractScraper
         // ‘Semaine du lundi 10 février 2015 au vendredi 14 février 2015’
         // ‘Week van maandag 10 februari 2015 tot vrijdag 14 februari 2015’
         'week' => [
-            'regex'   => '#du\s+(?:\w+)\s+(\d{1,2})\s+(\w+)\s+(\d{4})\s+au\s+(?:.+)\s+(\d{1,2})\s+(\w+)\s+(\d{4})#u',
+            'regex'   => '#du\s+(?:\w+)\s+(\d{1,2})(?:er)?\s+(\w+)\s+(\d{4})\s+au\s+(?:.+)\s+(\d{1,2})(?:er)?\s+(\w+)\s+(\d{4})#u',
             'matches' => [
                 'startDay' => 1, 'startMonth' => 2, 'startYear' => 3,
                 'endDay'   => 4, 'endMonth'   => 5, 'endYear'   => 6,
