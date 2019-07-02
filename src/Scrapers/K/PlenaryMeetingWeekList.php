@@ -21,8 +21,10 @@ class PlenaryMeetingWeekList extends AbstractScraper
         // Normal case. Examples:
         // ‘Semaine du lundi 1er février 2015 au vendredi 5 février 2015’
         // ‘Semaine du lundi 15 février 2015 au vendredi 19 février 2015’
+        // The `(?:du )?` part is there for cases when the ‘du’ word is
+        // incorrectly missing in the sentence…
         'week' => [
-            'regex'   => '#du (\d{1,2})(?:er)? au (\d{1,2})(?:er)? (\w+) (\d{4})#u',
+            'regex'   => '#(?:du )?(\d{1,2})(?:er)? au (\d{1,2})(?:er)? (\w+) (\d{4})#u',
             'matches' => [
                 'startDay' => 1, 'startMonth' => 3, 'startYear' => 4,
                 'endDay'   => 2, 'endMonth'   => 3, 'endYear'   => 4,
