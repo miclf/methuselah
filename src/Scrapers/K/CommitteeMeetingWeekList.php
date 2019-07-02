@@ -42,6 +42,15 @@ class CommitteeMeetingWeekList extends AbstractScraper
                 'endDay'   => 3, 'endMonth'   => 4, 'endYear'   => 5,
             ],
         ],
+        // Case where only the first half of the range is present. Examples:
+        // ‘Semaine du lundi 10 octobre’
+        // ‘Week van maandag 10 oktober’
+        'week_with_missing_end_of_range' => [
+            'regex'   => '#du (?:\w+) (\d{1,2}) (\w+)#u',
+            'matches' => [
+                'startDay' => 1, 'startMonth' => 2
+            ],
+        ],
     ];
 
     /**
